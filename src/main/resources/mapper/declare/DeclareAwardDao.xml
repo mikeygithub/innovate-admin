@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.innovate.modules.declare.dao.DeclareAwardDao">
+
+    <select id="queryAll" resultType="DeclareAwardEntity" parameterType="map">
+        select * from innovate_declare_award
+        where declare_id = #{declareId}
+            and is_del = 0
+    </select>
+
+    <update id="remove" parameterType="map">
+        update innovate_declare_award
+        set is_del = 1
+        where declare_id = #{declareId}
+    </update>
+
+    <!--统计获奖数量-->
+    <select id="queryAwardNum" resultType="java.lang.Long" parameterType="map">
+        select count(distinct award_id) from innovate_declare_award a
+        left join innovate_declare_info b
+        on a.declare_id = b.declare_id
+        where is_prize = 1
+        <if test="eventId != '' and eventId != null">
+            and b.event_id = #{eventId}
+        </if>
+    </select>
+
+    <!--统计奖金数量-->
+    <select id="queryAwardMoney" resultType="java.lang.Double" parameterType="map">
+        select sum(award_money) from innovate_declare_award a
+        left join innovate_declare_info b
+        on a.declare_id = b.declare_id
+        where is_prize = 1
+        <if test="eventId != '' and eventId != null">
+            and b.event_id = #{eventId}
+        </if>
+    </select>
+</mapper>

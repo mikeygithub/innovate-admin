@@ -1,0 +1,37 @@
+package com.innovate.modules.innovate.entity;
+
+import com.baomidou.mybatisplus.annotations.TableId;
+import com.baomidou.mybatisplus.annotations.TableName;
+import com.innovate.modules.sys.entity.SysUserEntity;
+import lombok.Data;
+
+import java.io.Serializable;
+
+/**
+ * @author:tz
+ * @create:2018-11-08
+ * @description:责任人
+ **/
+@Data
+@TableName("innovate_user_person_info")
+public class UserPersonInfoEntity implements Serializable {
+    @TableId
+    private Long userPerId;
+    private Long userId;
+    private Long gradeId;
+    private String perCardNo;
+    private Long perSex;
+    private String perPost;
+    private String perPoliticsType;
+    private String perStuNo;
+    private String perClassNo;
+    private String perCormNo;
+    private String perNative;
+    private String perQq;
+    private String perSchoolPost;
+    private String perSchoolHonor;
+    private String perSocialPractice;
+    private SysUserEntity sysUserEntity;
+    private Long isDel;
+
+}

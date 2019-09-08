@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.innovate.modules.innovate.dao.BaseTeacherInfoDao">
+    <!--统计教师人数-->
+    <select id="queryAllTeacher" resultType="java.lang.Long">
+        SELECT count(teacher_id) from innovate_base_teacher_info
+        where base_id = #{baseId}
+    </select>
+
+    <!--统计全职/兼职教师人数-->
+    <select id="queryTypeTeacher" resultType="java.lang.Long" parameterType="HashMap" >
+        SELECT count(teacher_id) from innovate_base_teacher_info
+        where base_id = #{baseId}
+        and teacher_work_status = #{status}
+    </select>
+</mapper>

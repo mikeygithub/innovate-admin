@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.innovate.modules.declare.dao.DeclareStaffInfoDao">
+
+    <select id="queryAll" resultType="DeclareStaffInfoEntity" parameterType="map">
+        select * from innovate_declare_staff_info
+        where declare_id = #{declareId}
+            and is_del = 0
+    </select>
+
+    <update id="remove" parameterType="map">
+        update innovate_declare_staff_info
+        set is_del = 1
+        where declare_id = #{declareId}
+    </update>
+
+    <!--统计参与者个数-->
+    <select id="queryStaffNum" resultType="java.lang.Long" parameterType="map">
+        select count(distinct staff_id) from innovate_declare_staff_info a
+        left join innovate_declare_info b
+        on a.declare_id = b.declare_id
+        <where>
+            <if test="instituteId != '' and instituteId != null">
+                b.institute_id = #{instituteId}
+            </if>
+        </where>
+    </select>
+
+</mapper>

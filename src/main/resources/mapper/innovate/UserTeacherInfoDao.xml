@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.innovate.modules.innovate.dao.UserTeacherInfoDao">
+    <resultMap id="UserTeacherInfoMap" type="UserTeacherInfoEntity">
+        <id column="user_teacher_id" property="userTeacherId"></id>
+        <result column="user_id" property="userId"></result>
+        <result column="teacher_card_no" property="teacherCardNo"></result>
+        <result column="teacher_sex" property="teacherSex"></result>
+        <result column="teacher_post" property="teacherPost"></result>
+        <result column="teacher_title" property="teacherTitle"></result>
+        <association property="sysUserEntity" javaType="SysUserEntity">
+            <id column="user_id" property="userId"></id>
+            <result column="name" property="name"></result>
+            <result column="email" property="email"></result>
+            <result column="mobile" property="mobile"></result>
+            <result column="institute_id" property="instituteId"></result>
+            <result column="createUserId" property="createUserId"></result>
+        </association>
+    </resultMap>
+
+    <select id="queryTeacher" resultType="SysUserEntity" parameterType="map">
+        select * from sys_user a, sys_user_role b
+        where a.user_id = b.user_id
+        and b.role_id = 3
+        <if test="like != null and like != ''">
+            and a.name like CONCAT('%',#{like},'%')
+        </if>
+        <if test="userId != null and userId != ''">
+            and a.user_id = #{userId}
+        </if>
+    </select>
+
+    <select id="queryProjectTeacherInfo" resultMap="UserTeacherInfoMap">
+        select * from sys_user a, innovate_user_teacher_info b
+        left join innovate_project_teacher c on b.user_id = c.user_id
+        where a.user_id = b.user_id
+        and c.is_del = 0
+        and c.project_id = #{projectId}
+    </select>
+
+    <select id="queryMatchTeacherInfo" resultMap="UserTeacherInfoMap">
+        select * from sys_user a, innovate_user_teacher_info b
+        left join innovate_match_teacher c on b.user_id = c.user_id
+        where a.user_id = b.user_id
+        and c.is_del = 0
+        and c.match_id = #{matchId}
+    </select>
+
+    <select id="queryDeclareTeacherInfo" resultMap="UserTeacherInfoMap">
+        select * from sys_user a, innovate_user_teacher_info b
+        left join innovate_declare_teacher c on b.user_id = c.user_id
+        where a.user_id = b.user_id
+        and c.is_del = 0
+        and c.declare_id = #{declareId}
+    </select>
+
+    <select id="queryFinishTeacherInfo" resultMap="UserTeacherInfoMap">
+        select * from sys_user a, innovate_user_teacher_info b
+        left join innovate_finish_teacher c on b.user_id = c.user_id
+        where a.user_id = b.user_id
+        and c.is_del = 0
+        and c.finish_id = #{finishId}
+    </select>
+
+    <select id="queryAllTeacherInfo" resultMap="UserTeacherInfoMap">
+        select * from sys_user a, innovate_user_teacher_info b
+        where a.user_id = b.user_id
+    </select>
+
+    <select id="queryByUserId" resultType="UserTeacherInfoEntity">
+        select * from innovate_user_teacher_info
+        where user_id = #{userId}
+    </select>
+
+    <delete id="deleteByProjectId">
+        delete from innovate_user_teacher_info
+        where project_id = #{projectId}
+    </delete>
+
+    <select id="queryAll" resultType="UserTeacherInfoEntity">
+        select * from innovate_user_teacher_info
+        where user_teacher_id = #{userTeacherId}
+    </select>
+
+</mapper>

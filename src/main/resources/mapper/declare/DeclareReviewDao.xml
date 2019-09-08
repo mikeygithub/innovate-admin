@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.innovate.modules.declare.dao.DeclareReviewDao">
+
+    <select id="queryAll" resultType="DeclareReviewEntity" parameterType="map">
+      select * from innovate_declare_review
+        where declare_id = #{declareId}
+        <if test="apply != null and apply != ''">
+            and apply = #{apply}
+        </if>
+        and is_del = 0
+    </select>
+
+    <update id="remove" parameterType="map">
+      update innovate_declare_review
+        set is_del = 1
+        where 1 = 1
+        <if test="apply != null and apply != ''">
+            and apply = #{apply}
+        </if>
+        <if test="declareId != null and declareId != ''">
+            and declare_id = #{declareId}
+        </if>
+    </update>
+
+    <!--统计未评分的个数-->
+    <select id="queryCount" resultType="Long" parameterType="map">
+      select count(distinct review_id) from innovate_declare_review
+        where score is null
+        <if test="apply != null and apply != ''">
+          and apply = #{apply}
+        </if>
+        <if test="declareId != null and declareId != ''">
+           and declare_id = #{declareId}
+        </if>
+        and is_del = 0
+    </select>
+
+    <!--计算平均分-->
+    <select id="queryScoreAvg" resultType="java.lang.Double" parameterType="map">
+        select avg(score) from innovate_declare_review
+        where is_del = 0
+        <if test="apply != null and apply != ''">
+            and apply = #{apply}
+        </if>
+        <if test="declareId != null and declareId != ''">
+            and declare_id = #{declareId}
+        </if>
+    </select>
+
+    <!--查看评分-->
+    <select id="queryScore" resultType="DeclareReviewEntity" parameterType="map">
+        select * from innovate_declare_review
+        <where>
+            <if test="declareId != null and declareId != ''">
+                declare_id = #{declareId}
+            </if>
+            <if test="userId != null and userId != ''">
+                and user_id = #{userId}
+            </if>
+            <if test="apply != null and apply != ''">
+                and apply like CONCAT('%',#{apply},'%')
+            </if>
+            <if test="isDel != null and isDel != ''">
+                and is_del = #{isDel}
+            </if>
+        </where>
+    </select>
+
+</mapper>

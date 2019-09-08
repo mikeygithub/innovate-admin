@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.innovate.modules.match.dao.MatchApplyUpdateDao">
+
+    <select id="queryAll" resultType="MatchApplyUpdateEntity" parameterType="map">
+      select  * from innovate_match_apply_update
+      where match_id = #{matchId}
+            and is_del = 0
+    </select>
+
+    <update id="remove" parameterType="map">
+        update innovate_match_apply_update
+        set is_del = 1
+        where match_id = #{matchId}
+    </update>
+
+</mapper>

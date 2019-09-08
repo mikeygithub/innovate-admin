@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.innovate.modules.innovate.dao.UserPersonInfoDao">
+    <resultMap id="UserPersonInfoMap" type="UserPersonInfoEntity">
+        <id column="user_per_id" property="userPerId"></id>
+        <result column="user_id" property="userId"></result>
+        <result column="per_card_no" property="perCardNo"></result>
+        <result column="grade_id" property="gradeId"></result>
+        <result column="per_sex" property="perSex"></result>
+        <result column="per_post" property="perPost"></result>
+        <result column="per_politics_type" property="perPoliticsType"></result>
+        <result column="per_stu_no" property="perStuNo"></result>
+        <result column="per_class_no" property="perClassNo"></result>
+        <result column="per_corm_no" property="perCormNo"></result>
+        <result column="per_native" property="perNative"></result>
+        <result column="per_qq" property="perQq"></result>
+        <result column="per_school_post" property="perSchoolPost"></result>
+        <result column="per_school_honor" property="perSchoolHonor"></result>
+        <result column="per_social_practice" property="perSocialPractice"></result>
+        <association property="sysUserEntity" javaType="SysUserEntity">
+            <id column="user_id" property="userId"></id>
+            <result column="name" property="name"></result>
+            <result column="email" property="email"></result>
+            <result column="mobile" property="mobile"></result>
+            <result column="institute_id" property="instituteId"></result>
+            <result column="createUserId" property="createUserId"></result>
+        </association>
+    </resultMap>
+
+    <select id="queryAllPersonInfo" resultMap="UserPersonInfoMap" parameterType="map">
+        select * from innovate_user_person_info a
+        left join sys_user b on a.user_id = b.user_id,
+        <if test="projectId != null and projectId != ''">
+            innovate_project_info c where b.user_id = c.project_user_id
+        </if>
+        <if test="matchId != null and matchId != ''">
+            innovate_match_info d where b.user_id = d.project_user_id
+        </if>
+        <if test="declareId != null and declareId != ''">
+            innovate_declare_info e where b.user_id = e.project_user_id
+        </if>
+        <if test="finishId != null and finishId != ''">
+            innovate_finish_info f where b.user_id = f.project_user_id
+        </if>
+
+
+        <if test="projectId != null and projectId != ''">
+            and c.project_id = #{projectId}
+        </if>
+        <if test="matchId != null and matchId != ''">
+            and d.match_id = #{matchId}
+        </if>
+        <if test="declareId != null and declareId != ''">
+            and e.declare_id = #{declareId}
+        </if>
+        <if test="finishId != null and finishId != ''">
+            and f.finish_id = #{finishId}
+        </if>
+    </select>
+
+<!--    <select id="queryAllPersonInfo" resultMap="UserPersonInfoMap">
+        select * from innovate_user_person_info a
+        left join sys_user b on a.user_id = b.user_id,
+        innovate_project_info c
+        where b.user_id = c.project_user_id
+        and c.project_id = #{projectId}
+    </select>-->
+
+
+    <select id="queryByUserId" resultType="UserPersonInfoEntity">
+        select * from innovate_user_person_info
+        where user_id = #{userId}
+    </select>
+
+    <select id="queryByUserInstituteIds" resultType="UserPersonInfoEntity">
+        select * from innovate_user_person_info upi , sys_user su
+        where
+        upi.user_id=su.user_id
+        and
+        institute_id = #{instituteId}
+    </select>
+
+    <delete id="deleteByProjectId">
+        delete from innovate_user_person_info
+        where project_id = #{projectId}
+    </delete>
+
+    <select id="queryAll" resultType="UserPersonInfoEntity">
+        select * from innovate_user_person_info
+        where user_per_id = #{perId}
+    </select>
+</mapper>

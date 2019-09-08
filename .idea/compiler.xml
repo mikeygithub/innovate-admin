@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CompilerConfiguration">
+    <annotationProcessing>
+      <profile default="true" name="Default" enabled="true" />
+      <profile name="Maven default annotation processors profile" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <module name="innovate-admin" />
+        <module name="innovate-admin-2019-03-05" />
+        <module name="innovate-admin-2019-0402" />
+        <module name="innovate-admin-master-2019-03-15" />
+      </profile>
+    </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="innovate-admin" target="1.8" />
+      <module name="innovate-admin-2019-0402" target="1.8" />
+    </bytecodeTargetLevel>
+  </component>
+  <component name="JavacSettings">
+    <option name="ADDITIONAL_OPTIONS_OVERRIDE">
+      <module name="innovate-admin" options="-parameters" />
+      <module name="innovate-admin-2019-0402" options="-parameters" />
+    </option>
+  </component>
+</project>

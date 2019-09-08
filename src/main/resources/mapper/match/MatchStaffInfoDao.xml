@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.innovate.modules.match.dao.MatchStaffInfoDao">
+
+    <select id="queryAll" resultType="MatchStaffInfoEntity" parameterType="map">
+        select * from innovate_match_staff_info
+        where match_id = #{matchId}
+            and is_del = 0
+    </select>
+
+    <update id="remove" parameterType="map">
+        update innovate_match_staff_info
+        set is_del = 1
+        where match_id = #{matchId}
+    </update>
+
+    <!--统计参与者个数-->
+    <select id="queryUserNum" resultType="java.lang.Long" parameterType="map">
+        select count(distinct staff_id) from innovate_match_staff_info a
+        left join innovate_match_info b
+        on a.match_id = b.match_id
+        <where>
+            <if test="eventId != '' and eventId != null">
+                b.event_id = #{eventId}
+            </if>
+        </where>
+    </select>
+
+</mapper>

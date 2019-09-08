@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.innovate.modules.innovate.dao.ProjectMonthlyReportDao">
+
+    <select id="queryAllReport" resultType="ProjectMonthlyReportEntity">
+        select * from innovate_project_monthly_report
+    </select>
+
+    <update id="remove" parameterType="map">
+        update innovate_project_monthly_report
+        set is_del = 1
+        where report_id = #{reportId}
+    </update>
+
+    <!--累计投入资金数额-->
+    <select id="totalInvest" resultType="java.lang.Double" parameterType="map">
+        select sum(report_invest_capital) from innovate_project_monthly_report
+        where project_id = #{projectId}
+        and DATE_FORMAT(report_time,'%Y-%m') between #{totalStartTime} and #{totalEndTime};
+    </select>
+
+    <!--累计营业额-->
+    <select id="totalSales" resultType="java.lang.Double" parameterType="map">
+        select sum(report_sales) from innovate_project_monthly_report
+        where project_id = #{projectId}
+        and DATE_FORMAT(report_time,'%Y-%m') between #{totalStartTime} and #{totalEndTime};
+    </select>
+
+    <!--累计利润情况-->
+    <select id="totalProfits" resultType="java.lang.Double" parameterType="map">
+        select sum(report_profits) from innovate_project_monthly_report
+        where project_id = #{projectId}
+        and DATE_FORMAT(report_time,'%Y-%m') between #{totalStartTime} and #{totalEndTime};
+    </select>
+
+    <!--累计上缴税金情况-->
+    <select id="totalTax" resultType="java.lang.Double" parameterType="map">
+        select sum(report_tax) from innovate_project_monthly_report
+        where project_id = #{projectId}
+        and DATE_FORMAT(report_time,'%Y-%m') between #{totalStartTime} and #{totalEndTime};
+    </select>
+
+</mapper>

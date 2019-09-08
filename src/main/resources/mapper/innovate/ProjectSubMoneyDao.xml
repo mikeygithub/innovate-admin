@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.innovate.modules.innovate.dao.ProjectSubMoneyDao">
+
+    <select id="queryAll" resultType="ProjectSubMoneyEntity" parameterType="map">
+        select * from innovate_project_subsidies_money
+        where project_id = #{projectId}
+            and is_del = 0
+    </select>
+
+    <update id="remove" parameterType="map">
+        update innovate_project_subsidies_money
+        set is_del = 1
+        where project_id = #{projectId}
+    </update>
+
+    <!--统计补贴金额-->
+    <select id="querySubMoney" resultType="java.lang.Double">
+        select sum(sub_money) from innovate_project_subsidies_money a
+        left join innovate_project_info b
+        on a.project_id = b.project_id
+        left join innovate_base_project_station c
+        on b.station_id = c.station_id
+        where base_id = #{baseId} and sub_type = #{subType}
+    </select>
+
+    <!--统计获得投融资团队的数量-->
+    <select id="queryInvestNum" resultType="java.lang.Long">
+        select count(distinct a.project_id) from innovate_project_subsidies_money a
+        left join innovate_project_info b
+        on a.project_id = b.project_id
+        left join innovate_base_project_station c
+        on b.station_id = c.station_id
+        where base_id = #{baseId} and sub_type = #{subType}
+    </select>
+
+</mapper>

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.innovate.modules.declare.dao.DeclareRetreatDao">
+
+    <select id="queryAllRetreat" resultType="DeclareRetreatEntity">
+        select  * from innovate_declare_retreat
+        where retreat_id = #{retreatId}
+            and is_del = 0
+    </select>
+
+    <select id="queryAll" resultType="DeclareRetreatEntity">
+        select  * from innovate_declare_retreat
+        <where>
+            <if test="declareId != null and declareId != ''">
+                declare_id = #{declareId}
+            </if>
+            <if test="userId != null and userId != ''">
+                and user_id = #{userId}
+            </if>
+            <if test="apply != null and apply != ''">
+                and apply like CONCAT('%',#{apply},'%')
+            </if>
+        </where>
+    </select>
+
+</mapper>

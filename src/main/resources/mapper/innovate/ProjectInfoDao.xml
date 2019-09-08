@@ -1,0 +1,285 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.innovate.modules.innovate.dao.ProjectInfoDao">
+
+    <select id="queryById" resultType="ProjectInfoEntity">
+        select * from innovate_project_info
+        where project_id = #{projectId}
+    </select>
+
+    <!--筛选满足当前条件的项目总条数-->
+    <select id="queryCountPage" resultType="Integer" parameterType="map">
+        select count(*) from innovate_project_info a
+
+        <if test="isTeacher != null and isTeacher != ''">
+            inner join innovate_project_teacher b on a.project_id = b.project_id
+        </if>
+
+        <if test="isEr != null and isEr != ''">
+            inner join sys_user b on a.project_user_id = b.user_id
+            inner join innovate_user_person_info c on c.user_id = b.user_id
+        </if>
+
+        <if test="hasReview != null and hasReview != ''">
+            inner join innovate_project_review c on a.project_id = c.project_id
+            and a.is_del = c.is_del
+        </if>
+
+        where 1 = 1
+
+        <if test="isTeacher != null and isTeacher != ''">
+            and b.user_id = #{userId}
+            and b.is_del = 0
+        </if>
+
+        <if test="isStudent != null and isStudent != ''">
+            and a.project_user_id = #{userId}
+        </if>
+
+        <!--该值为当前用户的所属部门-->
+        <if test="isEr != null and isEr != ''">
+            and b.institute_id = #{erInstituteId}
+        </if>
+
+        <if test="isUpdate != null and isUpdate != ''">
+            and a.is_update = #{isUpdate}
+        </if>
+
+        <if test="applyUpdate != null and applyUpdate != ''">
+            and a.apply_update = #{applyUpdate}
+        </if>
+
+        <if test="isDel != null and isDel != ''">
+            and a.is_del = #{isDel}
+        </if>
+
+        <if test="noPass != null and noPass != '' and noPassStatus != null and noPassStatus != ''">
+            and a.${noPass} = #{noPassStatus}
+        </if>
+
+        <if test="apply != null and apply != '' and applyStatus != null and hasApply == 1">
+            and a.${apply} = #{applyStatus}
+        </if>
+
+        <if test="apply != null and apply != '' and applyStatus != null and hasApply == 2">
+            and a.${apply} > #{applyStatus}
+        </if>
+
+        --         评委
+        <if test="hasReview != null and hasReview != '' and apply != '' and apply != null">
+            and c.apply = #{apply}
+        </if>
+
+        <if test="hasReview != null and hasReview != '' and userId != '' and userId != null">
+            and c.user_id = #{userId}
+        </if>
+
+        <if test="apply != null and apply != '' and applyStatus != null and hasReview == 1">
+            and a.${apply} = #{applyStatus}
+            and c.score is null
+        </if>
+
+        <if test="apply != null and apply != '' and applyStatus != null and hasReview == 2">
+            and a.${apply} = #{applyStatus}
+            and c.score is not null
+        </if>
+
+        <if test="apply != null and apply != '' and applyStatus != null and hasReview == 3">
+            and a.${apply} > #{applyStatus}
+            and c.score is not null
+        </if>
+
+        <if test="startPage != null and endPage != null">
+            limit #{startPage}, #{endPage}
+        </if>
+
+    </select>
+
+    <!--筛选满足当前条件的项目-->
+    <select id="queryPage" resultType="ProjectInfoEntity" parameterType="map">
+        select * from innovate_project_info a
+
+        <if test="isTeacher != null and isTeacher != ''">
+            inner join innovate_project_teacher b on a.project_id = b.project_id
+        </if>
+
+        <if test="isEr != null and isEr != ''">
+            inner join sys_user b on a.project_user_id = b.user_id
+            inner join innovate_user_person_info c on c.user_id = b.user_id
+        </if>
+
+        <if test="hasReview != null and hasReview != ''">
+            inner join innovate_project_review c on a.project_id = c.project_id
+            and a.is_del = c.is_del
+        </if>
+
+        where 1 = 1
+
+        <if test="startTime != null and startTime != ''
+        and endTime != null and endTime != ''">
+            and DATE_FORMAT(a.project_in_date,'%Y-%m-%d') between #{startTime} and #{endTime}
+        </if>
+
+        <if test="projectIndustry != null and projectIndustry != ''">
+            and project_industry = #{projectIndustry}
+        </if>
+
+        <if test="isTeacher != null and isTeacher != ''">
+            and b.user_id = #{userId}
+            and b.is_del = 0
+        </if>
+
+        <if test="isStudent != null and isStudent != ''">
+            and a.project_user_id = #{userId}
+        </if>
+
+        <!--该值为当前用户的所属部门-->
+        <if test="isEr != null and isEr != ''">
+            and b.institute_id = #{erInstituteId}
+        </if>
+
+        <if test="isUpdate != null and isUpdate != ''">
+            and a.is_update = #{isUpdate}
+        </if>
+
+        <if test="applyUpdate != null and applyUpdate != ''">
+            and a.apply_update = #{applyUpdate}
+        </if>
+
+        <if test="isDel != null and isDel != ''">
+            and a.is_del = #{isDel}
+        </if>
+
+        <if test="noPass != null and noPass != '' and noPassStatus != null and noPassStatus != ''">
+            and a.${noPass} = #{noPassStatus}
+        </if>
+
+        <if test="apply != null and apply != '' and applyStatus != null and hasApply == 1">
+          and a.${apply} = #{applyStatus}
+        </if>
+
+        <if test="apply != null and apply != '' and applyStatus != null and hasApply == 2">
+            and a.${apply} > #{applyStatus}
+        </if>
+
+--         评委
+        <if test="hasReview != null and hasReview != '' and apply != '' and apply != null">
+            and c.apply = #{apply}
+        </if>
+
+        <if test="hasReview != null and hasReview != '' and userId != '' and userId != null">
+            and c.user_id = #{userId}
+        </if>
+
+        <if test="apply != null and apply != '' and applyStatus != null and hasReview == 1">
+            and a.${apply} = #{applyStatus}
+            and c.score is null
+        </if>
+
+        <if test="apply != null and apply != '' and applyStatus != null and hasReview == 2">
+            and a.${apply} = #{applyStatus}
+            and c.score is not null
+        </if>
+
+        <if test="apply != null and apply != '' and applyStatus != null and hasReview == 3">
+            and a.${apply} > #{applyStatus}
+            and c.score is not null
+        </if>
+
+        <if test="startPage != null and endPage != null">
+            limit #{startPage}, #{endPage}
+        </if>
+    </select>
+
+    <!--筛选满足当前条件的项目-->
+    <select id="noPass" resultType="ProjectInfoEntity" parameterType="map">
+        SELECT * FROM innovate_project_info
+          WHERE is_del = '0'
+          AND (audit_no_pass = '1' OR base_no_pass = '1' OR match_no_pass = '1' OR finish_no_pass = '1')
+          <if test="userId != '' and userId != null">
+              AND project_user_id = #{userId}
+          </if>
+    </select>
+
+    <!--查询所有的的项目-->
+    <select id="queryAll" resultType="ProjectInfoEntity" parameterType="map">
+        SELECT * FROM innovate_project_info
+        WHERE is_del = '0'
+    </select>
+
+    <update id="remove" parameterType="map">
+        update innovate_project_info
+        set is_del = 1
+        where project_id = #{projectId}
+    </update>
+
+
+
+    <!--统计开始-->
+
+    <!--查询工位Id-->
+    <select id="queryStationIdList" resultType="long">
+        select distinct station_id from innovate_project_info
+        where project_status = #{projectStatus}
+    </select>
+
+
+    <!-- 统计项目总数 -->
+    <select id="queryProjectNum" resultType="java.lang.Long">
+        select count(distinct project_id) from innovate_project_info a
+        left join innovate_base_project_station b
+        on a.station_id = b.station_id
+        where base_id = #{baseId}
+        <if test="projectStatus != null and projectStatus != ''">
+            and project_status = #{projectStatus}
+        </if>
+        <if test="projectBase != null and projectBase != ''">
+            and project_base = #{projectBase}
+        </if>
+        <if test="projectRegStatus != null and projectRegStatus != ''">
+            and project_reg_status = #{projectRegStatus}
+        </if>
+    </select>
+
+    <!--统计总投资额-->
+    <select id="queryInvest" resultType="java.lang.Double">
+        select sum(project_init_money) from innovate_project_info a
+        left join innovate_base_project_station b
+        on a.station_id = b.station_id
+        where base_id = #{baseId}
+    </select>
+
+    <!--统计吸纳就业见习-->
+    <select id="queryAbsorb" resultType="java.lang.Long">
+        select sum(per_num_absorb_em + per_num_absorb_pt) from innovate_project_info a
+        left join innovate_base_project_station b
+        on a.station_id = b.station_id
+        where base_id = #{baseId}
+    </select>
+
+    <!--统计带动就业-->
+    <select id="queryDriveEmNum" resultType="java.lang.Long">
+        select sum(per_num_drive_em_num) from innovate_project_info a
+        left join innovate_base_project_station b
+        on a.station_id = b.station_id
+        where base_id = #{baseId}
+    </select>
+
+    <!--拥有的有效知识产权数量-->
+    <select id="queryIprNum" resultType="java.lang.Long">
+        select count(project_id) from innovate_project_info a
+        left join innovate_base_project_station b
+        on a.station_id = b.station_id
+        where base_id = #{baseId} and project_property = #{projectProperty}
+    </select>
+
+    <!--查询baseId-->
+    <select id="queryBaseId" resultType="java.lang.Long">
+        select base_id from innovate_project_info a
+        left join innovate_base_project_station b
+        on a.station_id = b.station_id
+        where project_id = #{projectId}
+    </select>
+
+</mapper>

@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.innovate.modules.innovate.dao.BaseProjectStationDao">
+
+    <!-- 查询所有工位 -->
+    <select id="queryAll" resultType="BaseProjectStationEntity">
+		select * from innovate_base_project_station
+	</select>
+
+	<!-- 查询工位数 -->
+	<select id="queryStationNum" resultType="java.lang.Long">
+		select count(station_id) from innovate_base_project_station
+		where base_id = #{baseId}
+	</select>
+
+	<!-- 查询工位办公面积 -->
+	<select id="queryArea" resultType="java.lang.Double">
+		select station_area from innovate_base_project_station
+		where station_id = #{stationId}
+	</select>
+
+	<!-- 查询baseId -->
+	<select id="queryBaseId" resultType="java.lang.Long">
+		select base_id from innovate_base_project_station
+		where station_id = #{stationId}
+	</select>
+
+	<update id="hasApply" parameterType="java.lang.Long">
+        update innovate_base_project_station
+        set has_apply = 1
+        where station_id = #{stationId}
+    </update>
+
+	<update id="delApply" parameterType="java.lang.Long">
+        update innovate_base_project_station
+        set has_apply = 0
+        where station_id = #{stationId}
+    </update>
+
+</mapper>
