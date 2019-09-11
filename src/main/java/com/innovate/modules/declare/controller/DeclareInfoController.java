@@ -58,39 +58,22 @@ public class DeclareInfoController extends AbstractController {
         Long erInstituteId = ShiroUtils.getUserEntity().getInstituteId();
         params.put("erInstituteId",erInstituteId);
         PageUtils page = declareInfoModelService.queryPage(params);
-
+        //学院
         List<InnovateInstituteEntity> institute = innovateInstituteService.queryAllInstitute();
+        //年级
         List<InnovateGradeEntity> grade = innovateGradeService.queryAllGrade();
 
-        /*查询指导老师*/
-        List<UserTeacherInfoEntity> declareTeacherInfoEntities=new CopyOnWriteArrayList<UserTeacherInfoEntity>();
-
-        for (int i = 0; i < page.getList().size() ; i++) {
-
-            DeclareInfoModel declareInfoModel = (DeclareInfoModel) page.getList().get(i);
-
-            for (UserTeacherInfoEntity userTeacherInfoEntity:userTeacherInfoService.queryDeclareTeacherInfo(declareInfoModel.getDeclareInfoEntity().getDeclareId())){
-
-                if (!declareTeacherInfoEntities.contains(userTeacherInfoEntity)){
-
-                    declareTeacherInfoEntities.add(userTeacherInfoEntity);
-
-                }
-
-            }
-
-        }
         return R.ok()
                 .put("page", page)
                 .put("institute", institute)
-                .put("grade", grade)
-                .put("teacher",declareTeacherInfoEntities);
+                .put("grade", grade);
     }
     /**
      * 按照学院查询统计汇总该学院项目信息
      * @param params
      * @return
      */
+    //TODO：优化数据查询
     @GetMapping("/erCollect")
     @RequiresPermissions("innovate:declare:info")
     public R erCollect(@RequestParam Map<String, Object> params){

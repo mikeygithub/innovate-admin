@@ -10,6 +10,7 @@
 
     <!--筛选满足当前条件的项目总条数-->
     <select id="queryCountPage" resultType="Integer" parameterType="map">
+
         select count(*) from innovate_declare_info a
 
         <if test="isTeacher != null and isTeacher != ''">
@@ -41,20 +42,36 @@
             and a.declare_name like CONCAT('%',#{projectName},'%')
         </if>
 
-        <if test="isAdmin != null and isAdmin != ''">
-            and b.declare_order_no is not null
+        <if test="instituteId != null and instituteId != ''">
+            and a.institute_id = #{instituteId}
         </if>
+        <if test="project_audit_apply_status != null and projectAuditApplyStatus != ''">
+            and project_audit_apply_status = #{project_audit_apply_status}
+        </if>
+
+        <if test="project_audit_apply_status_more != null and projectAuditApplyStatusMore != ''">
+            and project_audit_apply_status &gt; #{project_audit_apply_status_more}
+        </if>
+
+        <if test="project_audit_apply_status_less != null and projectAuditApplyStatusLess != ''">
+            and project_audit_apply_status &lt; #{project_audit_apply_status_less}
+        </if>
+
 
         <!--该值为当前用户的所属部门-->
         <if test="isEr != null and isEr != ''">
             and b.institute_id = #{erInstituteId}
         </if>
 
+        <if test="isAdmin != null and isAdmin != ''">
+            and b.declare_order_no is not null
+        </if>
+
         <if test="isReview != null and isReview != ''">
             and b.declare_order_no is not null
         </if>
 
-        <if test="isTeacher != null and isTeacher != ''">
+        <if test="isTeacher != null and isTeacher != '' and userId != null and userId != ''">
             and b.user_id = #{userId}
             and b.is_del = 0
         </if>
@@ -155,7 +172,7 @@
         </if>
 
         <if test="instituteId != null and instituteId != ''">
-            and institute_id = #{instituteId}
+            and a.institute_id = #{instituteId}
         </if>
         <if test="project_audit_apply_status != null and projectAuditApplyStatus != ''">
             and project_audit_apply_status = #{project_audit_apply_status}
@@ -183,7 +200,7 @@
             and b.declare_order_no is not null
         </if>
 
-        <if test="isTeacher != null and isTeacher != ''">
+        <if test="isTeacher != null and isTeacher != '' and userId != null and userId != ''">
             and b.user_id = #{userId}
             and b.is_del = 0
         </if>

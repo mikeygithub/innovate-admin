@@ -46,4 +46,6 @@ public interface DeclareInfoModelService {
 
     //    获取该学院的全部大创项目
     List<DeclareInfoModel> queryErCollect(Map<String, Object> params);
+
+    List<DeclareInfoModel> queryDeclareByInstituteId(Map<String, Object> params);
 }

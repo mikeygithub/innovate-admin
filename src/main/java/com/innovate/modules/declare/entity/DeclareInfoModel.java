@@ -2,6 +2,7 @@ package com.innovate.modules.declare.entity;
 
 import com.baomidou.mybatisplus.annotations.TableName;
 import com.innovate.modules.innovate.entity.UserPersonInfoEntity;
+import com.innovate.modules.innovate.entity.UserTeacherInfoEntity;
 import lombok.Data;
 
 import java.io.Serializable;
@@ -14,11 +15,12 @@ import java.util.List;
 @Data
 @TableName(value = "innovate_declare_sighing_opinion")
 public class DeclareInfoModel implements Serializable {
-    private DeclareInfoEntity declareInfoEntity;
-    private List<UserPersonInfoEntity> userPersonInfoEntities;
-    private List<DeclareTeacherEntity> declareTeacherEntities;
-    private List<DeclareAttachEntity> declareAttachEntities;
-    private List<DeclareStaffInfoEntity> declareStaffInfoEntities;
-    private List<DeclareReviewEntity> declareReviewEntities;
-    private List<DeclareAwardEntity> declareAwardEntities;
+    private DeclareInfoEntity declareInfoEntity;//大创项目
+    private List<UserPersonInfoEntity> userPersonInfoEntities;//负责人
+    private List<DeclareTeacherEntity> declareTeacherEntities;//教师
+    private List<UserTeacherInfoEntity> declareUserTeacherInfoEntities;//教师用户
+    private List<DeclareAttachEntity> declareAttachEntities;//附件
+    private List<DeclareStaffInfoEntity> declareStaffInfoEntities;//员工
+    private List<DeclareReviewEntity> declareReviewEntities;//回退
+    private List<DeclareAwardEntity> declareAwardEntities;//获奖
 }
