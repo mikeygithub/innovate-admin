@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.innovate.modules.generator.dao.EntEnterpriseInfoDao">
+
+	<!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="com.innovate.modules.enterprise.entity.EntEnterpriseInfoEntity" id="entEnterpriseInfoMap">
+        <result property="entInfoId" column="ent_info_id"/>
+        <result property="userId" column="user_id"/>
+        <result property="entName" column="ent_name"/>
+        <result property="entCorporate" column="ent_corporate"/>
+        <result property="entBusiness" column="ent_business"/>
+        <result property="entCode" column="ent_code"/>
+        <result property="entRegister" column="ent_register"/>
+        <result property="entFoundingTime" column="ent_founding_time"/>
+        <result property="entType" column="ent_type"/>
+        <result property="entStatus" column="ent_status"/>
+        <result property="entRegisterAddress" column="ent_register_address"/>
+        <result property="entAddress" column="ent_address"/>
+        <result property="entIntroduce" column="ent_introduce"/>
+        <result property="newHighZones" column="new_high_zones"/>
+    </resultMap>
+
+
+</mapper>

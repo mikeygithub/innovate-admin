@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.innovate.modules.generator.dao.EntStudentExperienceInfoDao">
+
+	<!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="com.innovate.modules.enterprise.entity.EntStudentExperienceInfoEntity" id="entStudentExperienceInfoMap">
+        <result property="stuExperienceId" column="stu_experience_id"/>
+        <result property="stuInfoId" column="stu_info_id"/>
+        <result property="stuExperienceContent" column="stu_experience_content"/>
+        <result property="stuExperienceTime" column="stu_experience_time"/>
+        <result property="stuExperiencePlace" column="stu_experience_place"/>
+        <result property="stuExperienceWorkType" column="stu_experience_work_type"/>
+    </resultMap>
+
+
+</mapper>

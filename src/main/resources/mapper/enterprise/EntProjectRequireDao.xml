@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.innovate.modules.generator.dao.EntProjectRequireDao">
+
+	<!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="com.innovate.modules.enterprise.entity.EntProjectRequireEntity" id="entProjectRequireMap">
+        <result property="proRequireId" column="pro_require_id"/>
+        <result property="proInfoId" column="pro_info_id"/>
+        <result property="proPeopleNumber" column="pro_people_number"/>
+        <result property="requireSpecialty" column="require_specialty"/>
+        <result property="researchArea" column="research_area"/>
+        <result property="proPayoffWay" column="pro_payoff_way"/>
+        <result property="stuInfoId" column="stu_info_id"/>
+        <result property="teaInfoId" column="tea_info_id"/>
+    </resultMap>
+
+
+</mapper>
