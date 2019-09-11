@@ -47,6 +47,4 @@ public interface MatchInfoModelService {
     @Transactional
     void deleteProps(Map<String, Object> params);
 
-    //    获取该学院的全部比赛项目
-    List<MatchInfoModel> queryErCollect(Map<String, Object> params);
 }

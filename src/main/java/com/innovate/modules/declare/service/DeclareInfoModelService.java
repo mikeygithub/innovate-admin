@@ -44,8 +44,4 @@ public interface DeclareInfoModelService {
     @Transactional
     void deleteProps(Map<String, Object> params);
 
-    //    获取该学院的全部大创项目
-    List<DeclareInfoModel> queryErCollect(Map<String, Object> params);
-
-    List<DeclareInfoModel> queryDeclareByInstituteId(Map<String, Object> params);
 }

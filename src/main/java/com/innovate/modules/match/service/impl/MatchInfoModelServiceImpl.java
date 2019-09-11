@@ -3,6 +3,7 @@ package com.innovate.modules.match.service.impl;
 import com.innovate.common.utils.PageUtils;
 import com.innovate.modules.innovate.entity.*;
 import com.innovate.modules.innovate.service.UserPerInfoService;
+import com.innovate.modules.innovate.service.UserTeacherInfoService;
 import com.innovate.modules.match.entity.*;
 import com.innovate.modules.match.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,6 +36,8 @@ public class MatchInfoModelServiceImpl implements MatchInfoModelService {
     private MatchTeacherService matchTeacherService;
     @Autowired
     private MatchReviewService matchReviewService;
+    @Autowired
+    private UserTeacherInfoService userTeacherInfoService;
 
     private List<MatchTeacherEntity> matchTeacherEntities;
     private List<UserPersonInfoEntity> userPersonInfoEntities;
@@ -42,6 +45,7 @@ public class MatchInfoModelServiceImpl implements MatchInfoModelService {
     private List<MatchStaffInfoEntity> matchStaffInfoEntities;
     private List<MatchAwardEntity> matchAwardEntities;
     private List<MatchReviewEntity> matchReviewEntities;
+    private List<UserTeacherInfoEntity> userTeacherInfoEntities;
 
     @Override
     public PageUtils queryPage(Map<String, Object> params) {
@@ -67,9 +71,7 @@ public class MatchInfoModelServiceImpl implements MatchInfoModelService {
         MatchInfoModel tempMatchInfoModel = null;
 //        包含项目所有信息的主要实体
         List<MatchInfoModel> matchInfoModels = new ArrayList<>();
-
         tempLists = matchInfoService.queryPage(params);
-
         Map<String, Object> tempParams = new HashMap<>();
 
         for (MatchInfoEntity matchInfoEntity : tempLists) {
@@ -98,6 +100,7 @@ public class MatchInfoModelServiceImpl implements MatchInfoModelService {
 //        获取项目相关的所有表的数据信息
         userPersonInfoEntities = userPerInfoService.queryAllPersonInfo(params);
         matchTeacherEntities = matchTeacherService.queryAll(params);
+        userTeacherInfoEntities = userTeacherInfoService.queryMatchTeacherInfo(matchId);
         matchAttachEntities = matchAttachService.queryAll(params);
         matchStaffInfoEntities = matchStaffInfoService.queryAll(params);
         matchAwardEntities = matchAwardService.queryAll(params);
@@ -106,6 +109,7 @@ public class MatchInfoModelServiceImpl implements MatchInfoModelService {
 //        将项目相关的信息放入tempInnovatematchInfoModel中
         tempMatchInfoModel.setUserPersonInfoEntities(userPersonInfoEntities);
         tempMatchInfoModel.setMatchTeacherEntities(matchTeacherEntities);
+        tempMatchInfoModel.setUserTeacherInfoEntities(userTeacherInfoEntities);
         tempMatchInfoModel.setMatchAttachEntities(matchAttachEntities);
         tempMatchInfoModel.setMatchStaffInfoEntities(matchStaffInfoEntities);
         tempMatchInfoModel.setMatchAwardEntities(matchAwardEntities);
@@ -167,50 +171,5 @@ public class MatchInfoModelServiceImpl implements MatchInfoModelService {
         matchAttachService.remove(params);
         matchStaffInfoService.remove(params);
         matchAwardService.remove(params);
-    }
-
-    @Override
-    public List<MatchInfoModel> queryErCollect(Map<String, Object> params) {
-
-        Long instituteId = Long.parseLong(params.get("instituteId").toString());
-
-        List<MatchInfoModel> total=new CopyOnWriteArrayList<MatchInfoModel>();
-
-        //根据学院查询出用户
-        List<UserPersonInfoEntity> userPersonInfoEntities = userPerInfoService.queryByUserInstituteIds(instituteId);
-        //查询这些用户的所有比赛项目
-        for (UserPersonInfoEntity userPersonInfoEntity:userPersonInfoEntities){
-
-            HashMap<String, Object> stringLongHashMap = new HashMap<String, Object>();
-
-            stringLongHashMap.put("project_user_id",userPersonInfoEntity.getUserId());
-
-            List<MatchInfoEntity> matchInfoEntities = matchInfoService.selectByMap(stringLongHashMap);
-
-            for (MatchInfoEntity matchInfoEntity:matchInfoEntities){
-
-                HashMap<String, Object> paramas = new HashMap<>();
-
-                paramas.put("matchId",matchInfoEntity.getMatchId());
-
-                MatchInfoModel query = query(paramas);
-
-                total.add(query);
-            }
-        }
-        //移除不通过和未提交的比赛项目
-        if (total.size()>0) {
-
-            for (MatchInfoModel matchInfoModel : total) {
-
-                if (matchInfoModel.getMatchInfoEntity().getProjectMatchApplyStatus() == 0 || matchInfoModel.getMatchInfoEntity().getMatchNoPass() == 1) {
-
-                    total.remove(matchInfoModel);
-
-                }
-            }
-
-        }
-        return total;
     }
 }

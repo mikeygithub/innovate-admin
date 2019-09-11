@@ -15,7 +15,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
  * @author: 尧志欣
@@ -76,10 +75,7 @@ public class DeclareInfoModelServiceImpl implements DeclareInfoModelService {
         DeclareInfoModel tempdeclareInfoModel = null;
 //        包含项目所有信息的主要实体
         List<DeclareInfoModel> declareInfoModels = new ArrayList<>();
-
-        logger.info("=========before queryPage=========");
         tempLists = declareInfoService.queryPage(params);
-        logger.info("==========ene queryPage============");
         Map<String, Object> tempParams = new HashMap<>();
 
         for (DeclareInfoEntity declareInfoEntity : tempLists) {
@@ -196,69 +192,5 @@ public class DeclareInfoModelServiceImpl implements DeclareInfoModelService {
         declareAttachService.remove(params);
         declareStaffInfoService.remove(params);
         declareAwardService.remove(params);
-    }
-
-    @Override
-    @Deprecated
-    public List<DeclareInfoModel> queryErCollect(Map<String, Object> params) {
-//        //学院id
-//        Long instituteId = Long.parseLong(params.get("instituteId").toString());
-//        //
-//        List<DeclareInfoModel> total=new CopyOnWriteArrayList<DeclareInfoModel>();
-//        //根据学院查询出用户
-//        List<UserPersonInfoEntity> userPersonInfoEntities = userPerInfoService.queryByUserInstituteIds(instituteId);
-//        //查询这些用户的所有大创项目
-//        for (UserPersonInfoEntity userPersonInfoEntity:userPersonInfoEntities){
-//
-//            HashMap<String, Object> stringLongHashMap = new HashMap<String, Object>();
-//
-//            stringLongHashMap.put("project_user_id",userPersonInfoEntity.getUserId());
-//
-//            List<DeclareInfoEntity> declareInfoEntities = declareInfoService.selectByMap(stringLongHashMap);
-//
-//            for (DeclareInfoEntity declareInfoEntity:declareInfoEntities){
-//
-//                HashMap<String, Object> paramas = new HashMap<>();
-//
-//                paramas.put("declareId",declareInfoEntity.getDeclareId());
-//
-//                DeclareInfoModel query = query(paramas);
-//
-//                total.add(query);
-//            }
-//        }
-//        //移除不通过和未提交的比赛项目
-//        if (total.size()>0) {
-//
-//            for (DeclareInfoModel declareInfoModel : total) {
-//
-//                //移除二级学院未审批和不通过的项目
-//                if (declareInfoModel.getDeclareInfoEntity().getProjectAuditApplyStatus() <3 ||
-//                        declareInfoModel.getDeclareInfoEntity().getAuditNoPass()==1||
-//                        declareInfoModel.getDeclareInfoEntity().getIsDel()==1
-//                ) {
-//
-//                    total.remove(declareInfoModel);
-//
-//                }
-//            }
-//
-//        }
-//        return total;
-        return queryDeclareByInstituteId(params);
-    }
-    @Override
-    public List<DeclareInfoModel> queryDeclareByInstituteId(Map<String, Object> params) {
-        //学院id
-        Long instituteId = Long.parseLong(params.get("instituteId").toString());
-        //
-        List<DeclareInfoModel> total=new CopyOnWriteArrayList<DeclareInfoModel>();
-        //移除不通过和未提交的比赛项目
-
-        logger.info("=============start===========");
-        List<DeclareInfoEntity> declareInfoEntities = declareInfoService.queryPage(params);
-        logger.info("==============end============");
-
-        return total;
     }
 }

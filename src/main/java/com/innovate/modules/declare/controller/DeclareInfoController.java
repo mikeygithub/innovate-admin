@@ -19,11 +19,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.CopyOnWriteArrayList;
-
 /**
  * @author Mikey
  * @Title:
@@ -67,39 +64,6 @@ public class DeclareInfoController extends AbstractController {
                 .put("page", page)
                 .put("institute", institute)
                 .put("grade", grade);
-    }
-    /**
-     * 按照学院查询统计汇总该学院项目信息
-     * @param params
-     * @return
-     */
-    //TODO：优化数据查询
-    @GetMapping("/erCollect")
-    @RequiresPermissions("innovate:declare:info")
-    public R erCollect(@RequestParam Map<String, Object> params){
-
-        Long instituteId = Long.parseLong(params.get("instituteId").toString());
-
-        List<UserTeacherInfoEntity> userTeacherInfoEntities=new LinkedList<>();
-
-        //大创项目信息
-        List<DeclareInfoModel> declareInfoModels = declareInfoModelService.queryErCollect(params);
-        //指导老师信息
-        for (DeclareInfoModel declareInfoModel:declareInfoModels){
-
-            List<UserTeacherInfoEntity> userTeacherInfoEntitie = userTeacherInfoService.queryDeclareTeacherInfo(declareInfoModel.getDeclareInfoEntity().getDeclareId());
-
-            for (UserTeacherInfoEntity userTeacherInfoEntity:userTeacherInfoEntitie){
-
-                if(!userTeacherInfoEntities.contains(userTeacherInfoEntity)){
-
-                    userTeacherInfoEntities.add(userTeacherInfoEntity);
-
-                }
-            }
-        }
-
-        return R.ok().put("declareInfoList", declareInfoModels).put("userTeacherInfoEntities", userTeacherInfoEntities);
     }
     /**
      * 未通过的项目

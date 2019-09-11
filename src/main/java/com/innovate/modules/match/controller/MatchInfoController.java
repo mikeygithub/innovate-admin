@@ -11,16 +11,13 @@ import com.innovate.modules.match.entity.MatchInfoModel;
 import com.innovate.modules.match.service.MatchInfoModelService;
 import com.innovate.modules.match.service.MatchInfoService;
 import com.innovate.modules.sys.controller.AbstractController;
-import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
  * @author Mikey
@@ -60,64 +57,11 @@ public class MatchInfoController extends AbstractController {
         List<InnovateInstituteEntity> institute = innovateInstituteService.queryAllInstitute();
         List<InnovateGradeEntity> grade = innovateGradeService.queryAllGrade();
 
-        /*查询指导老师*/
-        List<UserTeacherInfoEntity> matchTeacherInfoEntities=new CopyOnWriteArrayList<UserTeacherInfoEntity>();
-
-        for (int i = 0; i < page.getList().size() ; i++) {
-
-            MatchInfoModel matchInfoModel = (MatchInfoModel) page.getList().get(i);
-
-            for (UserTeacherInfoEntity userTeacherInfoEntity:userTeacherInfoService.queryMatchTeacherInfo(matchInfoModel.getMatchInfoEntity().getMatchId())){
-
-                if (!matchTeacherInfoEntities.contains(userTeacherInfoEntity)){
-
-                    matchTeacherInfoEntities.add(userTeacherInfoEntity);
-
-                }
-
-            }
-
-        }
-        return R.ok()
-                .put("page", page)
+        return R.ok().put("page", page)
                 .put("institute", institute)
-                .put("grade", grade)
-                .put("teacher",matchTeacherInfoEntities);
-
+                .put("grade", grade);
     }
 
-    /**
-     * 按照学院查询统计汇总该学院项目信息
-     * @param params
-     * @return
-     */
-    @GetMapping("/erCollect")
-    @RequiresPermissions("innovate:match:info")
-    public R erCollect(@RequestParam Map<String, Object> params){
-
-        Long instituteId = Long.parseLong(params.get("instituteId").toString());
-
-        List<UserTeacherInfoEntity> userTeacherInfoEntities=new LinkedList<>();
-
-        //参赛项目信息
-        List<MatchInfoModel> matchInfoList = matchInfoModelService.queryErCollect(params);
-        //指导老师信息
-        for (MatchInfoModel matchInfoModel:matchInfoList){
-
-            List<UserTeacherInfoEntity> userTeacherInfoEntitie = userTeacherInfoService.queryMatchTeacherInfo(matchInfoModel.getMatchInfoEntity().getMatchId());
-
-            for (UserTeacherInfoEntity userTeacherInfoEntity:userTeacherInfoEntitie){
-
-                if(!userTeacherInfoEntities.contains(userTeacherInfoEntity)){
-
-                    userTeacherInfoEntities.add(userTeacherInfoEntity);
-
-                }
-            }
-        }
-
-        return R.ok().put("matchInfoList", matchInfoList).put("userTeacherInfoEntities", userTeacherInfoEntities);
-    }
     /**
      * 未通过的项目
      */
