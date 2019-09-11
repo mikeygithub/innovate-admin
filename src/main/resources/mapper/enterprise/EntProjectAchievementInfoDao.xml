@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.innovate.modules.generator.dao.EntProjectAchievementInfoDao">
+
+	<!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="com.innovate.modules.enterprise.entity.EntProjectAchievementInfoEntity" id="entProjectAchievementInfoMap">
+        <result property="proAchievementId" column="pro_achievement_id"/>
+        <result property="proInfoId" column="pro_info_id"/>
+        <result property="proAchievementContent" column="pro_achievement_content"/>
+    </resultMap>
+
+
+</mapper>
