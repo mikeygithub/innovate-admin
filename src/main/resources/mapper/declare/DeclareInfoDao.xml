@@ -132,6 +132,10 @@
             and c.score is not null
         </if>
 
+        <if test="declareTime != null and declareTime != ''">
+            and a.declare_time like CONCAT('%',#{declareTime},'%')
+        </if>
+
         <if test="startPage != null and endPage != null">
             limit #{startPage}, #{endPage}
         </if>
@@ -261,9 +265,14 @@
             and c.score is not null
         </if>
 
+        <if test="declareTime != null and declareTime != ''">
+            and a.declare_time like CONCAT('%',#{declareTime},'%')
+        </if>
+
         <if test="startPage != null and endPage != null">
             limit #{startPage}, #{endPage}
         </if>
+
     </select>
 
     <!--筛选满足当前条件的项目-->

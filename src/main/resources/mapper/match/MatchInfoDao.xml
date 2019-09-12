@@ -94,6 +94,10 @@
             and c.score is not null
         </if>
 
+        <if test="matchTime != null and matchTime != ''">
+            and a.match_time like CONCAT('%',#{matchTime},'%')
+        </if>
+
         <if test="startPage != null and endPage != null">
             limit #{startPage}, #{endPage}
         </if>
@@ -136,6 +140,8 @@
         <if test="isEr != null and isEr != ''">
             and b.institute_id = #{erInstituteId}
         </if>
+
+
 
         <if test="isUpdate != null and isUpdate != ''">
             and a.is_update = #{isUpdate}
@@ -184,6 +190,11 @@
             and a.${apply} > #{applyStatus}
             and c.score is not null
         </if>
+
+        <if test="matchTime != null and matchTime != ''">
+            and a.match_time like CONCAT('%',#{matchTime},'%')
+        </if>
+
 
         <if test="startPage != null and endPage != null">
             limit #{startPage}, #{endPage}

@@ -7,6 +7,7 @@ import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import lombok.Data;
 
 import java.io.Serializable;
+import java.util.Date;
 
 /**
  * @author:tz
@@ -36,5 +37,5 @@ public class MatchInfoEntity implements Serializable {
     @JsonSerialize(using=ToStringSerializer.class)
     private Double matchScoreAvg;
     private Long isDel;
-
+    private Date matchTime;
 }
