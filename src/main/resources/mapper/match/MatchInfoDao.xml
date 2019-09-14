@@ -20,6 +20,12 @@
             inner join sys_user b on a.project_user_id = b.user_id
             inner join innovate_user_person_info c on c.user_id = b.user_id
         </if>
+         <!--与isEr为独立事件-->
+        <if test="isInstitute != null and isInstitute != '' and instituteId != null and instituteId != '' ">
+            inner join sys_user b on a.project_user_id = b.user_id
+            inner join innovate_user_person_info c on c.user_id = b.user_id
+            and b.institute_id = #{instituteId}
+        </if>
 
         <if test="hasReview != null and hasReview != ''">
             inner join innovate_match_review c on a.match_id = c.match_id
@@ -115,7 +121,11 @@
             inner join sys_user b on a.project_user_id = b.user_id
             inner join innovate_user_person_info c on c.user_id = b.user_id
         </if>
-
+        <if test="isInstitute != null and isInstitute != '' and instituteId != null and instituteId != '' ">
+            inner join sys_user b on a.project_user_id = b.user_id
+            inner join innovate_user_person_info c on c.user_id = b.user_id
+            and b.institute_id = #{instituteId}
+        </if>
         <if test="hasReview != null and hasReview != ''">
             inner join innovate_match_review c on a.match_id = c.match_id
             and a.is_del = c.is_del
