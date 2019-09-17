@@ -34,6 +34,11 @@ public class InnovateTitleServiceImpl extends ServiceImpl<InnovateTitleDao, Inno
     }
 
     @Override
+    public List<InnovateTitleEntity> queryTitle(Map<String, Object> params) {
+        return baseMapper.queryTitle(params);
+    }
+
+    @Override
     public List<InnovateTitleEntity> queryAll() {
         return baseMapper.queryAll();
     }

@@ -3,6 +3,13 @@
 
 <mapper namespace="com.innovate.modules.innovate.dao.InnovateTitleDao">
 
+    <select id="queryTitle" resultType="InnovateTitleEntity" parameterType="map">
+        select * from innovate_sys_title a
+        <if test="like != null and like != ''">
+            where a.title_name like CONCAT('%',#{like},'%')
+        </if>
+    </select>
+
     <select id="queryAll" resultType="InnovateTitleEntity" parameterType="map">
         select * from innovate_sys_title
     </select>

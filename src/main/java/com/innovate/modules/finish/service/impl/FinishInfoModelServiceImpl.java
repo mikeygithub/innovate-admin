@@ -4,7 +4,9 @@ import com.innovate.common.utils.PageUtils;
 import com.innovate.modules.finish.entity.*;
 import com.innovate.modules.finish.service.*;
 import com.innovate.modules.innovate.entity.UserPersonInfoEntity;
+import com.innovate.modules.innovate.entity.UserTeacherInfoEntity;
 import com.innovate.modules.innovate.service.UserPerInfoService;
+import com.innovate.modules.innovate.service.UserTeacherInfoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -31,9 +33,12 @@ public class FinishInfoModelServiceImpl implements FinishInfoModelService {
     @Autowired
     private FinishTeacherService finishTeacherService;
     @Autowired
+    private UserTeacherInfoService userTeacherInfoService;
+    @Autowired
     private FinishReviewService finishReviewService;
 
     private List<FinishTeacherEntity> finishTeacherEntities;
+    private List<UserTeacherInfoEntity> userTeacherInfoEntities;
     private List<UserPersonInfoEntity> userPersonInfoEntities;
     private List<FinishAttachEntity> finishAttachEntities;
     private List<FinishStaffInfoEntity> finishStaffInfoEntities;
@@ -92,6 +97,7 @@ public class FinishInfoModelServiceImpl implements FinishInfoModelService {
 //        获取项目相关的所有表的数据信息
         userPersonInfoEntities = userPerInfoService.queryAllPersonInfo(params);
         finishTeacherEntities = finishTeacherService.queryAll(params);
+        userTeacherInfoEntities = userTeacherInfoService.queryFinishTeacherInfo(finishId);
         finishAttachEntities = finishAttachService.queryAll(params);
         finishStaffInfoEntities = finishStaffInfoService.queryAll(params);
         finishReviewEntities = finishReviewService.queryAll(params);
@@ -99,6 +105,7 @@ public class FinishInfoModelServiceImpl implements FinishInfoModelService {
 //        将项目相关的信息放入tempInnovatefinishInfoModel中
         tempFinishInfoModel.setUserPersonInfoEntities(userPersonInfoEntities);
         tempFinishInfoModel.setFinishTeacherEntities(finishTeacherEntities);
+        tempFinishInfoModel.setFinishUserTeacherInfoEntities(userTeacherInfoEntities);
         tempFinishInfoModel.setFinishAttachEntities(finishAttachEntities);
         tempFinishInfoModel.setFinishStaffInfoEntities(finishStaffInfoEntities);
         tempFinishInfoModel.setFinishReviewEntities(finishReviewEntities);

@@ -15,5 +15,6 @@ import java.util.Map;
  **/
 public interface InnovateTitleService extends IService<InnovateTitleEntity> {
     PageUtils queryPage(Map<String, Object> params);
+    List<InnovateTitleEntity> queryTitle(Map<String, Object> params);
     List<InnovateTitleEntity> queryAll();
 }
