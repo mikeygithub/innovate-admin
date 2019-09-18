@@ -39,6 +39,17 @@ public class InnovateTitleController extends AbstractController {
     }
 
     /**
+     * 职称信息
+     */
+    @GetMapping("/title")
+//    @RequiresPermissions("innovate:title:list")
+    public R allTitle(@RequestParam Map<String, Object> params){
+        List<InnovateTitleEntity> innovateTitleEntities = innovateTitleService.queryTitle(params);
+        return R.ok()
+                .put("innovateTitleEntities", innovateTitleEntities);
+    }
+
+    /**
      * 所有
      */
     @GetMapping("/all")

@@ -6,6 +6,7 @@ import com.innovate.modules.innovate.entity.InnovateTitleEntity;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author: 尧志欣
@@ -14,5 +15,6 @@ import java.util.List;
  **/
 @Mapper
 public interface InnovateTitleDao extends BaseMapper<InnovateTitleEntity> {
+    List<InnovateTitleEntity> queryTitle(Map<String, Object> params);
     List<InnovateTitleEntity> queryAll();
 }

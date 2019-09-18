@@ -178,6 +178,10 @@
             and c.score is not null
         </if>
 
+        <if test="finishTime != null and finishTime != ''">
+            and a.finish_time like CONCAT('%',#{finishTime},'%')
+        </if>
+
         <if test="startPage != null and endPage != null">
             limit #{startPage}, #{endPage}
         </if>
