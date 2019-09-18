@@ -146,7 +146,7 @@
             and a.project_user_id = #{userId}
         </if>
 
---         该值为当前用户的所属部门
+        <!--该值为当前用户的所属部门-->
         <if test="isEr != null and isEr != ''">
             and b.institute_id = #{erInstituteId}
         </if>

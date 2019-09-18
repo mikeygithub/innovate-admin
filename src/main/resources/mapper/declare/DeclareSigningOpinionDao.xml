@@ -9,7 +9,7 @@
             and is_del = 0
     </select>
 
-    <!--<select id="queryAll" resultType="DeclareRetreatEntity">-->
+    <!--<select id="queryAll" resultType="CheckRetreatEntity">-->
         <!--select  * from innovate_declare_retreat-->
         <!--<where>-->
             <!--<if test="declareId != null and declareId != ''">-->
