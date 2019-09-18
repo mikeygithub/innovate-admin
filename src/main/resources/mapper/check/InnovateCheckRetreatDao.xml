@@ -4,7 +4,7 @@
 <mapper namespace="com.innovate.modules.innovate.check.dao.InnovateCheckRetreatDao">
 
 	<!-- 可根据自己的需求，是否要使用 -->
-    <resultMap type="com.innovate.modules.innovate.check.entity.InnovateCheckRetreatEntity" id="innovateCheckRetreatMap">
+    <resultMap type="com.innovate.modules.check.entity.InnovateCheckRetreatEntity" id="innovateCheckRetreatMap">
         <result property="retreatId" column="retreat_id"/>
         <result property="checkId" column="check_id"/>
         <result property="userId" column="user_id"/>
