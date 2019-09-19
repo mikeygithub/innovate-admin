@@ -33,5 +33,8 @@ public class UserPersonInfoEntity implements Serializable {
     private String perSocialPractice;
     private SysUserEntity sysUserEntity;
     private Long isDel;
-
+    private Integer perWorking;          //'工作方式',
+    private Integer perAge;              //'年龄',
+    private String perInterest;         //'兴趣爱好',
+    private Integer perEmploy;           //'是否已经被企业录用  0:是，1：否',
 }

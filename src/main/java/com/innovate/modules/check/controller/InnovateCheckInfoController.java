@@ -1,6 +1,7 @@
 package com.innovate.modules.check.controller;
 
 import java.util.Arrays;
+import java.util.Date;
 import java.util.Map;
 
 import org.apache.shiro.authz.annotation.RequiresPermissions;
@@ -37,6 +38,7 @@ public class InnovateCheckInfoController {
     @RequestMapping("/list")
     @RequiresPermissions("check:innovatecheckinfo:list")
     public R list(@RequestParam Map<String, Object> params){
+
         PageUtils page = innovateCheckInfoService.queryPage(params);
 
         return R.ok().put("page", page);
@@ -49,6 +51,7 @@ public class InnovateCheckInfoController {
     @RequestMapping("/info/{checkId}")
     @RequiresPermissions("check:innovatecheckinfo:info")
     public R info(@PathVariable("checkId") Long checkId){
+
 		InnovateCheckInfoEntity innovateCheckInfo = innovateCheckInfoService.selectById(checkId);
 
         return R.ok().put("innovateCheckInfo", innovateCheckInfo);
@@ -64,7 +67,28 @@ public class InnovateCheckInfoController {
 
         return R.ok();
     }
+    /**
+     * 设置中期检查项目
+     */
+    @RequestMapping("/saveByDeclareBatchIds")
+    @RequiresPermissions("check:innovatecheckinfo:save")
+    public R saveByDeclareBatchIds(@RequestBody Long[] checkIds){
 
+        innovateCheckInfoService.saveByDeclareBatchIds(checkIds);
+
+        return R.ok();
+    }
+    /**
+     * 设置中期检查项目
+     */
+    @RequestMapping("/saveByTime")
+    @RequiresPermissions("check:innovatecheckinfo:save")
+    public R saveByTime(@RequestBody Date time){
+
+        innovateCheckInfoService.saveByTime(time);
+
+        return R.ok();
+    }
     /**
      * 修改
      */

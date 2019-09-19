@@ -22,4 +22,8 @@ public class UserTeacherInfoEntity {
     private Long teacherTitle;
     private SysUserEntity sysUserEntity;
     private Long isDel;
+    private Integer teacherBackground;
+    private Integer teacherDegree;
+    private String teacherStudy;
+    private String teacherScientific;
 }

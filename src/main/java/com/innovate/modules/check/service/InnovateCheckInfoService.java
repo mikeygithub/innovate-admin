@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.service.IService;
 import com.innovate.common.utils.PageUtils;
 import com.innovate.modules.check.entity.InnovateCheckInfoEntity;
 
+import java.util.Date;
 import java.util.Map;
 
 /**
@@ -16,5 +17,9 @@ import java.util.Map;
 public interface InnovateCheckInfoService extends IService<InnovateCheckInfoEntity> {
 
     PageUtils queryPage(Map<String, Object> params);
+
+    void saveByDeclareBatchIds(Long[] checkIds);
+
+    void saveByTime(Date time);
 }
 
