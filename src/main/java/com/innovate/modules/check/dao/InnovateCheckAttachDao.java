@@ -4,6 +4,8 @@ import com.baomidou.mybatisplus.mapper.BaseMapper;
 import com.innovate.modules.check.entity.InnovateCheckAttachEntity;
 import org.apache.ibatis.annotations.Mapper;
 
+import java.util.List;
+
 /**
  * 中期检查附件表
  * 
@@ -13,5 +15,5 @@ import org.apache.ibatis.annotations.Mapper;
  */
 @Mapper
 public interface InnovateCheckAttachDao extends BaseMapper<InnovateCheckAttachEntity> {
-	
+
 }

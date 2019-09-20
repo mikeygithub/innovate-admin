@@ -5,6 +5,7 @@ import com.innovate.common.utils.PageUtils;
 import com.innovate.modules.check.entity.InnovateCheckInfoEntity;
 
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -18,7 +19,7 @@ public interface InnovateCheckInfoService extends IService<InnovateCheckInfoEnti
 
     PageUtils queryPage(Map<String, Object> params);
 
-    void saveByDeclareBatchIds(Long[] checkIds);
+    void saveByDeclareBatchIds(List<Long> checkIds);
 
     void saveByTime(Date time);
 }

@@ -18,6 +18,54 @@
         <result property="isDel" column="is_del"/>
     </resultMap>
 
+    <select id="queryCountPage" resultType="Integer" parameterType="map">
+
+        select count(*) from innovate_check_info a
+
+        <if test="userId != null and userId != ''">
+            inner join innovate_declare_info b on a.declare_id = b.declare_id
+            and b.project_user_id = #{userId}
+        </if>
+
+        where 1 = 1
+
+        <if test="declareId != null and declareId != ''">
+            and a.declare_id = #{declareId}
+        </if>
+
+        <if test="groupId != null and groupId != ''">
+            and a.group_id = #{groupId}
+        </if>
+
+        <if test="isUpdate != null and isUpdate != ''">
+            and a.is_update = #{isUpdate}
+        </if>
+
+        <if test="applyUpdate != null and applyUpdate != ''">
+            and a.apply_update = #{applyUpdate}
+        </if>
+
+        <if test="checkNoPass != null and checkNoPass != ''">
+            and a.check_no_pass = #{checkNoPass}
+        </if>
+
+        <if test="instituteId != null and instituteId != ''">
+            and a.institute_id = #{instituteId}
+        </if>
+
+        <if test="projectCheckApplyStatus != null and projectCheckApplyStatus != ''">
+            and a.project_check_apply_status = #{projectCheckApplyStatus}
+        </if>
+
+        <if test="checkTime != null and checkTime != ''">
+            and a.check_time like CONCAT('%',#{checkTime},'%')
+        </if>
+
+        <if test="isDel != null and isDel != ''">
+            and a.is_del = #{isDel}
+        </if>
+    </select>
+
     <select id="queryPage" parameterType="map" resultType="InnovateCheckInfoEntity">
 
         select * from innovate_check_info a
@@ -65,7 +113,7 @@
             and a.is_del = #{isDel}
         </if>
 
-        <if test="startPage != null and endPage != null">
+        <if test="starPage != null and endPage != null">
             limit #{startPage}, #{endPage}
         </if>
     </select>

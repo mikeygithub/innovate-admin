@@ -26,7 +26,7 @@ import com.innovate.common.utils.R;
  * @date 2019-09-18 22:20:42
  */
 @RestController
-@RequestMapping("check/innovatecheckretreat")
+@RequestMapping("check/retreat")
 public class InnovateCheckRetreatController {
     @Autowired
     private InnovateCheckRetreatService innovateCheckRetreatService;
@@ -35,7 +35,7 @@ public class InnovateCheckRetreatController {
      * 列表
      */
     @RequestMapping("/list")
-    @RequiresPermissions("check:innovatecheckretreat:list")
+    @RequiresPermissions("check:retreat:list")
     public R list(@RequestParam Map<String, Object> params){
         PageUtils page = innovateCheckRetreatService.queryPage(params);
 
@@ -47,7 +47,7 @@ public class InnovateCheckRetreatController {
      * 信息
      */
     @RequestMapping("/info/{retreatId}")
-    @RequiresPermissions("check:innovatecheckretreat:info")
+    @RequiresPermissions("check:retreat:info")
     public R info(@PathVariable("retreatId") Long retreatId){
 		InnovateCheckRetreatEntity innovateCheckRetreat = innovateCheckRetreatService.selectById(retreatId);
 
@@ -58,9 +58,10 @@ public class InnovateCheckRetreatController {
      * 保存
      */
     @RequestMapping("/save")
-    @RequiresPermissions("check:innovatecheckretreat:save")
+    @RequiresPermissions("check:retreat:save")
     public R save(@RequestBody InnovateCheckRetreatEntity innovateCheckRetreat){
-		innovateCheckRetreatService.insert(innovateCheckRetreat);
+
+        innovateCheckRetreatService.insert(innovateCheckRetreat);
 
         return R.ok();
     }
@@ -69,7 +70,7 @@ public class InnovateCheckRetreatController {
      * 修改
      */
     @RequestMapping("/update")
-    @RequiresPermissions("check:innovatecheckretreat:update")
+    @RequiresPermissions("check:retreat:update")
     public R update(@RequestBody InnovateCheckRetreatEntity innovateCheckRetreat){
 		innovateCheckRetreatService.updateById(innovateCheckRetreat);
 
@@ -80,7 +81,7 @@ public class InnovateCheckRetreatController {
      * 删除
      */
     @RequestMapping("/delete")
-    @RequiresPermissions("check:innovatecheckretreat:delete")
+    @RequiresPermissions("check:retreat:delete")
     public R delete(@RequestBody Long[] retreatIds){
 		innovateCheckRetreatService.deleteBatchIds(Arrays.asList(retreatIds));
 

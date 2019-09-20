@@ -7,13 +7,16 @@ import com.baomidou.mybatisplus.service.impl.ServiceImpl;
 import com.innovate.modules.check.dao.InnovateCheckInfoDao;
 import com.innovate.modules.check.entity.InnovateCheckAttachEntity;
 import com.innovate.modules.check.entity.InnovateCheckInfoEntity;
+import com.innovate.modules.check.entity.InnovateCheckInfoModel;
 import com.innovate.modules.check.service.InnovateCheckInfoService;
 import com.innovate.modules.declare.entity.DeclareInfoEntity;
+import com.innovate.modules.declare.entity.DeclareInfoModel;
 import com.innovate.modules.declare.service.DeclareInfoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import com.innovate.common.utils.PageUtils;
@@ -26,13 +29,39 @@ public class InnovateCheckInfoServiceImpl extends ServiceImpl<InnovateCheckInfoD
     @Autowired
     private DeclareInfoService declareInfoService;
 
+    private List<InnovateCheckInfoModel> innovateCheckInfoModels;
+
     @Override
     public PageUtils queryPage(Map<String, Object> params) {
-        Page<InnovateCheckInfoEntity> page = this.selectPage(
-                new Query<InnovateCheckInfoEntity>(params).getPage(),
-                new EntityWrapper<InnovateCheckInfoEntity>()
-        );
-        return new PageUtils(page);
+
+        Integer totalPage  = baseMapper.queryCountPage(params);
+
+        Integer currPage  = 1;
+        Integer pageSize  = 10;
+        try {
+            if (params.get("currPage")!=null&&params.get("pageSize")!=null) {
+                currPage = Integer.parseInt(params.get("currPage").toString());
+                pageSize = Integer.parseInt(params.get("pageSize").toString());
+            }
+        } catch (Exception e) { e.printStackTrace(); }
+        Integer startPage = 0 + pageSize * (currPage - 1);
+        Integer endPage = pageSize;
+
+        params.put("startPage", startPage);
+        params.put("endPage", endPage);
+
+        List<InnovateCheckInfoEntity> innovateCheckInfoEntities = baseMapper.queryPage(params);
+        innovateCheckInfoModels = new LinkedList<>();
+        InnovateCheckInfoModel temp = null;
+        for (InnovateCheckInfoEntity info:innovateCheckInfoEntities){
+            temp = new InnovateCheckInfoModel();
+            DeclareInfoEntity declareInfoEntity = declareInfoService.queryById(info.getDeclareId());
+            temp.setInnovateCheckInfoEntity(info);
+            temp.setDeclareInfoEntity(declareInfoEntity);
+            innovateCheckInfoModels.add(temp);
+        }
+
+        return new PageUtils(innovateCheckInfoModels, totalPage, pageSize, currPage);
     }
 
     /**
@@ -40,7 +69,7 @@ public class InnovateCheckInfoServiceImpl extends ServiceImpl<InnovateCheckInfoD
      * @param checkIds
      */
     @Override
-    public void saveByDeclareBatchIds(Long[] checkIds) {
+    public void saveByDeclareBatchIds(List<Long> checkIds) {
         for (Long id : checkIds) {
             InnovateCheckInfoEntity innovateCheckInfoEntity = new InnovateCheckInfoEntity();
             innovateCheckInfoEntity.setInstituteId(declareInfoService.queryById(id).getInstituteId());
