@@ -1,11 +1,13 @@
 package com.innovate.modules.enterprise.entity;
 
+import com.baomidou.mybatisplus.annotations.TableField;
 import com.baomidou.mybatisplus.annotations.TableId;
 import com.baomidou.mybatisplus.annotations.TableName;
 import lombok.Data;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 /**
  * 企业基本信息表
@@ -76,5 +78,16 @@ public class EntEnterpriseInfoEntity implements Serializable {
 	 * 是否高新区:0是，1否
 	 */
 	private String newHighZones;
+
+	/**
+	 * 企业头像
+	 */
+	private String entLogo;
+
+	/**
+	 * 企业证明材料，附件
+	 */
+	@TableField(exist = false)
+	private List<EntEnterpriseAttachmentEntity> attachments;
 
 }

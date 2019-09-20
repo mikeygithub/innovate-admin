@@ -1,21 +1,27 @@
 package com.innovate.modules.sys.controller;
 
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.innovate.common.utils.R;
-import com.innovate.common.validator.ValidatorUtils;
-import com.innovate.common.validator.group.AddGroup;
+import com.innovate.modules.common.entity.CommonAttachments;
+import com.innovate.modules.common.entity.CommonFile;
+import com.innovate.modules.enterprise.entity.EntEnterpriseAttachmentEntity;
+import com.innovate.modules.enterprise.entity.EntEnterpriseInfoEntity;
+import com.innovate.modules.enterprise.service.EntEnterpriseAttachmentService;
+import com.innovate.modules.enterprise.service.EntEnterpriseInfoService;
 import com.innovate.modules.innovate.utils.SmsUtil;
 import com.innovate.modules.sys.entity.SysUserEntity;
 import com.innovate.modules.sys.form.SysLoginForm;
 import com.innovate.modules.sys.service.SysCaptchaService;
 import com.innovate.modules.sys.service.SysUserService;
 import com.innovate.modules.sys.service.SysUserTokenService;
+import jdk.nashorn.internal.parser.TokenType;
 import org.apache.commons.io.IOUtils;
 import org.apache.shiro.crypto.hash.Sha256Hash;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
-
 import javax.imageio.ImageIO;
 import javax.servlet.ServletException;
 import javax.servlet.ServletOutputStream;
@@ -41,6 +47,11 @@ public class SysLoginController extends AbstractController {
 	private SysUserTokenService sysUserTokenService;
 	@Autowired
 	private SysCaptchaService sysCaptchaService;
+	@Autowired
+	private EntEnterpriseInfoService entEnterpriseInfoService;
+
+	@Autowired
+	private EntEnterpriseAttachmentService entEnterpriseAttachmentService;
 
 	private String VerificationCode;//短信验证码
 
@@ -108,6 +119,7 @@ public class SysLoginController extends AbstractController {
 	 * @return
 	 */
 	@PostMapping("/sys/register")
+	@Transactional
 	public R save(@RequestBody Map<String, Object> params) throws Exception{
 		System.out.println(new Gson().toJson(params));
 		String captcha = params.get("captcha").toString();
@@ -118,24 +130,60 @@ public class SysLoginController extends AbstractController {
 			user.setPassword((String)params.get("password"));
 			user.setMobile((String)params.get("mobile"));
 			user.setEmail((String)params.get("email"));
-			user.setInstituteId(Long.parseLong(params.get("instituteId").toString()));
 			user.setCreateUserId(1L);
 			user.setStatus(1);
 			List<Long> longList = new ArrayList<Long>();
 			//判断用户注册类型
-			if (1 == Long.parseLong((String) params.get("type"))){//项目负责人
+			Long type = Long.parseLong((String) params.get("type"));
+			if (1 == type){//项目负责人
 				longList.add(2L);
 				user.setRoleIdList(longList);
-			}else {//指导老师
+				user.setInstituteId(Long.parseLong(params.get("instituteId").toString()));
+			}else if(2 == type){//指导老师
 				longList.add(3L);
+				user.setRoleIdList(longList);
+				user.setInstituteId(Long.parseLong(params.get("instituteId").toString()));
+			}else if (3 == type){
+				longList.add(7L);
 				user.setRoleIdList(longList);
 			}
 			sysUserService.save(user);
+			if(3 == type){
+				invokeEntMsg(params, user);
+			}
 		}else{
 			return R.error("验证码错误");
 		}
 		return R.ok()
 				.put("params", params);
+	}
+
+	/**
+	 * 企业用户注册
+	 * @param params
+	 * @param user
+	 */
+	private void invokeEntMsg(@RequestBody Map<String, Object> params, SysUserEntity user) {
+		Object ent = params.get("ent");
+		Gson gson = new Gson();
+		String json = gson.toJson(ent);
+		EntEnterpriseInfoEntity entEntity = gson.fromJson(json, EntEnterpriseInfoEntity.class);
+		entEntity.setUserId(user.getUserId());
+		entEnterpriseInfoService.insert(entEntity);
+		Object attach = params.get("attachments");
+		String jsonAttach = gson.toJson(attach);
+		List<CommonAttachments> attachments = gson.fromJson(jsonAttach, new TypeToken<List<CommonAttachments>>(){}.getType());
+		if(attachments != null){
+			List<EntEnterpriseAttachmentEntity> insertBatch = new ArrayList<>();
+			for(int i=0; i<attachments.size(); i++){
+				CommonFile cfile = attachments.get(i).getResponse();
+				EntEnterpriseAttachmentEntity attachmentEntity = new EntEnterpriseAttachmentEntity();
+				attachmentEntity.setEntInfoId(entEntity.getEntInfoId());
+				attachmentEntity.setEntAttachmentUrl(cfile.getData());
+				insertBatch.add(attachmentEntity);
+			}
+			entEnterpriseAttachmentService.insertBatch(insertBatch);
+		}
 	}
 
 

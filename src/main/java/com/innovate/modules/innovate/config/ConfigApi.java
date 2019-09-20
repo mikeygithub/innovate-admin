@@ -23,10 +23,10 @@ public class ConfigApi {
     public static Long[] finishListName = {2L, 3L, 4L, 5L, 6L, 5L, 1L};
 
 //    文件存储路径
-//    public static String UPLOAD_URL = "C:/up/";
-    public static String UPLOAD_URL = "/home/mikey/MIKEY/";
+    public static String UPLOAD_URL = "C:/up/";
+    //public static String UPLOAD_URL = "/home/mikey/MIKEY/";
 //    public static String UPLOAD_URL = "/home/dell/upload";
 //    模板文件存储路径
-//    public static String TEMPLATE_URL = "C:/TEMPLATE/";
-    public static String TEMPLATE_URL = "/TEMPLATE/";
+    public static String TEMPLATE_URL = "C:/TEMPLATE/";
+    //public static String TEMPLATE_URL = "/TEMPLATE/";
 }

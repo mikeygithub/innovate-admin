@@ -64,6 +64,7 @@ public class ShiroConfig {
         filterMap.put("/innovate/sys/title/all", "anon");
         filterMap.put("/innovate/match/event/all", "anon");
         filterMap.put("/innovate/use/teacher/all", "anon");
+        filterMap.put("/common/file/**", "anon");
         filterMap.put("/druid/**", "anon");
         filterMap.put("/app/**", "anon");
         filterMap.put("/sys/login", "anon");
