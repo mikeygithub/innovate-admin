@@ -25,7 +25,7 @@ public class InnovateFileAskEntity implements Serializable {
 	@TableId
 	private Long fileAskId;
 	/**
-	 * 类型：0 大创,1 中期检查,2 赛事,3 结题
+	 * 类型：1 大创,2 中期检查,3 赛事,4 结题
 	 */
 	private Integer fileAskType;
 	/**
