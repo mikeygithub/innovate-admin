@@ -4,13 +4,51 @@
 <mapper namespace="com.innovate.modules.innovate.dao.InnovateFileAskDao">
 
 	<!-- 可根据自己的需求，是否要使用 -->
-    <resultMap type="com.innovate.modules.innovate.entity.InnovateFileAskEntity" id="innovateFileAskMap">
-        <result property="fileAskId" column="file_ask_id"/>
-        <result property="fileAskType" column="file_ask_type"/>
-        <result property="fileAskContent" column="file_ask_content"/>
-        <result property="fileAskTime" column="file_ask_time"/>
-        <result property="isDel" column="is_del"/>
-    </resultMap>
+    <!--<resultMap type="com.innovate.modules.innovate.entity.InnovateFileAskEntity" id="innovateFileAskMap">-->
+        <!--<result property="fileAskId" column="file_ask_id"/>-->
+        <!--<result property="fileAskType" column="file_ask_type"/>-->
+        <!--<result property="fileAskContent" column="file_ask_content"/>-->
+        <!--<result property="fileAskTime" column="file_ask_time"/>-->
+        <!--<result property="isDel" column="is_del"/>-->
+    <!--</resultMap>-->
 
+    <!--筛选满足当前条件的项目总条数-->
+    <select id="queryCountPage" resultType="Integer" parameterType="map">
 
+        select count(*) from innovate_file_ask a
+
+        where 1 = 1
+
+        <if test="fileAskType != null and fileAskType != ''">
+            and a.file_ask_type = #{fileAskType}
+        </if>
+
+        <if test="fileAskTime != null and fileAskTime != ''">
+            and a.file_ask_time like CONCAT('%',#{fileAskTime},'%')
+        </if>
+
+        <if test="startPage != null and endPage != null">
+            limit #{startPage}, #{endPage}
+        </if>
+
+    </select>
+
+    <!--筛选满足当前条件的项目-->
+    <select id="queryPage" resultType="InnovateFileAskEntity" parameterType="map">
+        select * from innovate_file_ask a
+
+        where 1 = 1
+
+        <if test="fileAskType != null and fileAskType != ''">
+            and a.file_ask_type = #{fileAskType}
+        </if>
+
+        <if test="fileAskTime != null and fileAskTime != ''">
+            and a.file_ask_time like CONCAT('%',#{fileAskTime},'%')
+        </if>
+
+        <if test="startPage != null and endPage != null">
+            limit #{startPage}, #{endPage}
+        </if>
+    </select>
 </mapper>
