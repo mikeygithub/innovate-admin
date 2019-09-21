@@ -25,4 +25,6 @@ public class InnovateCheckInfoModel implements Serializable {
 
     private DeclareInfoEntity declareInfoEntity;
 
+    private List<InnovateCheckRetreatEntity> innovateCheckRetreatEntities;
+
 }

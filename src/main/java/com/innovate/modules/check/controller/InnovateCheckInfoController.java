@@ -8,6 +8,7 @@ import java.util.Map;
 import com.innovate.modules.check.entity.InnovateCheckAttachEntity;
 import com.innovate.modules.check.entity.InnovateCheckInfoModel;
 import com.innovate.modules.check.service.InnovateCheckAttachService;
+import com.innovate.modules.check.service.InnovateCheckRetreatService;
 import com.innovate.modules.declare.entity.DeclareInfoEntity;
 import com.innovate.modules.declare.service.DeclareInfoService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
@@ -37,7 +38,8 @@ public class InnovateCheckInfoController {
     private InnovateCheckAttachService innovateCheckAttachService;
     @Autowired
     private DeclareInfoService declareInfoService;
-
+    @Autowired
+    private InnovateCheckRetreatService innovateCheckRetreatService;
     /**
      * 列表
      */
@@ -74,8 +76,12 @@ public class InnovateCheckInfoController {
      */
     @RequestMapping("/save")
     @RequiresPermissions("innovate:check:save")
-    public R save(@RequestBody InnovateCheckInfoEntity innovateCheckInfo){
-		innovateCheckInfoService.insert(innovateCheckInfo);
+    public R save(@RequestBody(required = false) InnovateCheckInfoModel innovateCheckInfoModel){
+
+        innovateCheckAttachService.insertOrUpdateBatch(innovateCheckInfoModel.getInnovateCheckAttachEntities());
+        innovateCheckInfoService.insertOrUpdate(innovateCheckInfoModel.getInnovateCheckInfoEntity());
+        if (innovateCheckInfoModel.getInnovateCheckRetreatEntities()!=null)
+		innovateCheckRetreatService.insertOrUpdateBatch(innovateCheckInfoModel.getInnovateCheckRetreatEntities());
 
         return R.ok();
     }
@@ -106,8 +112,9 @@ public class InnovateCheckInfoController {
      */
     @RequestMapping("/update")
     @RequiresPermissions("innovate:check:update")
-    public R update(@RequestBody InnovateCheckInfoEntity innovateCheckInfo){
-		innovateCheckInfoService.updateById(innovateCheckInfo);
+    public R update(@RequestBody(required = false) InnovateCheckInfoModel innovateCheckInfoModel){
+
+		innovateCheckInfoService.updateById(innovateCheckInfoModel.getInnovateCheckInfoEntity());
 
         return R.ok();
     }

@@ -57,8 +57,21 @@
             and a.project_check_apply_status = #{projectCheckApplyStatus}
         </if>
 
+        <if test="hasApply != null and hasApply != '' and hasApply == 0">
+            and a.project_check_apply_status = #{hasApply}
+        </if>
+
+        <if test="hasApply != null and hasApply != '' and hasApply == 1">
+            and a.project_check_apply_status >= #{hasApply}
+        </if>
+
         <if test="checkTime != null and checkTime != ''">
             and a.check_time like CONCAT('%',#{checkTime},'%')
+        </if>
+
+        <!--搜索-->
+        <if test="projectName != null and projectName != ''">
+            and b.declare_name like CONCAT('%',#{projectName},'%')
         </if>
 
         <if test="isDel != null and isDel != ''">
@@ -105,8 +118,21 @@
             and a.project_check_apply_status = #{projectCheckApplyStatus}
         </if>
 
+        <if test="hasApply != null and hasApply != '' and hasApply == 0">
+            and a.project_check_apply_status = #{hasApply}
+        </if>
+
+        <if test="hasApply != null and hasApply != '' and hasApply == 1">
+            and a.project_check_apply_status >= #{hasApply}
+        </if>
+
         <if test="checkTime != null and checkTime != ''">
             and a.check_time like CONCAT('%',#{checkTime},'%')
+        </if>
+
+        <!--搜索-->
+        <if test="projectName != null and projectName != ''">
+            and b.declare_name like CONCAT('%',#{projectName},'%')
         </if>
 
         <if test="isDel != null and isDel != ''">

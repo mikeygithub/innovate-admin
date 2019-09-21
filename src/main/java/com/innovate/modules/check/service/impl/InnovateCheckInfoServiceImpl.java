@@ -97,4 +97,17 @@ public class InnovateCheckInfoServiceImpl extends ServiceImpl<InnovateCheckInfoD
         }
     }
 
+    /**
+     * 审批
+     * @param params
+     */
+    @Override
+    public void apply(Map<String, Object> params) {
+        String checkId = (String) params.get("checkId");
+        Integer projectCheckApplyStatus = Integer.parseInt((String) params.get("projectCheckApplyStatus"));
+        InnovateCheckInfoEntity innovateCheckInfoEntity = this.baseMapper.selectById(checkId);
+        innovateCheckInfoEntity.setProjectCheckApplyStatus(projectCheckApplyStatus);
+        this.updateById(innovateCheckInfoEntity);
+    }
+
 }

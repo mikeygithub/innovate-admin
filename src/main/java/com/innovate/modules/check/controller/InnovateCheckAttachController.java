@@ -135,6 +135,7 @@ public class InnovateCheckAttachController {
             innovateCheckAttachEntity = new InnovateCheckAttachEntity();
             innovateCheckAttachEntity.setAttachPath(UPLOAD_FILES_PATH);
             innovateCheckAttachEntity.setAttachName(fileName);
+            innovateCheckAttachEntity.setCheckId(Long.parseLong(request.getParameter("checkId")));
             innovateCheckAttachEntity.setIsDel(0);
         }
         return R.ok("文件上传成功")
