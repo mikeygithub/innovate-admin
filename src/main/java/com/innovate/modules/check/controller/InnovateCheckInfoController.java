@@ -2,15 +2,17 @@ package com.innovate.modules.check.controller;
 
 import java.util.Arrays;
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
 
+import com.innovate.modules.check.entity.InnovateCheckAttachEntity;
+import com.innovate.modules.check.entity.InnovateCheckInfoModel;
+import com.innovate.modules.check.service.InnovateCheckAttachService;
+import com.innovate.modules.declare.entity.DeclareInfoEntity;
+import com.innovate.modules.declare.service.DeclareInfoService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.innovate.modules.check.entity.InnovateCheckInfoEntity;
 import com.innovate.modules.check.service.InnovateCheckInfoService;
@@ -27,16 +29,20 @@ import com.innovate.common.utils.R;
  * @date 2019-09-18 22:20:42
  */
 @RestController
-@RequestMapping("check/innovatecheckinfo")
+@RequestMapping("innovate/check")
 public class InnovateCheckInfoController {
     @Autowired
     private InnovateCheckInfoService innovateCheckInfoService;
+    @Autowired
+    private InnovateCheckAttachService innovateCheckAttachService;
+    @Autowired
+    private DeclareInfoService declareInfoService;
 
     /**
      * 列表
      */
-    @RequestMapping("/list")
-    @RequiresPermissions("check:innovatecheckinfo:list")
+    @GetMapping("/list")
+    @RequiresPermissions("innovate:check:list")
     public R list(@RequestParam Map<String, Object> params){
 
         PageUtils page = innovateCheckInfoService.queryPage(params);
@@ -48,20 +54,26 @@ public class InnovateCheckInfoController {
     /**
      * 信息
      */
-    @RequestMapping("/info/{checkId}")
-    @RequiresPermissions("check:innovatecheckinfo:info")
-    public R info(@PathVariable("checkId") Long checkId){
+    @RequestMapping("/info")
+    @RequiresPermissions("innovate:check:info")
+    public R info(Long checkId){
 
-		InnovateCheckInfoEntity innovateCheckInfo = innovateCheckInfoService.selectById(checkId);
+        InnovateCheckInfoModel innovateCheckInfoModel = new InnovateCheckInfoModel();
+        InnovateCheckInfoEntity innovateCheckInfo = innovateCheckInfoService.selectById(checkId);
+        List<InnovateCheckAttachEntity> innovateCheckAttachEntities = innovateCheckAttachService.queryByCheckId(checkId);
+        DeclareInfoEntity declareInfoEntity = declareInfoService.queryById(innovateCheckInfo.getDeclareId());
+        innovateCheckInfoModel.setDeclareInfoEntity(declareInfoEntity);
+        innovateCheckInfoModel.setInnovateCheckInfoEntity(innovateCheckInfo);
+        innovateCheckInfoModel.setInnovateCheckAttachEntities(innovateCheckAttachEntities);
 
-        return R.ok().put("innovateCheckInfo", innovateCheckInfo);
+        return R.ok().put("info", innovateCheckInfoModel);
     }
 
     /**
      * 保存
      */
     @RequestMapping("/save")
-    @RequiresPermissions("check:innovatecheckinfo:save")
+    @RequiresPermissions("innovate:check:save")
     public R save(@RequestBody InnovateCheckInfoEntity innovateCheckInfo){
 		innovateCheckInfoService.insert(innovateCheckInfo);
 
@@ -71,10 +83,10 @@ public class InnovateCheckInfoController {
      * 设置中期检查项目
      */
     @RequestMapping("/saveByDeclareBatchIds")
-    @RequiresPermissions("check:innovatecheckinfo:save")
+    @RequiresPermissions("innovate:check:save")
     public R saveByDeclareBatchIds(@RequestBody Long[] checkIds){
 
-        innovateCheckInfoService.saveByDeclareBatchIds(checkIds);
+        innovateCheckInfoService.saveByDeclareBatchIds(Arrays.asList(checkIds));
 
         return R.ok();
     }
@@ -82,7 +94,7 @@ public class InnovateCheckInfoController {
      * 设置中期检查项目
      */
     @RequestMapping("/saveByTime")
-    @RequiresPermissions("check:innovatecheckinfo:save")
+    @RequiresPermissions("innovate:check:save")
     public R saveByTime(@RequestBody Date time){
 
         innovateCheckInfoService.saveByTime(time);
@@ -93,7 +105,7 @@ public class InnovateCheckInfoController {
      * 修改
      */
     @RequestMapping("/update")
-    @RequiresPermissions("check:innovatecheckinfo:update")
+    @RequiresPermissions("innovate:check:update")
     public R update(@RequestBody InnovateCheckInfoEntity innovateCheckInfo){
 		innovateCheckInfoService.updateById(innovateCheckInfo);
 
@@ -104,7 +116,7 @@ public class InnovateCheckInfoController {
      * 删除
      */
     @RequestMapping("/delete")
-    @RequiresPermissions("check:innovatecheckinfo:delete")
+    @RequiresPermissions("innovate:check:delete")
     public R delete(@RequestBody Long[] checkIds){
 		innovateCheckInfoService.deleteBatchIds(Arrays.asList(checkIds));
 

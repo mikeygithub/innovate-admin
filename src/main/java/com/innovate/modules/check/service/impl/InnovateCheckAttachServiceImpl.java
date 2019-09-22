@@ -1,5 +1,6 @@
 package com.innovate.modules.check.service.impl;
 
+import com.baomidou.mybatisplus.enums.SqlLike;
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.plugins.Page;
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
@@ -8,6 +9,8 @@ import com.innovate.modules.check.dao.InnovateCheckAttachDao;
 import com.innovate.modules.check.entity.InnovateCheckAttachEntity;
 import com.innovate.modules.check.service.InnovateCheckAttachService;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 import java.util.Map;
 import com.innovate.common.utils.PageUtils;
 
@@ -24,5 +27,11 @@ public class InnovateCheckAttachServiceImpl extends ServiceImpl<InnovateCheckAtt
         );
         return new PageUtils(page);
     }
-
+    @Override
+    public List<InnovateCheckAttachEntity> queryByCheckId(Long checkId){
+        EntityWrapper ew = new EntityWrapper<>();
+        ew.setEntity(new InnovateCheckAttachEntity());
+        ew.eq("check_id",checkId);
+        return this.selectList(ew);
+    }
 }

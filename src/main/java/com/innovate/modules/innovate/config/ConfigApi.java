@@ -24,7 +24,7 @@ public class ConfigApi {
 
 //    文件存储路径
 //    public static String UPLOAD_URL = "C:/up/";
-    public static String UPLOAD_URL = "/home/soldier/下载/";
+    public static String UPLOAD_URL = "/home/mikey/MIKEY/";
 //    public static String UPLOAD_URL = "/home/dell/upload";
 //    模板文件存储路径
 //    public static String TEMPLATE_URL = "C:/TEMPLATE/";
