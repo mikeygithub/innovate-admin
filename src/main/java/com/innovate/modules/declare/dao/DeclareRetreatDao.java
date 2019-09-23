@@ -1,6 +1,7 @@
 package com.innovate.modules.declare.dao;
 
 import com.baomidou.mybatisplus.mapper.BaseMapper;
+import com.innovate.modules.check.entity.InnovateCheckRetreatEntity;
 import com.innovate.modules.declare.entity.DeclareRetreatEntity;
 import org.apache.ibatis.annotations.Mapper;
 
@@ -18,4 +19,5 @@ public interface DeclareRetreatDao extends BaseMapper<DeclareRetreatEntity> {
     List<DeclareRetreatEntity> queryAll(Map<String, Object> params);
 
     void remove(Map<String, Object> params);
+
 }

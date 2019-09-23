@@ -58,8 +58,9 @@ public class InnovateCheckInfoController {
      */
     @RequestMapping("/info")
     @RequiresPermissions("innovate:check:info")
-    public R info(Long checkId){
+    public R info(@RequestParam Map<String, Object> params){
 
+        Long checkId = Long.parseLong(params.get("checkId").toString());
         InnovateCheckInfoModel innovateCheckInfoModel = new InnovateCheckInfoModel();
         InnovateCheckInfoEntity innovateCheckInfo = innovateCheckInfoService.selectById(checkId);
         List<InnovateCheckAttachEntity> innovateCheckAttachEntities = innovateCheckAttachService.queryByCheckId(checkId);
@@ -78,10 +79,7 @@ public class InnovateCheckInfoController {
     @RequiresPermissions("innovate:check:save")
     public R save(@RequestBody(required = false) InnovateCheckInfoModel innovateCheckInfoModel){
 
-        innovateCheckAttachService.insertOrUpdateBatch(innovateCheckInfoModel.getInnovateCheckAttachEntities());
-        innovateCheckInfoService.insertOrUpdate(innovateCheckInfoModel.getInnovateCheckInfoEntity());
-        if (innovateCheckInfoModel.getInnovateCheckRetreatEntities()!=null)
-		innovateCheckRetreatService.insertOrUpdateBatch(innovateCheckInfoModel.getInnovateCheckRetreatEntities());
+        innovateCheckInfoService.save(innovateCheckInfoModel);
 
         return R.ok();
     }

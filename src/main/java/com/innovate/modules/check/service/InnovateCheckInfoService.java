@@ -3,6 +3,7 @@ package com.innovate.modules.check.service;
 import com.baomidou.mybatisplus.service.IService;
 import com.innovate.common.utils.PageUtils;
 import com.innovate.modules.check.entity.InnovateCheckInfoEntity;
+import com.innovate.modules.check.entity.InnovateCheckInfoModel;
 
 import java.util.Date;
 import java.util.List;
@@ -24,5 +25,7 @@ public interface InnovateCheckInfoService extends IService<InnovateCheckInfoEnti
     void saveByTime(Date time);
 
     void apply(Map<String, Object> params);
+
+    void save(InnovateCheckInfoModel innovateCheckInfoModel);
 }
 

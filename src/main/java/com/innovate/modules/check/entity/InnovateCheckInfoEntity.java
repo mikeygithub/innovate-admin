@@ -52,7 +52,7 @@ public class InnovateCheckInfoEntity implements Serializable {
 	/**
 	 * 检查平均分
 	 */
-	private BigDecimal checkScoreAvg;
+	private Double checkScoreAvg;
 	/**
 	 * 状态标识
 	 */

@@ -21,10 +21,16 @@
     <select id="queryCountPage" resultType="Integer" parameterType="map">
 
         select count(*) from innovate_check_info a
-
+        <!--负责人-->
         <if test="userId != null and userId != ''">
             inner join innovate_declare_info b on a.declare_id = b.declare_id
             and b.project_user_id = #{userId}
+        </if>
+
+        <!--当前评委-->
+        <if test="isReview != null and isReview != '' and reviewUserId != null and reviewUserId != ''">
+            inner join innovate_check_review c on a.check_id = c.check_id
+            and c.user_id = #{reviewUserId}
         </if>
 
         where 1 = 1
@@ -53,16 +59,24 @@
             and a.institute_id = #{instituteId}
         </if>
 
-        <if test="projectCheckApplyStatus != null and projectCheckApplyStatus != ''">
+<!--        <if test="projectCheckApplyStatus != null and projectCheckApplyStatus != ''">-->
+<!--            and a.project_check_apply_status = #{projectCheckApplyStatus}-->
+<!--        </if>-->
+
+        <if test="hasApply != null and hasApply != '' and hasApply == 1 and projectCheckApplyStatus != null and projectCheckApplyStatus != ''" >
             and a.project_check_apply_status = #{projectCheckApplyStatus}
         </if>
 
-        <if test="hasApply != null and hasApply != '' and hasApply == 0">
-            and a.project_check_apply_status = #{hasApply}
+        <if test="hasApply != null and hasApply != '' and hasApply == 2 and projectCheckApplyStatus != null and projectCheckApplyStatus != ''">
+            and a.project_check_apply_status > #{projectCheckApplyStatus}
         </if>
 
-        <if test="hasApply != null and hasApply != '' and hasApply == 1">
-            and a.project_check_apply_status >= #{hasApply}
+        <if test="hasApply != null and hasApply != '' and hasApply == 3">
+            and a.check_score_avg is not null
+        </if>
+
+        <if test="hasReview != null and hasReview != ''">
+            and a.group_id is not null
         </if>
 
         <if test="checkTime != null and checkTime != ''">
@@ -114,16 +128,24 @@
             and a.institute_id = #{instituteId}
         </if>
 
-        <if test="projectCheckApplyStatus != null and projectCheckApplyStatus != ''">
+<!--        <if test="projectCheckApplyStatus != null and projectCheckApplyStatus != ''">-->
+<!--            and a.project_check_apply_status = #{projectCheckApplyStatus}-->
+<!--        </if>-->
+
+        <if test="hasApply != null and hasApply != '' and hasApply == 1 and projectCheckApplyStatus != null and projectCheckApplyStatus != ''" >
             and a.project_check_apply_status = #{projectCheckApplyStatus}
         </if>
 
-        <if test="hasApply != null and hasApply != '' and hasApply == 0">
-            and a.project_check_apply_status = #{hasApply}
+        <if test="hasApply != null and hasApply != '' and hasApply == 2 and projectCheckApplyStatus != null and projectCheckApplyStatus != ''">
+            and a.project_check_apply_status > #{projectCheckApplyStatus}
         </if>
 
-        <if test="hasApply != null and hasApply != '' and hasApply == 1">
-            and a.project_check_apply_status >= #{hasApply}
+        <if test="hasApply != null and hasApply != '' and hasApply == 3">
+            and a.check_score_avg is not null
+        </if>
+
+        <if test="hasReview != null and hasReview != ''">
+            and a.group_id is not null
         </if>
 
         <if test="checkTime != null and checkTime != ''">

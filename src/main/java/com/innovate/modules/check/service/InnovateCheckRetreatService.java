@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.service.IService;
 import com.innovate.common.utils.PageUtils;
 import com.innovate.modules.check.entity.InnovateCheckRetreatEntity;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -16,5 +17,9 @@ import java.util.Map;
 public interface InnovateCheckRetreatService extends IService<InnovateCheckRetreatEntity> {
 
     PageUtils queryPage(Map<String, Object> params);
+
+    void retreat(Map<String, Object> params);
+
+    List<InnovateCheckRetreatEntity> query(Map<String, Object> params);
 }
 

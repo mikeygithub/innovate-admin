@@ -4,6 +4,9 @@ import com.baomidou.mybatisplus.mapper.BaseMapper;
 import com.innovate.modules.check.entity.InnovateCheckRetreatEntity;
 import org.apache.ibatis.annotations.Mapper;
 
+import java.util.List;
+import java.util.Map;
+
 /**
  * 中期检查回退
  * 
@@ -13,5 +16,7 @@ import org.apache.ibatis.annotations.Mapper;
  */
 @Mapper
 public interface InnovateCheckRetreatDao extends BaseMapper<InnovateCheckRetreatEntity> {
-	
+
+    List<InnovateCheckRetreatEntity> queryByParams(Map<String, Object> params);
+
 }

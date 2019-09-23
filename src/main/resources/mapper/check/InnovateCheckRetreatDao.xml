@@ -16,4 +16,27 @@
     </resultMap>
 
 
+    <select id="queryByParams" resultType="InnovateCheckRetreatEntity" parameterType="map">
+
+        select * from innovate_check_retreat a
+
+        <if test="checkId != null and checkId != ''">
+            a.check_id = #{checkId}
+        </if>
+
+        <if test="userId != null and userId != ''">
+            a.user_id = #{userId}
+        </if>
+
+        <if test="apply != null and apply != ''">
+            a.apply = #{apply}
+        </if>
+
+        <if test="isDel != null and isDel != ''">
+            a.is_del = #{isDel}
+        </if>
+
+    </select>
+
+
 </mapper>

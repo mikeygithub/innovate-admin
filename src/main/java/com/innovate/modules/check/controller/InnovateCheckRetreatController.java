@@ -1,15 +1,12 @@
 package com.innovate.modules.check.controller;
 
 import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.innovate.modules.check.entity.InnovateCheckRetreatEntity;
 import com.innovate.modules.check.service.InnovateCheckRetreatService;
@@ -26,7 +23,7 @@ import com.innovate.common.utils.R;
  * @date 2019-09-18 22:20:42
  */
 @RestController
-@RequestMapping("check/retreat")
+@RequestMapping("innovate/check/retreat")
 public class InnovateCheckRetreatController {
     @Autowired
     private InnovateCheckRetreatService innovateCheckRetreatService;
@@ -37,6 +34,7 @@ public class InnovateCheckRetreatController {
     @RequestMapping("/list")
     @RequiresPermissions("check:retreat:list")
     public R list(@RequestParam Map<String, Object> params){
+
         PageUtils page = innovateCheckRetreatService.queryPage(params);
 
         return R.ok().put("page", page);
@@ -57,11 +55,11 @@ public class InnovateCheckRetreatController {
     /**
      * 保存
      */
-    @RequestMapping("/save")
+    @PostMapping("/save")
     @RequiresPermissions("check:retreat:save")
-    public R save(@RequestBody InnovateCheckRetreatEntity innovateCheckRetreat){
+    public R save(@RequestParam Map<String, Object> params){
 
-        innovateCheckRetreatService.insert(innovateCheckRetreat);
+        innovateCheckRetreatService.retreat(params);
 
         return R.ok();
     }
@@ -69,7 +67,7 @@ public class InnovateCheckRetreatController {
     /**
      * 修改
      */
-    @RequestMapping("/update")
+    @PostMapping("/update")
     @RequiresPermissions("check:retreat:update")
     public R update(@RequestBody InnovateCheckRetreatEntity innovateCheckRetreat){
 		innovateCheckRetreatService.updateById(innovateCheckRetreat);
@@ -88,4 +86,15 @@ public class InnovateCheckRetreatController {
         return R.ok();
     }
 
+    /**
+     * 查询
+     */
+    @RequestMapping("/query")
+    @RequiresPermissions("check:retreat:list")
+    public R query(@RequestParam Map<String, Object> params){
+
+        List<InnovateCheckRetreatEntity> query = innovateCheckRetreatService.query(params);
+
+        return R.ok().put("retreatEntityList",query);
+    }
 }
