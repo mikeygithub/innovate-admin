@@ -1,6 +1,7 @@
 package com.innovate.modules.innovate.controller;
 
 import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 
 import org.apache.shiro.authz.annotation.RequiresPermissions;
@@ -16,17 +17,14 @@ import com.innovate.modules.innovate.service.InnovateFileAskService;
 import com.innovate.common.utils.PageUtils;
 import com.innovate.common.utils.R;
 
-
-
 /**
  * 上传文件要求表
- *
  * @author Mikey
  * @email 1625017540@qq.com
  * @date 2019-09-18 22:20:42
  */
 @RestController
-@RequestMapping("check/innovatefileask")
+@RequestMapping("innovate/sys/file/ask")
 public class InnovateFileAskController {
     @Autowired
     private InnovateFileAskService innovateFileAskService;
@@ -35,11 +33,21 @@ public class InnovateFileAskController {
      * 列表
      */
     @RequestMapping("/list")
-    @RequiresPermissions("check:innovatefileask:list")
+    @RequiresPermissions("innovate:file:ask:list")
     public R list(@RequestParam Map<String, Object> params){
         PageUtils page = innovateFileAskService.queryPage(params);
 
         return R.ok().put("page", page);
+    }
+
+    /**
+     * 集合
+     */
+    @RequestMapping("/query")
+    public R queryByParams(@RequestParam Map<String, Object> params){
+        InnovateFileAskEntity fileAsk= innovateFileAskService.queryByParams(params);
+
+        return R.ok().put("fileAsk", fileAsk);
     }
 
 
@@ -47,7 +55,7 @@ public class InnovateFileAskController {
      * 信息
      */
     @RequestMapping("/info/{fileAskId}")
-    @RequiresPermissions("check:innovatefileask:info")
+    @RequiresPermissions("innovate:file:ask:info")
     public R info(@PathVariable("fileAskId") Long fileAskId){
 		InnovateFileAskEntity innovateFileAsk = innovateFileAskService.selectById(fileAskId);
 
@@ -58,7 +66,7 @@ public class InnovateFileAskController {
      * 保存
      */
     @RequestMapping("/save")
-    @RequiresPermissions("check:innovatefileask:save")
+    @RequiresPermissions("innovate:file:ask:save")
     public R save(@RequestBody InnovateFileAskEntity innovateFileAsk){
 		innovateFileAskService.insert(innovateFileAsk);
 
@@ -69,7 +77,7 @@ public class InnovateFileAskController {
      * 修改
      */
     @RequestMapping("/update")
-    @RequiresPermissions("check:innovatefileask:update")
+    @RequiresPermissions("innovate:file:ask:update")
     public R update(@RequestBody InnovateFileAskEntity innovateFileAsk){
 		innovateFileAskService.updateById(innovateFileAsk);
 
@@ -80,7 +88,7 @@ public class InnovateFileAskController {
      * 删除
      */
     @RequestMapping("/delete")
-    @RequiresPermissions("check:innovatefileask:delete")
+    @RequiresPermissions("innovate:file:ask:delete")
     public R delete(@RequestBody Long[] fileAskIds){
 		innovateFileAskService.deleteBatchIds(Arrays.asList(fileAskIds));
 
