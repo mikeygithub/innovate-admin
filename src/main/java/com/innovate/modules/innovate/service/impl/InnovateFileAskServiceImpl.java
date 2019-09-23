@@ -48,4 +48,9 @@ public class InnovateFileAskServiceImpl extends ServiceImpl<InnovateFileAskDao, 
         return new PageUtils(fileAskEntityList, totalPage, pageSize, currPage);
     }
 
+    @Override
+    public InnovateFileAskEntity queryByParams(Map<String, Object> params) {
+        return baseMapper.queryByParams(params);
+    }
+
 }

@@ -24,4 +24,11 @@ public interface InnovateFileAskDao extends BaseMapper<InnovateFileAskEntity> {
     Integer queryCountPage(Map<String, Object> params);
 
     List<InnovateFileAskEntity> queryPage(Map<String, Object> params);
+
+    /**
+     * 查询满足条件的对象
+     * @param params
+     * @return
+     */
+    InnovateFileAskEntity queryByParams(Map<String, Object> params);
 }

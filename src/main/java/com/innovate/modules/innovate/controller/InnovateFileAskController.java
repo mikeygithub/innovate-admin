@@ -1,6 +1,7 @@
 package com.innovate.modules.innovate.controller;
 
 import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 
 import org.apache.shiro.authz.annotation.RequiresPermissions;
@@ -37,6 +38,16 @@ public class InnovateFileAskController {
         PageUtils page = innovateFileAskService.queryPage(params);
 
         return R.ok().put("page", page);
+    }
+
+    /**
+     * 集合
+     */
+    @RequestMapping("/query")
+    public R queryByParams(@RequestParam Map<String, Object> params){
+        InnovateFileAskEntity fileAsk= innovateFileAskService.queryByParams(params);
+
+        return R.ok().put("fileAsk", fileAsk);
     }
 
 

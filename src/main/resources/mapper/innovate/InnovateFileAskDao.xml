@@ -27,6 +27,10 @@
             and a.file_ask_time like CONCAT('%',#{fileAskTime},'%')
         </if>
 
+        <if test="isDel != null and isDel != ''">
+            and a.is_del = #{isDel}
+        </if>
+
         <if test="startPage != null and endPage != null">
             limit #{startPage}, #{endPage}
         </if>
@@ -47,8 +51,27 @@
             and a.file_ask_time like CONCAT('%',#{fileAskTime},'%')
         </if>
 
+        <if test="isDel != null and isDel != ''">
+            and a.is_del = #{isDel}
+        </if>
+
         <if test="startPage != null and endPage != null">
             limit #{startPage}, #{endPage}
+        </if>
+    </select>
+
+    <!--筛选满足当前条件的对象-->
+    <select id="queryByParams" resultType="InnovateFileAskEntity" parameterType="map">
+        select * from innovate_file_ask a
+
+        where 1 = 1
+
+        <if test="fileAskType != null and fileAskType != ''">
+            and a.file_ask_type = #{fileAskType}
+        </if>
+
+        <if test="fileAskTime != null and fileAskTime != ''">
+            and a.file_ask_time like CONCAT('%',#{fileAskTime},'%')
         </if>
     </select>
 </mapper>
