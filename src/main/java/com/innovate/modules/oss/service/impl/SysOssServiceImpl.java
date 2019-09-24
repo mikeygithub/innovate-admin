@@ -19,6 +19,7 @@ public class SysOssServiceImpl extends ServiceImpl<SysOssDao, SysOssEntity> impl
 	public PageUtils queryPage(Map<String, Object> params) {
 		Page<SysOssEntity> page = this.selectPage(
 				new Query<SysOssEntity>(params).getPage()
+
 		);
 
 		return new PageUtils(page);

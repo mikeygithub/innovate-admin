@@ -2,13 +2,16 @@ package com.innovate.modules.enterprise.controller;
 
 import com.innovate.common.utils.PageUtils;
 import com.innovate.common.utils.R;
+import com.innovate.modules.enterprise.annotation.HasRole;
 import com.innovate.modules.enterprise.entity.EntEnterpriseInfoEntity;
 import com.innovate.modules.enterprise.service.EntEnterpriseInfoService;
+import com.innovate.modules.sys.controller.AbstractController;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 
 
@@ -21,7 +24,7 @@ import java.util.Map;
  */
 @RestController
 @RequestMapping("enterprise/info")
-public class EntEnterpriseInfoController {
+public class EntEnterpriseInfoController extends AbstractController {
     @Autowired
     private EntEnterpriseInfoService entEnterpriseInfoService;
 
@@ -29,10 +32,17 @@ public class EntEnterpriseInfoController {
      * 列表
      */
     @RequestMapping("/list")
-    //@RequiresPermissions("enterprise:info:list")
+    // @RequiresPermissions("enterprise:info:list")
+    @HasRole(name = "企业入驻审核", roles = {"8", "9"})
     public R list(@RequestParam Map<String, Object> params){
+        // parmas ==> 传递一个数企业类型
+        String newHighZones = (String) params.get("_queryType");
+        if(newHighZones.equals("8")){
+            params.put("new_high_zones", "1");
+        }else{
+            params.put("new_high_zones", "0");
+        }
         PageUtils page = entEnterpriseInfoService.queryPage(params);
-
         return R.ok().put("page", page);
     }
 
