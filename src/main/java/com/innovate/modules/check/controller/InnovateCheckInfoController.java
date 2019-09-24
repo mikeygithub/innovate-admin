@@ -99,9 +99,9 @@ public class InnovateCheckInfoController {
      */
     @RequestMapping("/saveByTime")
     @RequiresPermissions("innovate:check:save")
-    public R saveByTime(@RequestBody Date time){
+    public R saveByTime(@RequestParam Map<String, Object> params){
 
-        innovateCheckInfoService.saveByTime(time);
+        innovateCheckInfoService.saveByTime(params);
 
         return R.ok();
     }

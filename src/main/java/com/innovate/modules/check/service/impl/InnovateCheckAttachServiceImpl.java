@@ -32,6 +32,7 @@ public class InnovateCheckAttachServiceImpl extends ServiceImpl<InnovateCheckAtt
         EntityWrapper ew = new EntityWrapper<>();
         ew.setEntity(new InnovateCheckAttachEntity());
         ew.eq("check_id",checkId);
+        ew.eq("is_del",0);
         return this.selectList(ew);
     }
 }

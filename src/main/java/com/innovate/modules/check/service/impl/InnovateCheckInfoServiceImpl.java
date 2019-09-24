@@ -5,25 +5,18 @@ import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.plugins.Page;
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
 import com.innovate.modules.check.dao.InnovateCheckInfoDao;
-import com.innovate.modules.check.entity.InnovateCheckAttachEntity;
-import com.innovate.modules.check.entity.InnovateCheckInfoEntity;
-import com.innovate.modules.check.entity.InnovateCheckInfoModel;
-import com.innovate.modules.check.service.InnovateCheckAttachService;
-import com.innovate.modules.check.service.InnovateCheckInfoService;
-import com.innovate.modules.check.service.InnovateCheckRetreatService;
+import com.innovate.modules.check.entity.*;
+import com.innovate.modules.check.service.*;
 import com.innovate.modules.declare.entity.DeclareInfoEntity;
 import com.innovate.modules.declare.entity.DeclareInfoModel;
 import com.innovate.modules.declare.service.DeclareInfoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Date;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+
 import com.innovate.common.utils.PageUtils;
 import com.innovate.common.utils.Query;
-
 
 
 @Service("innovateCheckInfoService")
@@ -34,6 +27,10 @@ public class InnovateCheckInfoServiceImpl extends ServiceImpl<InnovateCheckInfoD
     private InnovateCheckAttachService innovateCheckAttachService;
     @Autowired
     private InnovateCheckRetreatService innovateCheckRetreatService;
+    @Autowired
+    private InnovateCheckAwardService innovateCheckAwardService;
+    @Autowired
+    private InnovateCheckReviewService innovateCheckReviewService;
 
 
     private List<InnovateCheckInfoModel> innovateCheckInfoModels;
@@ -41,16 +38,18 @@ public class InnovateCheckInfoServiceImpl extends ServiceImpl<InnovateCheckInfoD
     @Override
     public PageUtils queryPage(Map<String, Object> params) {
 
-        Integer totalPage  = baseMapper.queryCountPage(params);
+        Integer totalPage = baseMapper.queryCountPage(params);
 
-        Integer currPage  = 1;
-        Integer pageSize  = 10;
+        Integer currPage = 1;
+        Integer pageSize = 10;
         try {
-            if (params.get("currPage")!=null&&params.get("pageSize")!=null) {
+            if (params.get("currPage") != null && params.get("pageSize") != null) {
                 currPage = Integer.parseInt(params.get("currPage").toString());
                 pageSize = Integer.parseInt(params.get("pageSize").toString());
             }
-        } catch (Exception e) { e.printStackTrace(); }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         Integer startPage = 0 + pageSize * (currPage - 1);
         Integer endPage = pageSize;
 
@@ -60,11 +59,26 @@ public class InnovateCheckInfoServiceImpl extends ServiceImpl<InnovateCheckInfoD
         List<InnovateCheckInfoEntity> innovateCheckInfoEntities = baseMapper.queryPage(params);
         innovateCheckInfoModels = new LinkedList<>();
         InnovateCheckInfoModel temp = null;
-        for (InnovateCheckInfoEntity info:innovateCheckInfoEntities){
+        for (InnovateCheckInfoEntity info : innovateCheckInfoEntities) {
+            //值对象
             temp = new InnovateCheckInfoModel();
-            DeclareInfoEntity declareInfoEntity = declareInfoService.queryById(info.getDeclareId());
             temp.setInnovateCheckInfoEntity(info);
+            //对应大创
+            DeclareInfoEntity declareInfoEntity = declareInfoService.queryById(info.getDeclareId());
             temp.setDeclareInfoEntity(declareInfoEntity);
+            //评委评分
+            Map<String,Object> map= new HashMap<>();
+            map.put("checkId", info.getCheckId());
+            List<InnovateCheckReviewEntity> innovateCheckReviewEntities = innovateCheckReviewService.queryAll(map);
+            temp.setInnovateCheckReviewEntities(innovateCheckReviewEntities);
+            //附件
+            List<InnovateCheckAttachEntity> innovateCheckAttachEntities = innovateCheckAttachService.queryByCheckId(info.getCheckId());
+            temp.setInnovateCheckAttachEntities(innovateCheckAttachEntities);
+            //奖项
+            List<InnovateCheckAwardEntity> innovateCheckAwardEntities = innovateCheckAwardService.queryAll(map);
+            temp.setInnovateCheckAwardEntities(innovateCheckAwardEntities);
+            //回退记录
+
             innovateCheckInfoModels.add(temp);
         }
 
@@ -73,6 +87,7 @@ public class InnovateCheckInfoServiceImpl extends ServiceImpl<InnovateCheckInfoD
 
     /**
      * 通过id批量设置需要中期检查的项目
+     *
      * @param checkIds
      */
     @Override
@@ -87,16 +102,23 @@ public class InnovateCheckInfoServiceImpl extends ServiceImpl<InnovateCheckInfoD
 
     /**
      * 通过年度批量设置需要中期检查的项目
-     * @param time
+     * @param params
      */
     @Override
-    public void saveByTime(Date time) {
+    public void saveByTime(Map<String,Object> params) {
+
+        String checkTime = params.get("checkTime").toString();
+
         EntityWrapper ew = new EntityWrapper<>();
         ew.setEntity(new DeclareInfoEntity());
-        ew.like("declare_time",time.toString(), SqlLike.DEFAULT);
+        //已经评分过的大创列表
+        ew.like("declare_time", checkTime, SqlLike.DEFAULT);
+        ew.eq("is_del",0);
+        ew.eq("audit_no_pass",0);
+        ew.isNotNull("declare_score_avg");
         List<DeclareInfoEntity> declareInfoEntities = declareInfoService.selectList(ew);
 
-        for (DeclareInfoEntity declareInfoEntity:declareInfoEntities){
+        for (DeclareInfoEntity declareInfoEntity : declareInfoEntities) {
             InnovateCheckInfoEntity innovateCheckInfoEntity = new InnovateCheckInfoEntity();
             innovateCheckInfoEntity.setInstituteId(declareInfoEntity.getInstituteId());
             innovateCheckInfoEntity.setDeclareId(declareInfoEntity.getDeclareId());
@@ -106,6 +128,7 @@ public class InnovateCheckInfoServiceImpl extends ServiceImpl<InnovateCheckInfoD
 
     /**
      * 审批
+     *
      * @param params
      */
     @Override
@@ -121,9 +144,9 @@ public class InnovateCheckInfoServiceImpl extends ServiceImpl<InnovateCheckInfoD
     public void save(InnovateCheckInfoModel innovateCheckInfoModel) {
         innovateCheckInfoModel.getInnovateCheckInfoEntity().setCheckNoPass(0);
         innovateCheckAttachService.insertOrUpdateBatch(innovateCheckInfoModel.getInnovateCheckAttachEntities());
-        if (innovateCheckInfoModel.getInnovateCheckAttachEntities()!=null)
-        insertOrUpdate(innovateCheckInfoModel.getInnovateCheckInfoEntity());
-        if (innovateCheckInfoModel.getInnovateCheckRetreatEntities()!=null)
+        if (innovateCheckInfoModel.getInnovateCheckAttachEntities() != null)
+            insertOrUpdate(innovateCheckInfoModel.getInnovateCheckInfoEntity());
+        if (innovateCheckInfoModel.getInnovateCheckRetreatEntities() != null)
             innovateCheckRetreatService.insertOrUpdateBatch(innovateCheckInfoModel.getInnovateCheckRetreatEntities());
 
     }

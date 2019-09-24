@@ -147,6 +147,11 @@ public class DeclareInfoModelServiceImpl implements DeclareInfoModelService {
 
     @Override
     public void saveEntity(DeclareInfoModel declareInfoModel) {
+
+        //自动生成项目编号
+        String declareNo = String.valueOf('D'+System.currentTimeMillis());
+        declareInfoModel.getDeclareInfoEntity().setDeclareNum(declareNo);
+
         declareInfoService.insert(declareInfoModel.getDeclareInfoEntity());
         this.saveOrupdateProps(declareInfoModel);
     }

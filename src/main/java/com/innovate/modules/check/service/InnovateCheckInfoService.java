@@ -22,10 +22,10 @@ public interface InnovateCheckInfoService extends IService<InnovateCheckInfoEnti
 
     void saveByDeclareBatchIds(List<Long> checkIds);
 
-    void saveByTime(Date time);
-
     void apply(Map<String, Object> params);
 
     void save(InnovateCheckInfoModel innovateCheckInfoModel);
+
+    void saveByTime(Map<String, Object> params);
 }
 

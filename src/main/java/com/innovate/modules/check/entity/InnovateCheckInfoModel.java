@@ -18,13 +18,16 @@ import java.util.List;
 public class InnovateCheckInfoModel implements Serializable {
 
     private static final long serialVersionUID = 1L;
-
+    //中期检查
     private InnovateCheckInfoEntity innovateCheckInfoEntity;
-
+    //附件
     private List<InnovateCheckAttachEntity> innovateCheckAttachEntities;
-
+    //对应的大创项目
     private DeclareInfoEntity declareInfoEntity;
-
+    //回退记录
     private List<InnovateCheckRetreatEntity> innovateCheckRetreatEntities;
-
+    //获奖信息
+    private List<InnovateCheckAwardEntity> innovateCheckAwardEntities;
+    //评委评分
+    private List<InnovateCheckReviewEntity> innovateCheckReviewEntities;
 }

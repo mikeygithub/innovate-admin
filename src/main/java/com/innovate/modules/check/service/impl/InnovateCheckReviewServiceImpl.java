@@ -16,6 +16,7 @@ import com.innovate.modules.declare.service.DeclareReviewService;
 import com.innovate.modules.declare.service.DeclareTeacherService;
 import com.innovate.modules.innovate.entity.InnovateReviewGroupUserEntity;
 import com.innovate.modules.innovate.service.InnovateReviewGroupUserService;
+import com.innovate.modules.sys.service.SysUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -39,6 +40,8 @@ public class InnovateCheckReviewServiceImpl extends ServiceImpl<InnovateCheckRev
     private DeclareTeacherService declareTeacherService;
     @Autowired
     private InnovateReviewGroupUserService innovateReviewGroupUserService;
+    @Autowired
+    private SysUserService sysUserService;
 
     @Override
     public List<InnovateCheckReviewEntity> queryAll(Map<String, Object> params) {
@@ -88,6 +91,7 @@ public class InnovateCheckReviewServiceImpl extends ServiceImpl<InnovateCheckRev
                     innovateCheckReviewEntity = new InnovateCheckReviewEntity();
                     innovateCheckReviewEntity.setApply(apply);
                     innovateCheckReviewEntity.setCheckId(checkId);
+                    innovateCheckReviewEntity.setUserName(sysUserService.selectById(innovateReviewGroupUserEntities.get(index).getUserId()).getName());
                     innovateCheckReviewEntity.setUserId(innovateReviewGroupUserEntities.get(index).getUserId());
                     tempSet.add(innovateCheckReviewEntity);
                 }

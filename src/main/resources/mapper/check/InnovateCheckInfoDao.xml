@@ -63,16 +63,21 @@
 <!--            and a.project_check_apply_status = #{projectCheckApplyStatus}-->
 <!--        </if>-->
 
+        <!--未审批-->
         <if test="hasApply != null and hasApply != '' and hasApply == 1 and projectCheckApplyStatus != null and projectCheckApplyStatus != ''" >
             and a.project_check_apply_status = #{projectCheckApplyStatus}
         </if>
-
+        <!--已经审批-->
         <if test="hasApply != null and hasApply != '' and hasApply == 2 and projectCheckApplyStatus != null and projectCheckApplyStatus != ''">
             and a.project_check_apply_status > #{projectCheckApplyStatus}
         </if>
-
+        <!--已经评分-->
         <if test="hasApply != null and hasApply != '' and hasApply == 3">
             and a.check_score_avg is not null
+        </if>
+        <!--未完成评分-->
+        <if test="hasApply != null and hasApply != '' and hasApply == 4">
+            and a.check_score_avg is null
         </if>
 
         <if test="hasReview != null and hasReview != ''">
@@ -88,6 +93,21 @@
             and b.declare_name like CONCAT('%',#{projectName},'%')
         </if>
 
+        <!--未评分-->
+        <if test="hasReview != null and hasReview != '' and hasReview == 1">
+            and c.score is null
+        </if>
+
+        <!--待他人评分-->
+        <if test="hasReview != null and hasReview != '' and hasReview == 2">
+            and c.score is not null
+        </if>
+
+        <!--已评分-->
+        <if test="hasReview != null and hasReview != '' and hasReview == 3">
+            and a.check_score_avg is not null
+        </if>
+
         <if test="isDel != null and isDel != ''">
             and a.is_del = #{isDel}
         </if>
@@ -97,9 +117,16 @@
 
         select * from innovate_check_info a
 
+        <!--负责人-->
         <if test="userId != null and userId != ''">
             inner join innovate_declare_info b on a.declare_id = b.declare_id
             and b.project_user_id = #{userId}
+        </if>
+
+        <!--当前评委-->
+        <if test="isReview != null and isReview != '' and reviewUserId != null and reviewUserId != ''">
+            inner join innovate_check_review c on a.check_id = c.check_id
+            and c.user_id = #{reviewUserId}
         </if>
 
         where 1 = 1
@@ -132,16 +159,22 @@
 <!--            and a.project_check_apply_status = #{projectCheckApplyStatus}-->
 <!--        </if>-->
 
+        <!--未审批-->
         <if test="hasApply != null and hasApply != '' and hasApply == 1 and projectCheckApplyStatus != null and projectCheckApplyStatus != ''" >
             and a.project_check_apply_status = #{projectCheckApplyStatus}
         </if>
-
+        <!--已经审批-->
         <if test="hasApply != null and hasApply != '' and hasApply == 2 and projectCheckApplyStatus != null and projectCheckApplyStatus != ''">
             and a.project_check_apply_status > #{projectCheckApplyStatus}
         </if>
-
+        <!--已经评分-->
         <if test="hasApply != null and hasApply != '' and hasApply == 3">
             and a.check_score_avg is not null
+        </if>
+        <!--未完成评分-->
+        <if test="hasApply != null and hasApply != '' and hasApply == 4">
+            and a.check_score_avg is null
+            and a.group_id is not null
         </if>
 
         <if test="hasReview != null and hasReview != ''">
@@ -159,6 +192,19 @@
 
         <if test="isDel != null and isDel != ''">
             and a.is_del = #{isDel}
+        </if>
+        <!--未评分-->
+        <if test="hasReview != null and hasReview != '' and hasReview == 1">
+            and c.score is null
+        </if>
+        <!--待他人评分-->
+        <if test="hasReview != null and hasReview != '' and hasReview == 2">
+            and c.score is not null
+            and a.check_score_avg is null
+        </if>
+        <!--已评分-->
+        <if test="hasReview != null and hasReview != '' and hasReview == 3">
+            and a.check_score_avg is not null
         </if>
 
         <if test="starPage != null and endPage != null">

@@ -21,6 +21,7 @@ public class InnovateCheckReviewEntity implements Serializable {
     private String apply;
     private Long checkId;
     private Long userId;
+    private String userName;
     private Long refereeNo;
     @JsonSerialize(using=ToStringSerializer.class)
     private Double score;
