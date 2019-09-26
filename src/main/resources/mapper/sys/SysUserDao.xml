@@ -65,4 +65,9 @@
 
 	</select>
 
+	<!-- 更新用户状态 -->
+	<update id="updateState">
+		UPDATE sys_user SET status = #{status} WHERE user_id = #{userId}
+	</update>
+
 </mapper>

@@ -1,13 +1,5 @@
 package com.innovate.modules.enterprise.aop;
 
-/**
- * @author spring
- * email: 4298293220@qq.com
- * site: https://springbless.xin
- * @description Aop企业入驻权限拦截
- * @date 2019/9/24
- */
-
 import com.innovate.common.exception.RRException;
 import com.innovate.modules.enterprise.annotation.HasRole;
 import com.innovate.modules.sys.entity.SysUserEntity;
@@ -26,7 +18,11 @@ import java.lang.reflect.Method;
 import java.util.List;
 
 /**
- * aop切面实现角色拦截
+ * @author spring
+ * email: 4298293220@qq.com
+ * site: https://springbless.xin
+ * @description Aop企业入驻权限拦截
+ * @date 2019/9/24
  */
 
 @Aspect

@@ -85,6 +85,16 @@ public class EntEnterpriseInfoEntity implements Serializable {
 	private String entLogo;
 
 	/**
+	 * 入驻申请时间
+	 */
+	private Date entInTime;
+
+	/**
+	 * 是否审核
+	 */
+	private String inApply;
+
+	/**
 	 * 企业证明材料，附件
 	 */
 	@TableField(exist = false)

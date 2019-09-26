@@ -29,6 +29,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -169,6 +170,7 @@ public class SysLoginController extends AbstractController {
 		String json = gson.toJson(ent);
 		EntEnterpriseInfoEntity entEntity = gson.fromJson(json, EntEnterpriseInfoEntity.class);
 		entEntity.setUserId(user.getUserId());
+		entEntity.setEntInTime(new Date());
 		entEnterpriseInfoService.insert(entEntity);
 		Object attach = params.get("attachments");
 		String jsonAttach = gson.toJson(attach);
