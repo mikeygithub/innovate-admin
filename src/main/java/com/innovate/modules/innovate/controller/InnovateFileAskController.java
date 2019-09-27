@@ -1,6 +1,7 @@
 package com.innovate.modules.innovate.controller;
 
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -68,8 +69,19 @@ public class InnovateFileAskController {
     @RequestMapping("/save")
     @RequiresPermissions("innovate:file:ask:save")
     public R save(@RequestBody InnovateFileAskEntity innovateFileAsk){
-		innovateFileAskService.insert(innovateFileAsk);
 
+        // 校验同一年度且统一类型的文件要求是否存在
+        Map<String, Object> params = new HashMap<>();
+        params.put("fileAskType", innovateFileAsk.getFileAskType());
+        params.put("fileAskTime", innovateFileAsk.getFileAskTime().getYear()+1900);
+        System.out.println(innovateFileAsk.getFileAskTime().getYear()+1900);
+        if (innovateFileAskService.queryByParams(params)==null) {
+//            innovateFileAskService.insert(innovateFileAsk);
+            System.out.println("6666666666666666666666666666666666666666666666666666666666666666666");
+        } else {
+            System.out.println("###################################################################################");
+            return R.error("当前输入的文件类型和年度已存在，不能重复添加！");
+        }
         return R.ok();
     }
 

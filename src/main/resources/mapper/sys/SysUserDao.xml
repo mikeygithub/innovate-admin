@@ -41,6 +41,10 @@
 			<if test="createUserId != null and createUserId != ''">
 				and create_user_id = #{createUserId}
 			</if>
+			<!--该值为当前用户的所属部门-->
+			<if test="erInstituteId != null and erInstituteId != ''">
+				and a.institute_id = #{erInstituteId}
+			</if>
 			<if test="startPage != null and endPage != null">
 				limit #{startPage}, #{endPage}
 			</if>
@@ -60,6 +64,10 @@
 			</if>
 			<if test="createUserId != null and createUserId != ''">
 				and create_user_id = #{createUserId}
+			</if>
+			<!--该值为当前用户的所属部门-->
+			<if test="erInstituteId != null and erInstituteId != ''">
+				and a.institute_id = #{erInstituteId}
 			</if>
 		</where>
 
