@@ -26,4 +26,6 @@ public interface InnovateCheckAwardService extends IService<InnovateCheckAwardEn
 
     void remove(Map<String, Object> params);
 
+    //findById
+    InnovateCheckAwardEntity findByAwardId(Long awardId);
 }

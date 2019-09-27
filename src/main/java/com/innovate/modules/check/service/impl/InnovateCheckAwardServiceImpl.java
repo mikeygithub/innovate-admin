@@ -40,4 +40,9 @@ public class InnovateCheckAwardServiceImpl extends ServiceImpl<InnovateCheckAwar
     public void remove(Map<String, Object> params) {
         baseMapper.remove(params);
     }
+
+    @Override
+    public InnovateCheckAwardEntity findByAwardId(Long awardId) {
+        return baseMapper.findByAwardId(awardId);
+    }
 }

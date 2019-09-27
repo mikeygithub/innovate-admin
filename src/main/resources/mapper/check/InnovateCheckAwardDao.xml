@@ -9,6 +9,13 @@
             and is_del = 0
     </select>
 
+
+    <select id="findByAwardId" resultType="InnovateCheckAwardEntity" parameterType="java.lang.Long">
+        select * from innovate_check_award
+        where award_id = #{awarId}
+            and is_del = 0
+    </select>
+
     <update id="remove" parameterType="map">
         update innovate_check_award
         set is_del = 1

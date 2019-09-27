@@ -26,5 +26,8 @@ public interface InnovateCheckAwardDao extends BaseMapper<InnovateCheckAwardEnti
     //统计奖金数量
     Double queryAwardMoney(Map<String, Object> params);
 
+    //findById
+    InnovateCheckAwardEntity findByAwardId(Long awardId);
+
     void remove(Map<String, Object> params);
 }

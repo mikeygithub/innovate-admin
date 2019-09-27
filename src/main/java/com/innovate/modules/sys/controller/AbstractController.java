@@ -13,6 +13,7 @@ import org.slf4j.LoggerFactory;
  * @date 2016年11月9日 下午9:42:26
  */
 public abstract class AbstractController {
+
 	protected Logger logger = LoggerFactory.getLogger(getClass());
 	
 	protected SysUserEntity getUser() {

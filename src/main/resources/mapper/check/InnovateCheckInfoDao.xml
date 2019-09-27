@@ -31,6 +31,7 @@
         <if test="isReview != null and isReview != '' and reviewUserId != null and reviewUserId != ''">
             inner join innovate_check_review c on a.check_id = c.check_id
             and c.user_id = #{reviewUserId}
+            and c.is_del = 0
         </if>
 
         where 1 = 1
@@ -127,6 +128,7 @@
         <if test="isReview != null and isReview != '' and reviewUserId != null and reviewUserId != ''">
             inner join innovate_check_review c on a.check_id = c.check_id
             and c.user_id = #{reviewUserId}
+            and c.is_del = 0
         </if>
 
         where 1 = 1

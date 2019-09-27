@@ -74,7 +74,7 @@ public class InnovateCheckReviewServiceImpl extends ServiceImpl<InnovateCheckRev
         InnovateCheckInfoEntity innovateCheckInfoEntity = innovateCheckInfoService.selectById(checkId);
         innovateCheckInfoEntity.setGroupId(groupId);
         //3：已经分配评委组状态
-        innovateCheckInfoEntity.setProjectCheckApplyStatus(3);
+//        innovateCheckInfoEntity.setProjectCheckApplyStatus(3);
         innovateCheckInfoService.updateById(innovateCheckInfoEntity);
 //        查询项目全部老师
         List<DeclareTeacherEntity> declareTeacherEntities = declareTeacherService.queryAll(params);

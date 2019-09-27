@@ -1,7 +1,9 @@
 package com.innovate.modules.check.controller;
 
 import com.innovate.common.utils.R;
+import com.innovate.modules.check.entity.InnovateCheckAwardEntity;
 import com.innovate.modules.check.entity.InnovateCheckReviewEntity;
+import com.innovate.modules.check.service.InnovateCheckAwardService;
 import com.innovate.modules.check.service.InnovateCheckReviewService;
 import com.innovate.modules.declare.entity.DeclareReviewEntity;
 import com.innovate.modules.declare.service.DeclareReviewService;
@@ -10,6 +12,7 @@ import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Map;
 
 /**
