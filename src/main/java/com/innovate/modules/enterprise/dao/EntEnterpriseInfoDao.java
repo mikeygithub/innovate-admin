@@ -1,6 +1,7 @@
 package com.innovate.modules.enterprise.dao;
 
 import com.baomidou.mybatisplus.mapper.BaseMapper;
+import com.innovate.common.utils.R;
 import com.innovate.modules.enterprise.entity.EntEnterpriseInfoEntity;
 import org.apache.ibatis.annotations.Mapper;
 
@@ -13,5 +14,21 @@ import org.apache.ibatis.annotations.Mapper;
  */
 @Mapper
 public interface EntEnterpriseInfoDao extends BaseMapper<EntEnterpriseInfoEntity> {
+
+    /**
+     * 企业信息详情
+     * @param entInfoId
+     * @return
+     */
+    EntEnterpriseInfoEntity queryEntEnterpriseInfo(Long entInfoId);
+
+
+    /**
+     * 更新企业入驻状态
+     * @param entInfoId 企业基本信息表主键
+     * @param inApply 企业入驻审核状态
+     * @return
+     */
+    boolean updateInApply(Long entInfoId, String inApply);
 	
 }

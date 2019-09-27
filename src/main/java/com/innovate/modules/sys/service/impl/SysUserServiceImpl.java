@@ -137,6 +137,11 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserDao, SysUserEntity> i
 				new EntityWrapper<SysUserEntity>().eq("user_id", userId).eq("password", password));
 	}
 
+	@Override
+	public boolean updateState(Long userId, Integer status) {
+		return baseMapper.updateState(userId, status);
+	}
+
 	/**
 	 * 检查角色是否越权
 	 */

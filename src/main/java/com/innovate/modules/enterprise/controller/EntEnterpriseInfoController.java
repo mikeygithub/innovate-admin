@@ -48,14 +48,22 @@ public class EntEnterpriseInfoController extends AbstractController {
 
 
     /**
-     * 信息
+     * 信息---企业入驻审核信息查询
      */
     @RequestMapping("/info/{entInfoId}")
-    @RequiresPermissions("enterprise:info")
+    // @RequiresPermissions("enterprise:info")
     public R info(@PathVariable("entInfoId") Long entInfoId){
-		EntEnterpriseInfoEntity entEnterpriseInfo = entEnterpriseInfoService.selectById(entInfoId);
+		return entEnterpriseInfoService.queryEntEnterpriseInfo(entInfoId);
+    }
 
-        return R.ok().put("entEnterpriseInfo", entEnterpriseInfo);
+    /**
+     * 处理企业入驻审核
+     * @return
+     */
+    @RequestMapping("/entExamine")
+    public R entExamine(@RequestParam  Map<String, Object> params){
+        logger.info("接收数据:{}", params);
+        return entEnterpriseInfoService.updateEntExamine(params);
     }
 
     /**

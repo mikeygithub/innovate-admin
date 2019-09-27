@@ -48,4 +48,12 @@ public interface SysUserDao extends BaseMapper<SysUserEntity> {
 	 */
 	int queryCount(Map<String, Object> params);
 
+	/**
+	 * 更新用户状态
+	 * @param userId 用户ID
+	 * @param status 用户状态
+	 * @return
+	 */
+	boolean updateState(Long userId, Integer status);
+
 }

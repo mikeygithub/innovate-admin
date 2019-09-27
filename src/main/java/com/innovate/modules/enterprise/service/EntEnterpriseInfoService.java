@@ -3,6 +3,7 @@ package com.innovate.modules.enterprise.service;
 
 import com.baomidou.mybatisplus.service.IService;
 import com.innovate.common.utils.PageUtils;
+import com.innovate.common.utils.R;
 import com.innovate.modules.enterprise.entity.EntEnterpriseInfoEntity;
 import org.springframework.stereotype.Service;
 
@@ -19,5 +20,19 @@ import java.util.Map;
 public interface EntEnterpriseInfoService extends IService<EntEnterpriseInfoEntity> {
 
     PageUtils queryPage(Map<String, Object> params);
+
+    /**
+     * 企业信息详情
+     * @param entInfoId
+     * @return
+     */
+    R queryEntEnterpriseInfo(Long entInfoId);
+
+    /**
+     * 更新企业入驻信息---审核
+     * @return
+     */
+    R updateEntExamine(Map params);
+
 }
 

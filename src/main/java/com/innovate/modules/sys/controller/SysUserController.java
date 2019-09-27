@@ -1,15 +1,17 @@
 package com.innovate.modules.sys.controller;
 
-import com.google.gson.Gson;
 import com.innovate.common.annotation.SysLog;
 import com.innovate.common.utils.Constant;
 import com.innovate.common.utils.PageUtils;
 import com.innovate.common.utils.R;
+import com.innovate.common.utils.RegularCheckUtils;
 import com.innovate.common.validator.Assert;
 import com.innovate.common.validator.ValidatorUtils;
 import com.innovate.common.validator.group.AddGroup;
 import com.innovate.common.validator.group.UpdateGroup;
 import com.innovate.modules.sys.entity.SysUserEntity;
+import com.innovate.modules.sys.entity.SysUserEntityModel;
+import com.innovate.modules.sys.entity.SysUserModel;
 import com.innovate.modules.sys.form.PasswordForm;
 import com.innovate.modules.sys.service.SysUserRoleService;
 import com.innovate.modules.sys.service.SysUserService;
@@ -19,6 +21,9 @@ import org.apache.shiro.crypto.hash.Sha256Hash;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -49,6 +54,16 @@ public class SysUserController extends AbstractController {
 		if(getUserId() != Constant.SUPER_ADMIN){
 			params.put("createUserId", getUserId());
 		}
+		PageUtils page = sysUserService.queryPage(params);
+
+		return R.ok().put("page", page);
+	}
+
+	/**
+	 * 二级学院所有用户列表
+	 */
+	@GetMapping("/erlist")
+	public R erlist(@RequestParam Map<String, Object> params){
 		PageUtils page = sysUserService.queryPage(params);
 
 		return R.ok().put("page", page);
@@ -121,12 +136,52 @@ public class SysUserController extends AbstractController {
 	@PostMapping("/save")
 	@RequiresPermissions("sys:user:save")
 	public R save(@RequestBody SysUserEntity user){
+		//校验对象
 		ValidatorUtils.validateEntity(user, AddGroup.class);
 
 		user.setCreateUserId(getUserId());
 		sysUserService.save(user);
 
 		return R.ok();
+	}
+
+	/**
+	 * 用于学院账号批量导入学院用户-项目负责人或学生
+	 */
+	@SysLog("批量保存用户")
+	@PostMapping("/batchsave")
+	@RequiresPermissions("sys:eruser:batchsave")
+	public R batchSave(@RequestBody(required = false) SysUserModel sysUserModel){
+
+		List<SysUserEntityModel> errorDate = new ArrayList<>();
+		SysUserEntity user;
+		for (SysUserEntityModel sysUserEntityModel : sysUserModel.getBatchSaveList()) {
+			if (	(!RegularCheckUtils.isPhone(sysUserEntityModel.get__EMPTY_2())) ||
+					(!RegularCheckUtils.isEmail(sysUserEntityModel.get__EMPTY_3())) ||
+					(sysUserEntityModel.get__EMPTY_4() != 2 && sysUserEntityModel.get__EMPTY_4() != 3)	) {
+				// 校验手机号、邮箱和用户类型
+				errorDate.add(sysUserEntityModel);
+				continue;
+			}
+			user = new SysUserEntity();
+			user.setUsername(sysUserEntityModel.get__EMPTY());
+			user.setName(sysUserEntityModel.get__EMPTY_1());
+			user.setPassword("123456");
+			user.setEmail(sysUserEntityModel.get__EMPTY_3());
+			user.setMobile(sysUserEntityModel.get__EMPTY_2());
+			user.setStatus(1);
+			user.setInstituteId(sysUserModel.getErInstituteId());
+			user.setCreateUserId((long) 1);
+			user.setRoleIdList(Arrays.asList(sysUserEntityModel.get__EMPTY_4()));
+			try {
+				sysUserService.save(user);
+			} catch (Exception e) {
+				e.printStackTrace();
+				return R.error().put("errorDate", sysUserModel.getBatchSaveList());
+			}
+		}
+
+		return errorDate.isEmpty() ? R.ok() : R.error().put("errorDate", errorDate);
 	}
 
 	/**
