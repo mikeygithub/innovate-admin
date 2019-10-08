@@ -6,6 +6,7 @@ import com.innovate.modules.enterprise.annotation.HasRole;
 import com.innovate.modules.enterprise.entity.EntEnterpriseInfoEntity;
 import com.innovate.modules.enterprise.service.EntEnterpriseInfoService;
 import com.innovate.modules.sys.controller.AbstractController;
+import io.swagger.annotations.Api;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -50,10 +51,10 @@ public class EntEnterpriseInfoController extends AbstractController {
     /**
      * 信息---企业入驻审核信息查询
      */
-    @RequestMapping("/info/{entInfoId}")
+    @RequestMapping("/info/{entInfoId}/{inApply}")
     // @RequiresPermissions("enterprise:info")
-    public R info(@PathVariable("entInfoId") Long entInfoId){
-		return entEnterpriseInfoService.queryEntEnterpriseInfo(entInfoId);
+    public R info(@PathVariable("entInfoId") Long entInfoId, @PathVariable("inApply")String inApply){
+		return entEnterpriseInfoService.queryEntEnterpriseInfo(entInfoId, inApply);
     }
 
     /**

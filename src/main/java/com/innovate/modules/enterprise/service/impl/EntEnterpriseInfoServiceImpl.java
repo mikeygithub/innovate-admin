@@ -41,9 +41,9 @@ public class EntEnterpriseInfoServiceImpl extends ServiceImpl<EntEnterpriseInfoD
     }
 
     @Override
-    @ResultNotNull(clazz = EntEnterpriseInfoEntity.class, targetKey = "data", codeKey = "code", errorCode = 500)
-    public R queryEntEnterpriseInfo(Long entInfoId) {
-        EntEnterpriseInfoEntity entity = entEnterpriseInfoDao.queryEntEnterpriseInfo(entInfoId);
+    //@ResultNotNull(clazz = EntEnterpriseInfoEntity.class, targetKey = "data", codeKey = "code", errorCode = 500)
+    public R queryEntEnterpriseInfo(Long entInfoId, String inApply) {
+        EntEnterpriseInfoEntity entity = entEnterpriseInfoDao.queryEntEnterpriseInfo(entInfoId, inApply);
         return R.ok().put("data", entity);
     }
 
@@ -51,8 +51,14 @@ public class EntEnterpriseInfoServiceImpl extends ServiceImpl<EntEnterpriseInfoD
     @Transactional
     public R updateEntExamine(Map params) {
         // 由于数据问题，此处可能会出现类型转换异常
-        boolean b = sysUserService.updateState((Long.valueOf((String)params.get("userId"))), Integer.valueOf((String) params.get("status")));
-        boolean b1 = entEnterpriseInfoDao.updateInApply(Long.valueOf((String) params.get("entInfoId")), (String) params.get("inApply"));
+        String inApply = (String) params.get("inApply");
+        int status = 0;
+        if("1".equals(inApply)){
+            status = 1;
+        }
+        // Integer.valueOf((String) params.get("status"))
+        boolean b = sysUserService.updateState((Long.valueOf((String)params.get("userId"))), status);
+        boolean b1 = entEnterpriseInfoDao.updateInApply(Long.valueOf((String) params.get("entInfoId")), inApply);
         return b && b1 ? R.ok() : R.error();
     }
 

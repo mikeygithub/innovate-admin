@@ -26,7 +26,7 @@ public interface EntEnterpriseInfoService extends IService<EntEnterpriseInfoEnti
      * @param entInfoId
      * @return
      */
-    R queryEntEnterpriseInfo(Long entInfoId);
+    R queryEntEnterpriseInfo(Long entInfoId, String inApply);
 
     /**
      * 更新企业入驻信息---审核

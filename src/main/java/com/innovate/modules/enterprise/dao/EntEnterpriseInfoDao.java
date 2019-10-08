@@ -20,7 +20,7 @@ public interface EntEnterpriseInfoDao extends BaseMapper<EntEnterpriseInfoEntity
      * @param entInfoId
      * @return
      */
-    EntEnterpriseInfoEntity queryEntEnterpriseInfo(Long entInfoId);
+    EntEnterpriseInfoEntity queryEntEnterpriseInfo(Long entInfoId, String inApply);
 
 
     /**

@@ -36,7 +36,7 @@
             <result column="ent_attachment_url" property="entAttachmentUrl" />
         </collection>
     </resultMap>
-    <select id="queryEntEnterpriseInfo" resultMap="entEnterpriseInfo_attachment_Map" parameterType="Long">
+    <select id="queryEntEnterpriseInfo" resultMap="entEnterpriseInfo_attachment_Map">
         SELECT
             e_e_i.ent_info_id, e_e_i.user_id , e_e_i.ent_name , e_e_i.ent_corporate , e_e_i.ent_business , e_e_i.ent_code,
             e_e_i.ent_register, e_e_i.ent_founding_time, e_e_i.ent_type, e_e_i.ent_status ,e_e_i.ent_register_address ,
@@ -48,6 +48,7 @@
         LEFT JOIN ent_enterprise_attachment e_e_a ON e_e_a.ent_info_id = e_e_i.ent_info_id
         WHERE
             e_e_i.ent_info_id = #{entInfoId}
+            <if test="inApply != null and inApply != ''"> AND e_e_i.in_apply = #{inApply} </if>
     </select>
 
     <!-- 更新企业入驻状态 -->
