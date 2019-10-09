@@ -7,8 +7,10 @@ import com.innovate.common.utils.PageUtils;
 import com.innovate.common.utils.PagingTool;
 import com.innovate.common.utils.Query;
 import com.innovate.common.utils.R;
+import com.innovate.modules.enterprise.annotation.DefaultValue;
 import com.innovate.modules.enterprise.dao.EntRecruitmentInfoDao;
 import com.innovate.modules.enterprise.entity.EntRecruitmentInfoEntity;
+import com.innovate.modules.enterprise.enums.DefValueEnum;
 import com.innovate.modules.enterprise.service.EntRecruitmentInfoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -23,6 +25,7 @@ public class EntRecruitmentInfoServiceImpl extends ServiceImpl<EntRecruitmentInf
     @Autowired
     private EntRecruitmentInfoDao entRecruitmentInfoDao;
 
+    @DefaultValue(targetType = java.util.Map.class, index = 0, key = "inApply", defValue = "0", defValueEnum = DefValueEnum.STRING)
     @Override
     public PageUtils queryPage(Map<String, Object> params) {
 //        Page<EntRecruitmentInfoEntity> page = this.selectPage(
@@ -30,9 +33,9 @@ public class EntRecruitmentInfoServiceImpl extends ServiceImpl<EntRecruitmentInf
 //                new EntityWrapper<EntRecruitmentInfoEntity>()
 //        );
         Page<?> objects = PagingTool.handlerPage(params);
-        if(null == params.get("inApply")){
-            params.put("inApply", "0");
-        }
+//        if(null == params.get("inApply")){
+//            params.put("inApply", "0");
+//        }
         List<EntRecruitmentInfoEntity> list = entRecruitmentInfoDao.entRecruitmentInfoList(params);
         PageUtils page = PagingTool.page(list, objects);
         return page;

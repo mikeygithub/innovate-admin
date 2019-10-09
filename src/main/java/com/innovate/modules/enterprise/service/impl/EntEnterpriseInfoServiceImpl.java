@@ -6,9 +6,11 @@ import com.baomidou.mybatisplus.service.impl.ServiceImpl;
 import com.innovate.common.utils.PageUtils;
 import com.innovate.common.utils.Query;
 import com.innovate.common.utils.R;
+import com.innovate.modules.enterprise.annotation.DefaultValue;
 import com.innovate.modules.enterprise.annotation.ResultNotNull;
 import com.innovate.modules.enterprise.dao.EntEnterpriseInfoDao;
 import com.innovate.modules.enterprise.entity.EntEnterpriseInfoEntity;
+import com.innovate.modules.enterprise.enums.DefValueEnum;
 import com.innovate.modules.enterprise.service.EntEnterpriseInfoService;
 import com.innovate.modules.sys.service.SysUserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,6 +49,7 @@ public class EntEnterpriseInfoServiceImpl extends ServiceImpl<EntEnterpriseInfoD
         return R.ok().put("data", entity);
     }
 
+    @DefaultValue(targetType = java.util.Map.class, index = 0, key = "inApply", defValue = "0", defValueEnum = DefValueEnum.STRING)
     @Override
     @Transactional
     public R updateEntExamine(Map params) {
