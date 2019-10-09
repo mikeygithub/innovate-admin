@@ -3,6 +3,8 @@ package com.innovate.modules.enterprise.dao;
 import com.baomidou.mybatisplus.mapper.BaseMapper;
 import com.innovate.modules.enterprise.entity.EntRecruitmentInfoEntity;
 import org.apache.ibatis.annotations.Mapper;
+import java.util.Map;
+import java.util.List;
 
 /**
  * 招聘信息表
@@ -13,5 +15,17 @@ import org.apache.ibatis.annotations.Mapper;
  */
 @Mapper
 public interface EntRecruitmentInfoDao extends BaseMapper<EntRecruitmentInfoEntity> {
-	
+
+    /**
+     * 招聘信息表 --》 id 查招聘信息 + 企业信息
+     * @return
+     */
+    EntRecruitmentInfoEntity entRecruitmentInfoById(Long recruitmentInfoId);
+
+    /**
+     * 招聘信息表 --》 id 查招聘信息 + 企业信息 -- > 列表
+     * @return
+     */
+    List<EntRecruitmentInfoEntity> entRecruitmentInfoList(Map<String, Object> params);
+
 }

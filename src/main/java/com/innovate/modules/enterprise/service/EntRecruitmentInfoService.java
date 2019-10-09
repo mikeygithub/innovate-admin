@@ -3,6 +3,7 @@ package com.innovate.modules.enterprise.service;
 
 import com.baomidou.mybatisplus.service.IService;
 import com.innovate.common.utils.PageUtils;
+import com.innovate.common.utils.R;
 import com.innovate.modules.enterprise.entity.EntRecruitmentInfoEntity;
 
 import java.util.Map;
@@ -16,6 +17,17 @@ import java.util.Map;
  */
 public interface EntRecruitmentInfoService extends IService<EntRecruitmentInfoEntity> {
 
+    /**
+     * 招聘信息表 --》 id 查招聘信息 + 企业信息 -- > 列表
+     * @return
+     */
     PageUtils queryPage(Map<String, Object> params);
+
+    /**
+     * 招聘信息表 --》 id 查招聘信息 + 企业信息
+     * @return
+     */
+    R entRecruitmentInfoById(Long recruitmentInfoId);
+
 }
 

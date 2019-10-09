@@ -29,7 +29,7 @@ public class EntRecruitmentInfoController {
      * 列表
      */
     @RequestMapping("/list")
-    @RequiresPermissions("enterprise:recruitment:info:list")
+    //@RequiresPermissions("enterprise:recruitment:info:list")
     public R list(@RequestParam Map<String, Object> params){
         PageUtils page = entRecruitmentInfoService.queryPage(params);
 
@@ -41,11 +41,10 @@ public class EntRecruitmentInfoController {
      * 信息
      */
     @RequestMapping("/info/{recruitmentInfoId}")
-    @RequiresPermissions("enterprise:recruitment:info")
+    //@RequiresPermissions("enterprise:recruitment:info")
     public R info(@PathVariable("recruitmentInfoId") Long recruitmentInfoId){
-		EntRecruitmentInfoEntity entRecruitmentInfo = entRecruitmentInfoService.selectById(recruitmentInfoId);
-
-        return R.ok().put("entRecruitmentInfo", entRecruitmentInfo);
+        R r = entRecruitmentInfoService.entRecruitmentInfoById(recruitmentInfoId);
+        return r;
     }
 
     /**
