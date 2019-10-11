@@ -58,11 +58,15 @@ public class EntEnterpriseInfoServiceImpl extends ServiceImpl<EntEnterpriseInfoD
         int status = 0;
         if("1".equals(inApply)){
             status = 1;
+            boolean b = sysUserService.updateState((Long.valueOf((String)params.get("userId"))), status);
+            boolean b1 = entEnterpriseInfoDao.updateInApply(Long.valueOf((String) params.get("entInfoId")), inApply);
+            return b && b1 ? R.ok() : R.error();
         }
         // Integer.valueOf((String) params.get("status"))
-        boolean b = sysUserService.updateState((Long.valueOf((String)params.get("userId"))), status);
-        boolean b1 = entEnterpriseInfoDao.updateInApply(Long.valueOf((String) params.get("entInfoId")), inApply);
-        return b && b1 ? R.ok() : R.error();
+        //sysUserService.deleteBatch(new Long[]{(Long.valueOf((String)params.get("userId")))});
+        sysUserService.deleteById((Long.valueOf((String) params.get("userId"))));
+        entEnterpriseInfoDao.deleteById(Long.valueOf((String) params.get("entInfoId")));
+        return R.ok();
     }
 
 }
