@@ -55,6 +55,11 @@ public class EntRecruitmentInfoEntity implements Serializable {
 	private String workWay;
 
 	/**
+	 * 审核状态
+	 */
+	private String inApply;
+
+	/**
 	 * 企业基本信息表
 	 */
 	@TableField(exist = false)

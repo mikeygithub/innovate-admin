@@ -73,7 +73,7 @@ public class EntRecruitmentInfoController {
      * 删除
      */
     @RequestMapping("/delete")
-    @RequiresPermissions("enterprise:recruitment:info:delete")
+    // @RequiresPermissions("enterprise:recruitment:info:delete")
     public R delete(@RequestBody Long[] recruitmentInfoIds){
 		entRecruitmentInfoService.deleteBatchIds(Arrays.asList(recruitmentInfoIds));
 
