@@ -6,8 +6,9 @@
 	<!-- 可根据自己的需求，是否要使用 -->
     <resultMap type="com.innovate.modules.enterprise.entity.EntTeacherExperienceInfoEntity" id="entTeacherExperienceInfoMap">
         <result property="teaExperienceId" column="tea_experience_id"/>
-        <result property="teaInfoId" column="tea_info_id"/>
+        <result property="userTeacherId" column="user_teacher_id"/>
         <result property="teaExperienceContent" column="tea_experience_content"/>
+        <result property="inApply" column="in_apply"/>
     </resultMap>
 
 

@@ -25,6 +25,7 @@ public interface UserTeacherInfoService extends IService<UserTeacherInfoEntity> 
     List<UserTeacherInfoEntity> queryFinishTeacherInfo(Long declareId);
     List<UserTeacherInfoEntity> queryAllTeacherInfo();
     UserTeacherInfoEntity queryByUserId(Long userId);
+
     @Transactional
     void saveOrUpdate(UserTeacherInfoEntity userTeacherInfoEntity);
 }

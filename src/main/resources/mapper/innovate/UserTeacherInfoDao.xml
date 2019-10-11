@@ -68,9 +68,10 @@
         where a.user_id = b.user_id
     </select>
 
-    <select id="queryByUserId" resultType="UserTeacherInfoEntity">
-        select * from innovate_user_teacher_info
-        where user_id = #{userId}
+    <select id="queryByUserId" resultMap="UserTeacherInfoMap">
+        select * from sys_user a, innovate_user_teacher_info b
+        where a.user_id = #{userId}
+        and a.user_id = b.user_id
     </select>
 
     <delete id="deleteByProjectId">

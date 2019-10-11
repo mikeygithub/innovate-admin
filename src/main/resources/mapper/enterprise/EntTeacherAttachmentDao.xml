@@ -2,18 +2,41 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.innovate.modules.enterprise.dao.EntTeacherAttachmentDao">
-
-	<!-- 可根据自己的需求，是否要使用 -->
+    <!--教师附件-->
     <resultMap type="com.innovate.modules.enterprise.entity.EntTeacherAttachmentEntity" id="entTeacherAttachmentMap">
         <result property="teaAttachmentId" column="tea_attachment_id"/>
-        <result property="teaInfoId" column="tea_info_id"/>
+        <result property="userTeacherId" column="user_teacher_id"/>
         <result property="proInfoId" column="pro_info_id"/>
         <result property="proCooperationInfoId" column="pro_cooperation_info_id"/>
         <result property="teaExperienceId" column="tea_experience_id"/>
         <result property="teaAchievementId" column="tea_achievement_id"/>
-        <result property="patent InfoId" column="patent _info_id"/>
+        <result property="patentInfoId" column="patent_info_id"/>
         <result property="teaAttachmentUrl" column="tea_attachment_url"/>
+        <result property="teaAttachmentName" column="tea_attachment_name"/>
+        <result property="inApply" column="in_apply"/>
     </resultMap>
-
-
+    <!--教师基本信息表外键-->
+    <select id="findByUserTeacherId" parameterType="java.lang.Long" resultType="EntTeacherAttachmentEntity">
+        select * from innovate_admin.ent_teacher_attachment where user_teacher_id = #{userTeacherId}
+    </select>
+    <!--项目信息外键-->
+    <select id="findByProInfoId" parameterType="java.lang.Long" resultType="EntTeacherAttachmentEntity">
+        select * from innovate_admin.ent_teacher_attachment where pro_info_id = #{proInfoId}
+    </select>
+    <!--项目合作外键-->
+    <select id="findByProCooperationInfoId" parameterType="java.lang.Long" resultType="EntTeacherAttachmentEntity">
+        select * from innovate_admin.ent_teacher_attachment where pro_cooperation_info_id = #{proCooperationInfoId}
+    </select>
+    <!--教师工作/项目经历外键-->
+    <select id="findByTeaExperienceId" parameterType="java.lang.Long" resultType="EntTeacherAttachmentEntity">
+        select * from innovate_admin.ent_teacher_attachment where tea_experience_id = #{teaExperienceId}
+    </select>
+    <!--教师所获奖励/证书外键-->
+    <select id="findByTeaAchievementId" parameterType="java.lang.Long" resultType="EntTeacherAttachmentEntity">
+        select * from innovate_admin.ent_teacher_attachment where tea_achievement_id = #{teaAchievementId}
+    </select>
+    <!--知识产权外键-->
+    <select id="findByPatentInfoId" parameterType="java.lang.Long" resultType="EntTeacherAttachmentEntity">
+        select * from innovate_admin.ent_teacher_attachment where patent_info_id = #{patentInfoId}
+    </select>
 </mapper>

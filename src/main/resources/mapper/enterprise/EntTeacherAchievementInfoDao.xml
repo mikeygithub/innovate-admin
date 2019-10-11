@@ -6,8 +6,20 @@
 	<!-- 可根据自己的需求，是否要使用 -->
     <resultMap type="com.innovate.modules.enterprise.entity.EntTeacherAchievementInfoEntity" id="entTeacherAchievementInfoMap">
         <result property="teaAchievementId" column="tea_achievement_id"/>
-        <result property="teaInfoId" column="tea_info_id"/>
+        <result property="userTeacherId" column="user_teacher_id"/>
         <result property="teaAchievementContent" column="tea_achievement_content"/>
+        <result property="inApply" column="in_apply"/>
+        <association property="entEnterpriseAttachmentEntity" javaType="EntEnterpriseAttachmentEntity">
+            <result property="teaAttachmentId" column="tea_attachment_id"/>
+            <result property="userTeacherId" column="user_teacher_id"/>
+            <result property="proInfoId" column="pro_info_id"/>
+            <result property="proCooperationInfoId" column="pro_cooperation_info_id"/>
+            <result property="teaExperienceId" column="tea_experience_id"/>
+            <result property="teaAchievementId" column="tea_achievement_id"/>
+            <result property="patentInfoId" column="patent_info_id"/>
+            <result property="teaAttachmentUrl" column="tea_attachment_url"/>
+            <result property="inApply" column="in_apply"/>
+        </association>
     </resultMap>
 
 

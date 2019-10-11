@@ -1,18 +1,19 @@
 package com.innovate.modules.enterprise.entity;
 
 
+import java.io.Serializable;
+import java.util.Date;
+
 import com.baomidou.mybatisplus.annotations.TableId;
 import com.baomidou.mybatisplus.annotations.TableName;
 import lombok.Data;
 
-import java.io.Serializable;
-
 /**
  * 教师附件表
  * 
- * @author 莫智帆
- * @email 1217567927@qq.com
- * @date 2019-09-10 22:18:36
+ * @author Mikey
+ * @email 1625017540@qq.com
+ * @date 2019-10-10 10:10:39
  */
 @Data
 @TableName("ent_teacher_attachment")
@@ -27,7 +28,7 @@ public class EntTeacherAttachmentEntity implements Serializable {
 	/**
 	 * 教师基本信息表外键
 	 */
-	private Long teaInfoId;
+	private Long userTeacherId;
 	/**
 	 * 项目信息外键
 	 */
@@ -52,5 +53,11 @@ public class EntTeacherAttachmentEntity implements Serializable {
 	 * 文件路径
 	 */
 	private String teaAttachmentUrl;
+	//名称
+	private String teaAttachmentName;
+	/**
+	 * 审核状态，0待审核 1已审核
+	 */
+	private Integer inApply;
 
 }
