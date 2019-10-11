@@ -30,5 +30,12 @@ public interface EntEnterpriseInfoDao extends BaseMapper<EntEnterpriseInfoEntity
      * @return
      */
     boolean updateInApply(Long entInfoId, String inApply);
+
+    /**
+     * 获取企业信息id 根据用户id
+     * @param userId
+     * @return
+     */
+    Long queryEntInfoIdByUserId(Long userId);
 	
 }

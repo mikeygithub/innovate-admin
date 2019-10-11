@@ -69,4 +69,9 @@ public class EntEnterpriseInfoServiceImpl extends ServiceImpl<EntEnterpriseInfoD
         return R.ok();
     }
 
+    @Override
+    public Long queryEntInfoIdByUserId(Long userId) {
+        return entEnterpriseInfoDao.queryEntInfoIdByUserId(userId);
+    }
+
 }

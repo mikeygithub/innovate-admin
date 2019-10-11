@@ -51,6 +51,17 @@
             <if test="inApply != null and inApply != ''"> AND e_e_i.in_apply = #{inApply} </if>
     </select>
 
+    <!-- 获取企业信息id 根据用户id -->
+    <select id="queryEntInfoIdByUserId" parameterType="java.lang.Long" resultType="java.lang.Long">
+        SELECT
+            ent_info_id
+        FROM
+            ent_enterprise_info
+        WHERE
+            user_id = #{userId}
+    </select>
+
+
     <!-- 更新企业入驻状态 -->
     <update id="updateInApply" >
         UPDATE ent_enterprise_info SET in_apply = #{inApply} WHERE ent_info_id = #{entInfoId}

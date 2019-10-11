@@ -3,7 +3,9 @@ package com.innovate.modules.enterprise.controller;
 import com.innovate.common.utils.PageUtils;
 import com.innovate.common.utils.R;
 import com.innovate.modules.enterprise.entity.EntRecruitmentInfoEntity;
+import com.innovate.modules.enterprise.service.EntEnterpriseInfoService;
 import com.innovate.modules.enterprise.service.EntRecruitmentInfoService;
+import com.innovate.modules.sys.controller.AbstractController;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -21,10 +23,12 @@ import java.util.Map;
  */
 @RestController
 @RequestMapping("enterprise/recruitment/info")
-public class EntRecruitmentInfoController {
+public class EntRecruitmentInfoController extends AbstractController {
     @Autowired
     private EntRecruitmentInfoService entRecruitmentInfoService;
 
+    @Autowired
+    private EntEnterpriseInfoService entEnterpriseInfoService;
     /**
      * 列表
      */
@@ -51,10 +55,12 @@ public class EntRecruitmentInfoController {
      * 保存
      */
     @RequestMapping("/save")
-    @RequiresPermissions("enterprise:recruitment:info:save")
-    public R save(@RequestBody EntRecruitmentInfoEntity entRecruitmentInfo){
-		entRecruitmentInfoService.insert(entRecruitmentInfo);
-
+    // @RequiresPermissions("enterprise:recruitment:info:save")
+    public R save( EntRecruitmentInfoEntity entRecruitmentInfo){
+        Long userId = getUserId();
+        Long entInfoId = entEnterpriseInfoService.queryEntInfoIdByUserId(userId);
+        entRecruitmentInfo.setEntInfoId(entInfoId);
+        entRecruitmentInfoService.insert(entRecruitmentInfo);
         return R.ok();
     }
 
@@ -62,10 +68,9 @@ public class EntRecruitmentInfoController {
      * 修改
      */
     @RequestMapping("/update")
-    @RequiresPermissions("enterprise:recruitment:info:update")
-    public R update(@RequestBody EntRecruitmentInfoEntity entRecruitmentInfo){
+    //@RequiresPermissions("enterprise:recruitment:info:update")
+    public R update( EntRecruitmentInfoEntity entRecruitmentInfo){
 		entRecruitmentInfoService.updateById(entRecruitmentInfo);
-
         return R.ok();
     }
 

@@ -25,6 +25,11 @@ public class EntRecruitmentInfoEntity implements Serializable {
 	 */
 	@TableId
 	private Long recruitmentInfoId;
+
+	/**
+	 * 企业id
+	 */
+	private Long entInfoId;
 	/**
 	 * 项目信息外键
 	 */

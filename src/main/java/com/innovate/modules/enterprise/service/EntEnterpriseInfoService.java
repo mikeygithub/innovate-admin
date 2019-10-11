@@ -34,5 +34,12 @@ public interface EntEnterpriseInfoService extends IService<EntEnterpriseInfoEnti
      */
     R updateEntExamine(Map params);
 
+    /**
+     * 获取企业信息id 根据用户id
+     * @param userId
+     * @return
+     */
+    Long queryEntInfoIdByUserId(Long userId);
+
 }
 
