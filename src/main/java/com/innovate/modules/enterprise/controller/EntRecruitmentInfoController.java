@@ -3,7 +3,9 @@ package com.innovate.modules.enterprise.controller;
 import com.innovate.common.utils.PageUtils;
 import com.innovate.common.utils.R;
 import com.innovate.modules.enterprise.entity.EntRecruitmentInfoEntity;
+import com.innovate.modules.enterprise.service.EntEnterpriseInfoService;
 import com.innovate.modules.enterprise.service.EntRecruitmentInfoService;
+import com.innovate.modules.sys.controller.AbstractController;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -21,19 +23,31 @@ import java.util.Map;
  */
 @RestController
 @RequestMapping("enterprise/recruitment/info")
-public class EntRecruitmentInfoController {
+public class EntRecruitmentInfoController extends AbstractController {
     @Autowired
     private EntRecruitmentInfoService entRecruitmentInfoService;
 
+    @Autowired
+    private EntEnterpriseInfoService entEnterpriseInfoService;
     /**
      * 列表
      */
     @RequestMapping("/list")
-    @RequiresPermissions("enterprise:recruitment:info:list")
+    //@RequiresPermissions("enterprise:recruitment:info:list")
     public R list(@RequestParam Map<String, Object> params){
         PageUtils page = entRecruitmentInfoService.queryPage(params);
 
         return R.ok().put("page", page);
+    }
+
+    /**
+     * 处理招聘信息审核
+     * @return
+     */
+    @RequestMapping("/recExamine")
+    public R entExamine(@RequestParam  Map<String, Object> params){
+        logger.info("接收数据:{}", params);
+        return entRecruitmentInfoService.updateRecExamine(params);
     }
 
 
@@ -41,21 +55,22 @@ public class EntRecruitmentInfoController {
      * 信息
      */
     @RequestMapping("/info/{recruitmentInfoId}")
-    @RequiresPermissions("enterprise:recruitment:info")
+    //@RequiresPermissions("enterprise:recruitment:info")
     public R info(@PathVariable("recruitmentInfoId") Long recruitmentInfoId){
-		EntRecruitmentInfoEntity entRecruitmentInfo = entRecruitmentInfoService.selectById(recruitmentInfoId);
-
-        return R.ok().put("entRecruitmentInfo", entRecruitmentInfo);
+        R r = entRecruitmentInfoService.entRecruitmentInfoById(recruitmentInfoId);
+        return r;
     }
 
     /**
      * 保存
      */
     @RequestMapping("/save")
-    @RequiresPermissions("enterprise:recruitment:info:save")
-    public R save(@RequestBody EntRecruitmentInfoEntity entRecruitmentInfo){
-		entRecruitmentInfoService.insert(entRecruitmentInfo);
-
+    // @RequiresPermissions("enterprise:recruitment:info:save")
+    public R save( EntRecruitmentInfoEntity entRecruitmentInfo){
+        Long userId = getUserId();
+        Long entInfoId = entEnterpriseInfoService.queryEntInfoIdByUserId(userId);
+        entRecruitmentInfo.setEntInfoId(entInfoId);
+        entRecruitmentInfoService.insert(entRecruitmentInfo);
         return R.ok();
     }
 
@@ -63,10 +78,9 @@ public class EntRecruitmentInfoController {
      * 修改
      */
     @RequestMapping("/update")
-    @RequiresPermissions("enterprise:recruitment:info:update")
-    public R update(@RequestBody EntRecruitmentInfoEntity entRecruitmentInfo){
+    //@RequiresPermissions("enterprise:recruitment:info:update")
+    public R update( EntRecruitmentInfoEntity entRecruitmentInfo){
 		entRecruitmentInfoService.updateById(entRecruitmentInfo);
-
         return R.ok();
     }
 
@@ -74,7 +88,7 @@ public class EntRecruitmentInfoController {
      * 删除
      */
     @RequestMapping("/delete")
-    @RequiresPermissions("enterprise:recruitment:info:delete")
+    // @RequiresPermissions("enterprise:recruitment:info:delete")
     public R delete(@RequestBody Long[] recruitmentInfoIds){
 		entRecruitmentInfoService.deleteBatchIds(Arrays.asList(recruitmentInfoIds));
 

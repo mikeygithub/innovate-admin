@@ -1,6 +1,7 @@
 package com.innovate.modules.enterprise.entity;
 
 
+import com.baomidou.mybatisplus.annotations.TableField;
 import com.baomidou.mybatisplus.annotations.TableId;
 import com.baomidou.mybatisplus.annotations.TableName;
 import lombok.Data;
@@ -24,6 +25,11 @@ public class EntRecruitmentInfoEntity implements Serializable {
 	 */
 	@TableId
 	private Long recruitmentInfoId;
+
+	/**
+	 * 企业id
+	 */
+	private Long entInfoId;
 	/**
 	 * 项目信息外键
 	 */
@@ -52,5 +58,16 @@ public class EntRecruitmentInfoEntity implements Serializable {
 	 * 工作方式
 	 */
 	private String workWay;
+
+	/**
+	 * 审核状态
+	 */
+	private String inApply;
+
+	/**
+	 * 企业基本信息表
+	 */
+	@TableField(exist = false)
+	private EntEnterpriseInfoEntity entEnterpriseInfo;
 
 }

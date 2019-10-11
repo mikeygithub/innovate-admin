@@ -5,10 +5,13 @@ import com.innovate.common.utils.R;
 import com.innovate.modules.enterprise.annotation.HasRole;
 import com.innovate.modules.enterprise.entity.EntEnterpriseInfoEntity;
 import com.innovate.modules.enterprise.service.EntEnterpriseInfoService;
+import com.innovate.modules.enterprise.service.EntRecruitmentInfoService;
 import com.innovate.modules.sys.controller.AbstractController;
+import com.innovate.modules.sys.service.SysUserService;
 import io.swagger.annotations.Api;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Arrays;
@@ -28,6 +31,12 @@ import java.util.Map;
 public class EntEnterpriseInfoController extends AbstractController {
     @Autowired
     private EntEnterpriseInfoService entEnterpriseInfoService;
+
+    @Autowired
+    private EntRecruitmentInfoService entRecruitmentInfoService;
+
+    @Autowired
+    private SysUserService sysUserService;
 
     /**
      * 列表
@@ -94,9 +103,12 @@ public class EntEnterpriseInfoController extends AbstractController {
      */
     @RequestMapping("/delete")
     @RequiresPermissions("enterprise:info:delete")
+    @Transactional
     public R delete(@RequestBody Long[] entInfoIds){
-		entEnterpriseInfoService.deleteBatchIds(Arrays.asList(entInfoIds));
-
+        List<Long> userIds = entEnterpriseInfoService.queryUserIdByEntInfoId(entInfoIds);
+        entEnterpriseInfoService.deleteBatchIds(Arrays.asList(entInfoIds));
+        entRecruitmentInfoService.deleteBatchIds(Arrays.asList(entInfoIds));
+        sysUserService.deleteBatchIds(userIds);
         return R.ok();
     }
 
