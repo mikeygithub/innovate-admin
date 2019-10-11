@@ -28,4 +28,12 @@ public interface EntRecruitmentInfoDao extends BaseMapper<EntRecruitmentInfoEnti
      */
     List<EntRecruitmentInfoEntity> entRecruitmentInfoList(Map<String, Object> params);
 
+    /**
+     * 更新招聘信息---审核
+     * @param recruitmentInfoId
+     * @param inApply
+     * @return
+     */
+    boolean updateInApply(Long recruitmentInfoId, String inApply);
+
 }

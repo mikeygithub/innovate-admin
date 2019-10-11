@@ -17,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Map;
 
 
@@ -72,6 +73,11 @@ public class EntEnterpriseInfoServiceImpl extends ServiceImpl<EntEnterpriseInfoD
     @Override
     public Long queryEntInfoIdByUserId(Long userId) {
         return entEnterpriseInfoDao.queryEntInfoIdByUserId(userId);
+    }
+
+    @Override
+    public List<Long> queryUserIdByEntInfoId(Long[] ids) {
+        return entEnterpriseInfoDao.queryUserIdByEntInfoId(ids);
     }
 
 }

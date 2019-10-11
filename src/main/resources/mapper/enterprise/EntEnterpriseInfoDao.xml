@@ -61,6 +61,18 @@
             user_id = #{userId}
     </select>
 
+    <!-- 根据企业id 查询用户id -->
+    <select id="queryUserIdByEntInfoId" resultType="Long">
+        SELECT
+            user_id
+        FROM
+            ent_enterprise_info
+        WHERE
+            ent_info_id IN
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </select>
 
     <!-- 更新企业入驻状态 -->
     <update id="updateInApply" >

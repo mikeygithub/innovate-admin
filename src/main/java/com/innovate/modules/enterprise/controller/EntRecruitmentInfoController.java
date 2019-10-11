@@ -40,6 +40,16 @@ public class EntRecruitmentInfoController extends AbstractController {
         return R.ok().put("page", page);
     }
 
+    /**
+     * 处理招聘信息审核
+     * @return
+     */
+    @RequestMapping("/recExamine")
+    public R entExamine(@RequestParam  Map<String, Object> params){
+        logger.info("接收数据:{}", params);
+        return entRecruitmentInfoService.updateRecExamine(params);
+    }
+
 
     /**
      * 信息

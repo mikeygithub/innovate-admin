@@ -5,6 +5,8 @@ import com.innovate.common.utils.R;
 import com.innovate.modules.enterprise.entity.EntEnterpriseInfoEntity;
 import org.apache.ibatis.annotations.Mapper;
 
+import java.util.List;
+
 /**
  * 企业基本信息表
  * 
@@ -37,5 +39,12 @@ public interface EntEnterpriseInfoDao extends BaseMapper<EntEnterpriseInfoEntity
      * @return
      */
     Long queryEntInfoIdByUserId(Long userId);
-	
+
+    /**
+     * 查询userId，entInfoId指定值为ids
+     * @param ids
+     * @return
+     */
+    List<Long> queryUserIdByEntInfoId(Long[] ids);
+
 }

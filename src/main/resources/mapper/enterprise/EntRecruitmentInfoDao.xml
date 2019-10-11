@@ -73,4 +73,10 @@
 
     </select>
 
+
+    <!-- 更新招聘信息-审核状态 -->
+    <update id="updateInApply" >
+        UPDATE ent_recruitment_info SET in_apply = #{inApply} WHERE recruitment_info_id = #{recruitmentInfoId}
+    </update>
+
 </mapper>

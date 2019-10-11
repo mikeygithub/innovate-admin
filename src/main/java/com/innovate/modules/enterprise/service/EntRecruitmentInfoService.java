@@ -29,5 +29,12 @@ public interface EntRecruitmentInfoService extends IService<EntRecruitmentInfoEn
      */
     R entRecruitmentInfoById(Long recruitmentInfoId);
 
+    /**
+     * 更新招聘信息---审核
+     * @param params
+     * @return
+     */
+    R updateRecExamine(Map<String, Object> params);
+
 }
 

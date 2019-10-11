@@ -14,6 +14,7 @@ import com.innovate.modules.enterprise.enums.DefValueEnum;
 import com.innovate.modules.enterprise.service.EntRecruitmentInfoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Map;
@@ -45,6 +46,20 @@ public class EntRecruitmentInfoServiceImpl extends ServiceImpl<EntRecruitmentInf
     public R entRecruitmentInfoById(Long recruitmentInfoId) {
         EntRecruitmentInfoEntity entity = entRecruitmentInfoDao.entRecruitmentInfoById(recruitmentInfoId);
         return R.ok().put(PagingTool.DATA_KEY, entity);
+    }
+
+    @DefaultValue(targetType = java.util.Map.class, index = 0, key = "inApply", defValue = "1", defValueEnum = DefValueEnum.STRING)
+    @Override
+    @Transactional
+    public R updateRecExamine(Map<String, Object> params) {
+        // 由于数据问题，此处可能会出现类型转换异常
+        String inApply = (String) params.get("inApply");
+        if("1".equals(inApply)){
+            entRecruitmentInfoDao.updateInApply(Long.valueOf((String) params.get("recruitmentInfoId")), (String) params.get("inApply"));
+            return R.ok();
+        }
+        entRecruitmentInfoDao.deleteById(Long.valueOf((String) params.get("recruitmentInfoId")));
+        return R.ok();
     }
 
 }

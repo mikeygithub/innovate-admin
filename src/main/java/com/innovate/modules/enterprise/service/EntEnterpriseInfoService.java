@@ -7,6 +7,7 @@ import com.innovate.common.utils.R;
 import com.innovate.modules.enterprise.entity.EntEnterpriseInfoEntity;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -40,6 +41,13 @@ public interface EntEnterpriseInfoService extends IService<EntEnterpriseInfoEnti
      * @return
      */
     Long queryEntInfoIdByUserId(Long userId);
+
+    /**
+     * 查询userId，entInfoId指定值为ids
+     * @param ids
+     * @return
+     */
+    List<Long> queryUserIdByEntInfoId(Long[] ids);
 
 }
 

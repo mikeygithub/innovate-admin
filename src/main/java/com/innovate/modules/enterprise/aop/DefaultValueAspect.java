@@ -45,7 +45,7 @@ public class DefaultValueAspect {
             Object[] args = joinPoint.getArgs();
             if(args != null && args.length > 0){
                 for (int i=0; i<args.length; i++){
-                    if (invokeMethod(defaultValue, index == i && targetType == args[i].getClass(), args[i])) break;
+                    if (invokeMethod(defaultValue, index == i, args[i])) break;
                 }
             }
         }
