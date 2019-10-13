@@ -4,6 +4,8 @@ import com.baomidou.mybatisplus.mapper.BaseMapper;
 import com.innovate.modules.enterprise.entity.EntTeacherAttachmentEntity;
 import org.apache.ibatis.annotations.Mapper;
 
+import java.util.List;
+
 /**
  * 教师附件表
  * 
@@ -20,7 +22,7 @@ public interface EntTeacherAttachmentDao extends BaseMapper<EntTeacherAttachment
    //项目合作外键
    EntTeacherAttachmentEntity findByProCooperationInfoId(Long proCooperationInfoId);
    //教师工作/项目经历外键
-   EntTeacherAttachmentEntity findByTeaExperienceId(Long teaExperienceId);
+   List<EntTeacherAttachmentEntity> findByTeaExperienceId(Long teaExperienceId);
    //教师所获奖励/证书外键
    EntTeacherAttachmentEntity findByTeaAchievementId(Long teaAchievementId);
    //知识产权外键

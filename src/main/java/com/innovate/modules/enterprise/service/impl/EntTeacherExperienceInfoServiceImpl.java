@@ -1,5 +1,6 @@
 package com.innovate.modules.enterprise.service.impl;
 
+import com.baomidou.mybatisplus.enums.SqlLike;
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.plugins.Page;
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
@@ -18,11 +19,24 @@ public class EntTeacherExperienceInfoServiceImpl extends ServiceImpl<EntTeacherE
 
     @Override
     public PageUtils queryPage(Map<String, Object> params) {
-        Page<EntTeacherExperienceInfoEntity> page = this.selectPage(
-                new Query<EntTeacherExperienceInfoEntity>(params).getPage(),
-                new EntityWrapper<>()
-        );
 
+        Object userId = params.get("userId");
+        Object hasApply = params.get("hasApply");
+        Object key = params.get("key");
+
+        EntityWrapper ew = new EntityWrapper<>();
+        ew.setEntity(new EntTeacherExperienceInfoEntity());
+        //教师查询
+        if (userId!=null&&userId!="") ew.eq("user_teacher_id",Long.parseLong(userId.toString()));
+        //1:未审批 2:已通过 3:未通过
+        if (hasApply!=null)ew.eq("in_apply",Long.parseLong(hasApply.toString()));
+        //查询
+        if (key!=null&&key.toString()!="")ew.like("tea_experience_content",key.toString(), SqlLike.DEFAULT);
+
+
+        Page<EntTeacherExperienceInfoEntity> page = this.selectPage(
+                new Query<EntTeacherExperienceInfoEntity>(params).getPage(), ew
+        );
         return new PageUtils(page);
     }
 

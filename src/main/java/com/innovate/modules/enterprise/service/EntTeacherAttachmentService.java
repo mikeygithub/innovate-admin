@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.service.IService;
 import com.innovate.common.utils.PageUtils;
 import com.innovate.modules.enterprise.entity.EntTeacherAttachmentEntity;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -24,7 +25,7 @@ public interface EntTeacherAttachmentService extends IService<EntTeacherAttachme
     //项目合作外键
     EntTeacherAttachmentEntity findByProCooperationInfoId(Long proCooperationInfoId);
     //教师工作/项目经历外键
-    EntTeacherAttachmentEntity findByTeaExperienceId(Long teaExperienceId);
+    List<EntTeacherAttachmentEntity> findByTeaExperienceId(Long teaExperienceId);
     //教师所获奖励/证书外键
     EntTeacherAttachmentEntity findByTeaAchievementId(Long teaAchievementId);
     //知识产权外键

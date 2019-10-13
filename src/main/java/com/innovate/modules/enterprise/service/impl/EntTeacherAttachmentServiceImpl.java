@@ -4,6 +4,8 @@ import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.plugins.Page;
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 import java.util.Map;
 import com.innovate.common.utils.PageUtils;
 import com.innovate.common.utils.Query;
@@ -42,7 +44,7 @@ public class EntTeacherAttachmentServiceImpl extends ServiceImpl<EntTeacherAttac
     }
 
     @Override
-    public EntTeacherAttachmentEntity findByTeaExperienceId(Long teaExperienceId) {
+    public List<EntTeacherAttachmentEntity> findByTeaExperienceId(Long teaExperienceId) {
         return baseMapper.findByTeaExperienceId(teaExperienceId);
     }
 

@@ -82,7 +82,13 @@ public class EntTeacherAchievementInfoController {
     @RequestMapping("/update")
     @RequiresPermissions("enterprise:teacher:achievement:update")
     public R update(@RequestBody EntTeacherAchievementInfoEntity entTeacherAchievementInfo){
-		entTeacherAchievementInfoService.updateById(entTeacherAchievementInfo);
+        //更新附件
+        EntTeacherAttachmentEntity old = entTeacherAttachmentService.findByTeaAchievementId(entTeacherAchievementInfo.getTeaAchievementId());
+        old.setTeaAttachmentName(entTeacherAchievementInfo.getEntTeacherAttachmentEntity().getTeaAttachmentName());
+        old.setTeaAttachmentUrl(entTeacherAchievementInfo.getEntTeacherAttachmentEntity().getTeaAttachmentUrl());
+        entTeacherAttachmentService.insertOrUpdate(old);
+
+        entTeacherAchievementInfoService.updateById(entTeacherAchievementInfo);
 
         return R.ok();
     }
@@ -110,6 +116,11 @@ public class EntTeacherAchievementInfoController {
         Integer status = Integer.parseInt(params.get("status").toString());
 
         EntTeacherAchievementInfoEntity entity = entTeacherAchievementInfoService.selectById(teaAchievementId);
+
+        if (status==3){ // 不通过意见
+            String option = params.get("option").toString();
+            entity.setRetreatOption(option);
+        }
 
         entity.setInApply(status);
 

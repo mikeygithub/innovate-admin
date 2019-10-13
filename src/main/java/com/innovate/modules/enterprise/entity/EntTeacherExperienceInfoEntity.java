@@ -3,7 +3,9 @@ package com.innovate.modules.enterprise.entity;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
+import com.baomidou.mybatisplus.annotations.TableField;
 import com.baomidou.mybatisplus.annotations.TableId;
 import com.baomidou.mybatisplus.annotations.TableName;
 import lombok.Data;
@@ -19,7 +21,6 @@ import lombok.Data;
 @TableName("ent_teacher_experience_info")
 public class EntTeacherExperienceInfoEntity implements Serializable {
 	private static final long serialVersionUID = 1L;
-
 	/**
 	 * 主键
 	 */
@@ -37,5 +38,9 @@ public class EntTeacherExperienceInfoEntity implements Serializable {
 	 * 审核状态，0待审核 1已审核
 	 */
 	private Integer inApply;
-
+	//不通过意见
+	private String retreatOption;
+	//附件entTeacherAttachmentEntities
+	@TableField(exist = false,el = "com.innovate.modules.enterprise.entity.EntTeacherAttachmentEntity")
+	private List<EntTeacherAttachmentEntity> entTeacherAttachmentEntities;
 }

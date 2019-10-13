@@ -27,6 +27,8 @@ public class EntTeacherAchievementInfoEntity implements Serializable {
 	private String teaAchievementContent;
 	//审核状态，0待审核 1已审核
 	private Integer inApply;
+	//不通过意见
+	private String retreatOption;
 	//附件
 	@TableField(exist = false,el = "com.innovate.modules.enterprise.entity.EntEnterpriseAttachmentEntity")
 	private EntTeacherAttachmentEntity entTeacherAttachmentEntity;
