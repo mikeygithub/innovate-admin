@@ -1,19 +1,20 @@
 package com.innovate.modules.enterprise.entity;
 
-
+import com.baomidou.mybatisplus.annotations.TableField;
 import com.baomidou.mybatisplus.annotations.TableId;
 import com.baomidou.mybatisplus.annotations.TableName;
-import lombok.Data;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
+
+import lombok.Data;
 
 /**
  * 学生工作/项目经历信息表
- * 
- * @author mozhifan
- * @email 1217567927@qq.com
- * @date 2019-09-10 22:19:50
+ * @author soldier
+ * @email 583403411@qq.com
+ * @date 2019-10-11 20:55:46
  */
 @Data
 @TableName("ent_student_experience_info")
@@ -28,7 +29,7 @@ public class EntStudentExperienceInfoEntity implements Serializable {
 	/**
 	 * 学生基本信息表外键
 	 */
-	private Long stuInfoId;
+	private Long userPerId;
 	/**
 	 * 工作/项目经历内容
 	 */
@@ -42,8 +43,22 @@ public class EntStudentExperienceInfoEntity implements Serializable {
 	 */
 	private String stuExperiencePlace;
 	/**
-	 * 经历工作/项目类型
+	 * 工作/项目经历类型:1社会实践 2志愿者活动
 	 */
-	private String stuExperienceWorkType;
+	private Integer stuExperienceWorkType;
+	/**
+	 * 审核状态:0待审核 1已审核 2已通过 3未通过
+	 */
+	private Integer inApply;
+	/**
+	 * 不通过时的会回退信息
+	 */
+	private String retreatOption;
+	/**
+	 * 附件
+	 * 		表示当前属性不是数据库的字段，但在项目中必须使用，这样在新增等使用bean的时候，mybatis-plus就会忽略这个，不会报错
+	 */
+	@TableField(exist = false,el = "com.innovate.modules.enterprise.entity.EntStudentAttachmentEntity")
+	private List<EntStudentAttachmentEntity> entStudentAttachmentEntities;
 
 }

@@ -73,7 +73,7 @@ public class EntTeacherAttachmentController {
 
         UserTeacherInfoEntity userTeacherInfoEntity = userTeacherInfoService.queryByUserId(Long.parseLong(teacherId));
 
-        String UPLOAD_FILES_PATH = ConfigApi.TEACHER_FILE_UPLOAD_URL + userTeacherInfoEntity.getSysUserEntity().getName() + "/"+ RandomUtils.getRandomNums()+"/";
+        String UPLOAD_FILES_PATH = ConfigApi.UPLOAD_URL + userTeacherInfoEntity.getSysUserEntity().getName() + "/"+ RandomUtils.getRandomNums()+"/";
 
         if (Objects.isNull(files) || files.isEmpty()) {
             return R.error("文件为空，请重新上传");

@@ -14,5 +14,25 @@
         <result property="stuAttachmentUrl" column="stu_attachment_url"/>
     </resultMap>
 
+    <!--学生信息外键-->
+    <select id="findByUserPerId" parameterType="java.lang.Long" resultType="EntStudentAttachmentEntity">
+        select * from innovate_admin.ent_student_attachment where user_per_id = #{userPerId}
+    </select>
+    <!--项目信息外键-->
+    <select id="findByProInfoId" parameterType="java.lang.Long" resultType="EntStudentAttachmentEntity">
+        select * from innovate_admin.ent_student_attachment where pro_info_id = #{proInfoId}
+    </select>
+    <!--项目合作外键-->
+    <select id="findByProCooperationInfoId" parameterType="java.lang.Long" resultType="EntStudentAttachmentEntity">
+        select * from innovate_admin.ent_student_attachment where pro_cooperation_info_id = #{proCooperationInfoId}
+    </select>
+    <!--学生工作/项目经历外键-->
+    <select id="findByStuExperienceId" parameterType="java.lang.Long" resultType="EntStudentAttachmentEntity">
+        select * from innovate_admin.ent_student_attachment where stu_experience_id = #{stuExperienceId}
+    </select>
+    <!--学生所获奖励/证书外键-->
+    <select id="findByStuAchievementId" parameterType="java.lang.Long" resultType="EntStudentAttachmentEntity">
+        select * from innovate_admin.ent_student_attachment where stu_achievement_id = #{stuAchievementId}
+    </select>
 
 </mapper>
