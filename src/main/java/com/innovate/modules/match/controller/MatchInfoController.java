@@ -114,7 +114,6 @@ public class MatchInfoController extends AbstractController {
     @PostMapping("/update")
     @RequiresPermissions("innovate:match:update")
     public R update(@RequestBody(required = false) MatchInfoModel matchInfoModel){
-        System.out.println(new Gson().toJson(matchInfoModel.getMatchAwardEntities()));
         matchInfoModelService.updateEntity(matchInfoModel);
         tempMatchInfoEntity = innovatematchInfoService.selectById(matchInfoModel.getMatchInfoEntity().getMatchId());
         return R.ok();
