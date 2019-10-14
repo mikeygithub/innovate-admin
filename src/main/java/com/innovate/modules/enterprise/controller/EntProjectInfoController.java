@@ -42,7 +42,7 @@ public class EntProjectInfoController extends AbstractController {
      * 信息
      */
     @RequestMapping("/info/{hasType}/{proInfoId}")
-    @RequiresPermissions("enterprise:project:info")
+    //@RequiresPermissions("enterprise:project:info")
     public R info(@PathVariable("proInfoId") Long proInfoId, @PathVariable("hasType") String hasType){
         if("userPerId".equals(hasType)){ // 学生
             return entProjectInfoService.queryEntProjectInfoByIdPerId(proInfoId);
