@@ -56,7 +56,6 @@ public class EntEnterpriseInfoController extends AbstractController {
         return R.ok().put("page", page);
     }
 
-
     /**
      * 信息---企业入驻审核信息查询
      */

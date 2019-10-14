@@ -8,7 +8,7 @@ import java.io.Serializable;
 
 /**
  * 项目成果信息表
- * 
+ *
  * @author 莫智帆
  * @email 1217567927@qq.com
  * @date 2019-09-10 22:18:36
@@ -31,5 +31,8 @@ public class EntProjectAchievementInfoEntity implements Serializable {
 	 * 项目成果内容
 	 */
 	private String proAchievementContent;
-
+	/**
+	 * 审核状态：0待审核，1已审核
+	 */
+	private String inApply;
 }

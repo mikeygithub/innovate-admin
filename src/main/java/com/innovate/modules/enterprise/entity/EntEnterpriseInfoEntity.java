@@ -11,7 +11,7 @@ import java.util.List;
 
 /**
  * 企业基本信息表
- * 
+ *
  * @author 莫智帆
  * @email 1217567927@qq.com
  * @date 2019-09-10 22:18:36
@@ -88,16 +88,13 @@ public class EntEnterpriseInfoEntity implements Serializable {
 	 * 入驻申请时间
 	 */
 	private Date entInTime;
-
-	/**
-	 * 是否审核
-	 */
-	private String inApply;
-
 	/**
 	 * 企业证明材料，附件
 	 */
 	@TableField(exist = false)
 	private List<EntEnterpriseAttachmentEntity> attachments;
-
+	/**
+	 * 审核状态：0待审核，1已审核
+	 */
+	private String inApply;
 }

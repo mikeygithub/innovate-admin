@@ -9,7 +9,7 @@ import java.io.Serializable;
 
 /**
  * 招聘学生表
- * 
+ *
  * @author mozhifan
  * @email 1217567927@qq.com
  * @date 2019-09-10 22:19:50
@@ -32,5 +32,8 @@ public class EntProjectStudentEntity implements Serializable {
 	 * 学生基本信息表外键
 	 */
 	private Long stuInfoId;
-
+	/**
+	 * 审核状态：0待审核，1已审核
+	 */
+	private String inApply;
 }
