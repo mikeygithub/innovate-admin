@@ -52,17 +52,17 @@ public class EntProjectInfoEntity implements Serializable {
 	private String proIntroduce;
 
 	/**
-	 *企业信息表外键
+	 * 企业信息表外键
 	 */
 	private Long entInfoId;
 
 	/**
-	 *学生信息表外键
+	 * 学生信息表外键
 	 */
 	private Long userPerId;
 
 	/**
-	 *教师信息表外键
+	 * 师信息表外键
 	 */
 	private Long userTeacherId;
 
