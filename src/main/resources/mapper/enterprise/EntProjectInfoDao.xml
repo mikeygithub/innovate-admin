@@ -101,7 +101,7 @@
         e_e_i.ent_register, e_e_i.ent_founding_time, e_e_i.ent_type, e_e_i.ent_status ,e_e_i.ent_register_address ,
         e_e_i.ent_address ,e_e_i.ent_introduce, e_e_i.new_high_zones, e_e_i.ent_logo, e_e_i.ent_in_time, e_e_i.in_apply AS e_in_apply
         FROM
-        ent_enterprise_info e_p_i
+            ent_project_info e_p_i
         LEFT JOIN ent_enterprise_info e_e_i ON e_p_i.ent_info_id = e_e_i.ent_info_id
         <if test="key != null and key.trim() != ''">
             WHERE e_p_i.pro_name LIKE CONCAT('%', #{key},'%')
@@ -116,7 +116,7 @@
             e_e_i.ent_register, e_e_i.ent_founding_time, e_e_i.ent_type, e_e_i.ent_status ,e_e_i.ent_register_address ,
             e_e_i.ent_address ,e_e_i.ent_introduce, e_e_i.new_high_zones, e_e_i.ent_logo, e_e_i.ent_in_time, e_e_i.in_apply AS e_in_apply
         FROM
-            ent_enterprise_info e_p_i
+            ent_project_info e_p_i
             LEFT JOIN ent_enterprise_info e_e_i ON e_p_i.ent_info_id = e_e_i.ent_info_id
         WHERE e_p_i.pro_info_id = #{id}
     </select>
@@ -139,12 +139,12 @@
     </resultMap>
     <select id="queryEntProjectInfoListByIdTeacherId" parameterType="java.util.Map" resultMap="mapEntProjectInfoByIdTeacherId">
         SELECT
-        e_p_i.pro_info_id, e_p_i.pro_name , e_p_i.pro_register , e_p_i.pro_origin , e_p_i.pro_outlay , e_p_i.pro_type,
-        e_p_i.pro_introduce, e_p_i.ent_info_id, e_p_i.user_per_id, e_p_i.user_teacher_id ,e_p_i.in_apply ,
-        i_u_t_i.user_teacher_id AS i_user_teacher_id, i_u_t_i.user_id, i_u_t_i.teacher_card_no, i_u_t_i.teacher_sex, i_u_t_i.teacher_post,
-        i_u_t_i.teacher_title, i_u_t_i.teacher_background, i_u_t_i.teacher_degree, i_u_t_i.teacher_study, i_u_t_i.teacher_scientific
+            e_p_i.pro_info_id, e_p_i.pro_name , e_p_i.pro_register , e_p_i.pro_origin , e_p_i.pro_outlay , e_p_i.pro_type,
+            e_p_i.pro_introduce, e_p_i.ent_info_id, e_p_i.user_per_id, e_p_i.user_teacher_id ,e_p_i.in_apply ,
+            i_u_t_i.user_teacher_id AS i_user_teacher_id, i_u_t_i.user_id, i_u_t_i.teacher_card_no, i_u_t_i.teacher_sex, i_u_t_i.teacher_post,
+            i_u_t_i.teacher_title, i_u_t_i.teacher_background, i_u_t_i.teacher_degree, i_u_t_i.teacher_study, i_u_t_i.teacher_scientific
         FROM
-        ent_enterprise_info e_p_i
+            ent_project_info e_p_i
         LEFT JOIN innovate_user_teacher_info i_u_t_i ON e_p_i.user_teacher_id = i_u_t_i.user_teacher_id
         <if test="key != null and key.trim() != ''">
             WHERE e_p_i.pro_name LIKE CONCAT('%', #{key},'%')
@@ -158,7 +158,7 @@
             i_u_t_i.user_teacher_id AS i_user_teacher_id, i_u_t_i.user_id, i_u_t_i.teacher_card_no, i_u_t_i.teacher_sex, i_u_t_i.teacher_post,
             i_u_t_i.teacher_title, i_u_t_i.teacher_background, i_u_t_i.teacher_degree, i_u_t_i.teacher_study, i_u_t_i.teacher_scientific
         FROM
-            ent_enterprise_info e_p_i
+            ent_project_info e_p_i
             LEFT JOIN innovate_user_teacher_info i_u_t_i ON e_p_i.user_teacher_id = i_u_t_i.user_teacher_id
         WHERE e_p_i.pro_info_id = #{id}
     </select>

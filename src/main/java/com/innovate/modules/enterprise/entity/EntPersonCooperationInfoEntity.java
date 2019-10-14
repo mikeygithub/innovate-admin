@@ -31,14 +31,19 @@ public class EntPersonCooperationInfoEntity implements Serializable {
 	/**
 	 * 学生基本信息表外键：合作学生
 	 */
-	private Long stuInfoId;
+	private Long userPerId;
 	/**
 	 * 教师基本信息表外键：合作老师
 	 */
-	private Long teaInfoId;
+	private Long userTeacherId;
 	/**
 	 * 项目信息外键：合作企业
 	 */
-	private Long proInfoId;
+	private Long entInfoId;
+
+	/**
+	 * 审核状态，0待审核 1已审核
+	 */
+	private String inApply;
 
 }
