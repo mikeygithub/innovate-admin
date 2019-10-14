@@ -12,7 +12,166 @@
         <result property="proOutlay" column="pro_outlay"/>
         <result property="proType" column="pro_type"/>
         <result property="proIntroduce" column="pro_introduce"/>
+        <result property="entInfoId" column="ent_info_id"/>
+        <result property="userPerId" column="user_per_id"/>
+        <result property="userTeacherId" column="user_teacher_id"/>
+        <result property="inApply" column="in_apply"/>
     </resultMap>
 
+    <!-- 根据项目id和项目类型 查询项目信息列表 学生 -->
+    <resultMap id="mapEntProjectInfoByIdPerId" type="com.innovate.modules.enterprise.entity.EntProjectInfoEntity" extends="entProjectInfoMap">
+        <association property="userPersonInfo" javaType="com.innovate.modules.innovate.entity.UserPersonInfoEntity">
+            <id column="i_user_per_id" property="userPerId"></id>
+            <result column="user_id" property="userId"></result>
+            <result column="per_card_no" property="perCardNo"></result>
+            <result column="grade_id" property="gradeId"></result>
+            <result column="per_sex" property="perSex"></result>
+            <result column="per_post" property="perPost"></result>
+            <result column="per_politics_type" property="perPoliticsType"></result>
+            <result column="per_stu_no" property="perStuNo"></result>
+            <result column="per_class_no" property="perClassNo"></result>
+            <result column="per_corm_no" property="perCormNo"></result>
+            <result column="per_native" property="perNative"></result>
+            <result column="per_qq" property="perQq"></result>
+            <result column="per_school_post" property="perSchoolPost"></result>
+            <result column="per_school_honor" property="perSchoolHonor"></result>
+            <result column="per_social_practice" property="perSocialPractice"></result>
+            <result column="per_working" property="perWorking"></result>
+            <result column="per_age" property="perAge"></result>
+            <result column="per_interest" property="perInterest"></result>
+            <result column="per_employ" property="perEmploy"></result>
+        </association>
+    </resultMap>
+    <select id="queryEntProjectInfoListByIdPerId" parameterType="java.util.Map" resultMap="mapEntProjectInfoByIdPerId">
+        SELECT
+            e_p_i.pro_info_id, e_p_i.pro_name , e_p_i.pro_register , e_p_i.pro_origin , e_p_i.pro_outlay , e_p_i.pro_type,
+            e_p_i.pro_introduce, e_p_i.ent_info_id, e_p_i.user_per_id, e_p_i.user_teacher_id ,e_p_i.in_apply ,
+            i_u_p_i.user_per_id AS i_user_per_id, i_u_p_i.user_id, i_u_p_i.grade_id, i_u_p_i.per_card_no, i_u_p_i.per_sex, i_u_p_i.per_post,
+            i_u_p_i.per_politics_type, i_u_p_i.per_stu_no, i_u_p_i.per_class_no, i_u_p_i.per_corm_no, i_u_p_i.per_native, i_u_p_i.per_qq,
+            i_u_p_i.per_school_post, i_u_p_i.per_school_honor, i_u_p_i.per_social_practice, i_u_p_i.per_working, i_u_p_i.per_age,
+            i_u_p_i.per_interest, i_u_p_i.per_employ
+        FROM
+            ent_project_info e_p_i
+            LEFT JOIN innovate_user_person_info i_u_p_i ON e_p_i.user_per_id = i_u_p_i.user_per_id
+        <if test="key != null and key.trim() != ''">
+            WHERE e_p_i.pro_name LIKE CONCAT('%', #{key},'%')
+        </if>
+    </select>
+    <!-- 根据项目id和项目类型 查询项目信息 学生 -->
+    <select id="queryEntProjectInfoByIdPerId" parameterType="java.lang.Long" resultMap="mapEntProjectInfoByIdPerId">
+        SELECT
+            e_p_i.pro_info_id, e_p_i.pro_name , e_p_i.pro_register , e_p_i.pro_origin , e_p_i.pro_outlay , e_p_i.pro_type,
+            e_p_i.pro_introduce, e_p_i.ent_info_id, e_p_i.user_per_id, e_p_i.user_teacher_id ,e_p_i.in_apply ,
+            i_u_p_i.user_per_id AS i_user_per_id, i_u_p_i.user_id, i_u_p_i.grade_id, i_u_p_i.per_card_no, i_u_p_i.per_sex, i_u_p_i.per_post,
+            i_u_p_i.per_politics_type, i_u_p_i.per_stu_no, i_u_p_i.per_class_no, i_u_p_i.per_corm_no, i_u_p_i.per_native, i_u_p_i.per_qq,
+            i_u_p_i.per_school_post, i_u_p_i.per_school_honor, i_u_p_i.per_social_practice, i_u_p_i.per_working, i_u_p_i.per_age,
+            i_u_p_i.per_interest, i_u_p_i.per_employ
+        FROM
+            ent_project_info e_p_i
+            LEFT JOIN innovate_user_person_info i_u_p_i ON e_p_i.user_per_id = i_u_p_i.user_per_id
+        WHERE e_p_i.pro_info_id = #{id}
+    </select>
+
+    <!-- 根据项目id和项目类型 查询项目信息列表 企业 -->
+    <resultMap id="mapEntProjectInfoByIdEntId" type="com.innovate.modules.enterprise.entity.EntProjectInfoEntity" extends="entProjectInfoMap">
+        <association property="entEnterpriseInfo" javaType="com.innovate.modules.enterprise.entity.EntEnterpriseInfoEntity">
+            <result property="entInfoId" column="ent_info_id"/>
+            <result property="userId" column="user_id"/>
+            <result property="entName" column="ent_name"/>
+            <result property="entCorporate" column="ent_corporate"/>
+            <result property="entBusiness" column="ent_business"/>
+            <result property="entCode" column="ent_code"/>
+            <result property="entRegister" column="ent_register"/>
+            <result property="entFoundingTime" column="ent_founding_time"/>
+            <result property="entType" column="ent_type"/>
+            <result property="entStatus" column="ent_status"/>
+            <result property="entRegisterAddress" column="ent_register_address"/>
+            <result property="entAddress" column="ent_address"/>
+            <result property="entIntroduce" column="ent_introduce"/>
+            <result property="newHighZones" column="new_high_zones"/>
+            <result property="entInTime" column="ent_in_time"/>
+            <result property="inApply" column="in_apply"/>
+        </association>
+    </resultMap>
+    <select id="queryEntProjectInfoListByIdEntId" parameterType="java.util.Map" resultMap="mapEntProjectInfoByIdEntId">
+        SELECT
+        e_p_i.pro_info_id, e_p_i.pro_name , e_p_i.pro_register , e_p_i.pro_origin , e_p_i.pro_outlay , e_p_i.pro_type,
+        e_p_i.pro_introduce, e_p_i.ent_info_id, e_p_i.user_per_id, e_p_i.user_teacher_id ,e_p_i.in_apply ,
+        e_e_i.ent_info_id, e_e_i.user_id , e_e_i.ent_name , e_e_i.ent_corporate , e_e_i.ent_business , e_e_i.ent_code,
+        e_e_i.ent_register, e_e_i.ent_founding_time, e_e_i.ent_type, e_e_i.ent_status ,e_e_i.ent_register_address ,
+        e_e_i.ent_address ,e_e_i.ent_introduce, e_e_i.new_high_zones, e_e_i.ent_logo, e_e_i.ent_in_time, e_e_i.in_apply,
+        FROM
+        ent_enterprise_info e_p_i
+        LEFT JOIN ent_enterprise_info e_e_i ON e_p_i.ent_info_id = e_e_i.ent_info_id
+        <if test="key != null and key.trim() != ''">
+            WHERE e_p_i.pro_name LIKE CONCAT('%', #{key},'%')
+        </if>
+    </select>
+    <!-- 根据项目id和项目类型 查询项目信息 企业 -->
+    <select id="queryEntProjectInfoByIdEntId" parameterType="java.lang.Long" resultMap="mapEntProjectInfoByIdEntId">
+        SELECT
+            e_p_i.pro_info_id, e_p_i.pro_name , e_p_i.pro_register , e_p_i.pro_origin , e_p_i.pro_outlay , e_p_i.pro_type,
+            e_p_i.pro_introduce, e_p_i.ent_info_id, e_p_i.user_per_id, e_p_i.user_teacher_id ,e_p_i.in_apply ,
+            e_e_i.ent_info_id, e_e_i.user_id , e_e_i.ent_name , e_e_i.ent_corporate , e_e_i.ent_business , e_e_i.ent_code,
+            e_e_i.ent_register, e_e_i.ent_founding_time, e_e_i.ent_type, e_e_i.ent_status ,e_e_i.ent_register_address ,
+            e_e_i.ent_address ,e_e_i.ent_introduce, e_e_i.new_high_zones, e_e_i.ent_logo, e_e_i.ent_in_time, e_e_i.in_apply,
+        FROM
+            ent_enterprise_info e_p_i
+            LEFT JOIN ent_enterprise_info e_e_i ON e_p_i.ent_info_id = e_e_i.ent_info_id
+        WHERE e_p_i.pro_info_id = #{id}
+    </select>
+
+
+    <!-- 根据项目id和项目类型 查询项目信息 教师 -->
+    <resultMap id="mapEntProjectInfoByIdTeacherId" type="com.innovate.modules.enterprise.entity.EntProjectInfoEntity" extends="entProjectInfoMap">
+        <association property="userTeacherInfo" javaType="com.innovate.modules.innovate.entity.UserTeacherInfoEntity">
+            <id column="i_user_teacher_id" property="userTeacherId"></id>
+            <result column="user_id" property="userId"></result>
+            <result column="teacher_card_no" property="teacherCardNo"></result>
+            <result column="teacher_sex" property="teacherSex"></result>
+            <result column="teacher_post" property="teacherPost"></result>
+            <result column="teacher_title" property="teacherTitle"></result>
+            <result column="teacher_background" property="teacherBackground"></result>
+            <result column="teacher_degree" property="teacherDegree"></result>
+            <result column="teacher_study" property="teacherStudy"></result>
+            <result column="teacher_scientific" property="teacherScientific"></result>
+        </association>
+    </resultMap>
+    <select id="queryEntProjectInfoListByIdTeacherId" parameterType="java.util.Map" resultMap="mapEntProjectInfoByIdTeacherId">
+        SELECT
+        e_p_i.pro_info_id, e_p_i.pro_name , e_p_i.pro_register , e_p_i.pro_origin , e_p_i.pro_outlay , e_p_i.pro_type,
+        e_p_i.pro_introduce, e_p_i.ent_info_id, e_p_i.user_per_id, e_p_i.user_teacher_id ,e_p_i.in_apply ,
+        i_u_t_i.user_teacher_id AS i_user_teacher_id, i_u_t_i.user_id, i_u_t_i.teacher_card_no, i_u_t_i.teacher_sex, i_u_t_i.teacher_post,
+        i_u_t_i.teacher_title, i_u_t_i.teacher_background, i_u_t_i.teacher_degree, i_u_t_i.teacher_study, i_u_t_i.teacher_scientific
+        FROM
+        ent_enterprise_info e_p_i
+        LEFT JOIN innovate_user_teacher_info i_u_t_i ON e_p_i.user_teacher_id = i_u_t_i.user_teacher_id
+        <if test="key != null and key.trim() != ''">
+            WHERE e_p_i.pro_name LIKE CONCAT('%', #{key},'%')
+        </if>
+    </select>
+    <!-- 根据项目id和项目类型 查询项目信息列表 教师 -->
+    <select id="queryEntProjectInfoByIdTeacherId" parameterType="java.lang.Long" resultMap="mapEntProjectInfoByIdTeacherId">
+        SELECT
+            e_p_i.pro_info_id, e_p_i.pro_name , e_p_i.pro_register , e_p_i.pro_origin , e_p_i.pro_outlay , e_p_i.pro_type,
+            e_p_i.pro_introduce, e_p_i.ent_info_id, e_p_i.user_per_id, e_p_i.user_teacher_id ,e_p_i.in_apply ,
+            i_u_t_i.user_teacher_id AS i_user_teacher_id, i_u_t_i.user_id, i_u_t_i.teacher_card_no, i_u_t_i.teacher_sex, i_u_t_i.teacher_post,
+            i_u_t_i.teacher_title, i_u_t_i.teacher_background, i_u_t_i.teacher_degree, i_u_t_i.teacher_study, i_u_t_i.teacher_scientific
+        FROM
+            ent_enterprise_info e_p_i
+            LEFT JOIN innovate_user_teacher_info i_u_t_i ON e_p_i.user_teacher_id = i_u_t_i.user_teacher_id
+        WHERE e_p_i.pro_info_id = #{id}
+    </select>
+
+    <!-- 处理项目信息审核 -->
+    <update id="updateEntExamine" parameterType="java.util.Map">
+        UPDATE
+        <set>
+            <if test="inApply != null"> in_apply = #{inApply} </if>
+        </set>
+        <where>
+            <if test="proInfoId != null"> pro_info_id = #{proInfoId}</if>
+        </where>
+    </update>
 
 </mapper>

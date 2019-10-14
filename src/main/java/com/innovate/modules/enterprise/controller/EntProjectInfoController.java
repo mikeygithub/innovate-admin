@@ -4,6 +4,7 @@ import com.innovate.common.utils.PageUtils;
 import com.innovate.common.utils.R;
 import com.innovate.modules.enterprise.entity.EntProjectInfoEntity;
 import com.innovate.modules.enterprise.service.EntProjectInfoService;
+import com.innovate.modules.sys.controller.AbstractController;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -21,7 +22,7 @@ import java.util.Map;
  */
 @RestController
 @RequestMapping("enterprise/project/info")
-public class EntProjectInfoController {
+public class EntProjectInfoController extends AbstractController {
     @Autowired
     private EntProjectInfoService entProjectInfoService;
 
@@ -29,7 +30,7 @@ public class EntProjectInfoController {
      * 列表
      */
     @RequestMapping("/list")
-    @RequiresPermissions("enterprise:project:info:list")
+    // @RequiresPermissions("enterprise:project:info:list")
     public R list(@RequestParam Map<String, Object> params){
         PageUtils page = entProjectInfoService.queryPage(params);
 
@@ -40,12 +41,27 @@ public class EntProjectInfoController {
     /**
      * 信息
      */
-    @RequestMapping("/info/{proInfoId}")
+    @RequestMapping("/info/{hasType}/{proInfoId}")
     @RequiresPermissions("enterprise:project:info")
-    public R info(@PathVariable("proInfoId") Long proInfoId){
-		EntProjectInfoEntity entProjectInfo = entProjectInfoService.selectById(proInfoId);
+    public R info(@PathVariable("proInfoId") Long proInfoId, @PathVariable("hasType") String hasType){
+        if("userPerId".equals(hasType)){ // 学生
+            return entProjectInfoService.queryEntProjectInfoByIdPerId(proInfoId);
+        }else if("userTeacherId".equals(hasType)){ // 教师
+            return entProjectInfoService.queryEntProjectInfoByIdTeacherId(proInfoId);
+        }else if ("entInfoId".equals(hasType)){ // 企业
+            return entProjectInfoService.queryEntProjectInfoByIdEntId(proInfoId);
+        }
+        return R.ok();
+    }
 
-        return R.ok().put("entProjectInfo", entProjectInfo);
+    /**
+     * 处理项目信息审核
+     * @return
+     */
+    @RequestMapping("/entExamine")
+    public R entExamine(@RequestParam  Map<String, Object> params){
+        logger.info("接收数据:{}", params);
+        return entProjectInfoService.updateEntExamine(params);
     }
 
     /**

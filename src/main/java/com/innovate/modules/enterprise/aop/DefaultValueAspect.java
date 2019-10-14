@@ -1,6 +1,7 @@
 package com.innovate.modules.enterprise.aop;
 
 import com.innovate.common.exception.RRException;
+import com.innovate.modules.enterprise.annotation.DefaultArrayValue;
 import com.innovate.modules.enterprise.annotation.DefaultValue;
 import com.innovate.modules.enterprise.annotation.HasRole;
 import com.innovate.modules.enterprise.enums.DefValueEnum;
@@ -38,6 +39,7 @@ public class DefaultValueAspect {
         Signature signature = joinPoint.getSignature();
         MethodSignature methodSignature = (MethodSignature)signature;
         Method targetMethod = methodSignature.getMethod();
+        // 单值注解
         DefaultValue defaultValue = targetMethod.getAnnotation(DefaultValue.class);
         if(defaultValue != null){
             Class<?> targetType = defaultValue.targetType();
@@ -45,7 +47,20 @@ public class DefaultValueAspect {
             Object[] args = joinPoint.getArgs();
             if(args != null && args.length > 0){
                 for (int i=0; i<args.length; i++){
-                    if (invokeMethod(defaultValue, index == i, args[i])) break;
+                    if (invokeMethod(targetType, defaultValue, index == i, args[i])) break;
+                }
+            }
+        }
+
+        // 多值注解
+        DefaultArrayValue annotation = targetMethod.getAnnotation(DefaultArrayValue.class);
+        if(annotation != null){
+            Class<?> targetType = annotation.targetType();
+            int index = annotation.index();
+            Object[] args = joinPoint.getArgs();
+            if(args != null && args.length > 0){
+                for (int i=0; i<args.length; i++){
+                    if (invokeArrayMethod(annotation, index == i, args[i])) break;
                 }
             }
         }
@@ -54,7 +69,54 @@ public class DefaultValueAspect {
         return result;
     }
 
-    private boolean invokeMethod(DefaultValue defaultValue, boolean b, Object arg) {
+    private boolean invokeArrayMethod(DefaultArrayValue annotation, boolean b, Object arg) {
+        if(b){
+            if(arg instanceof java.util.Map){
+                java.util.Map map = (java.util.Map) arg;
+                String[] keys = annotation.key();
+                for(int i=0; i<keys.length; i++){
+                    Object object = map.get(keys[i]);
+                    if (null == object) {
+                        DefValueEnum[] defValueEnum = annotation.defValueEnum();
+                        enumArrayType(defValueEnum[i],keys[i], annotation.defValue()[i], map);
+                    }
+                }
+            }
+            return true;
+        }
+        return false;
+    }
+
+    private void enumArrayType(DefValueEnum defValueEnum, String key, String defaultValue, Map map) {
+        switch (defValueEnum){
+            case BYTE:
+                map.put(key,Byte.valueOf(defaultValue));
+                break;
+            case SHORT:
+                map.put(key,Short.valueOf(defaultValue));
+                break;
+            case INTEGER:
+                map.put(key,Integer.valueOf(defaultValue));
+                break;
+            case LONG:
+                map.put(key,Long.valueOf(defaultValue));
+                break;
+            case FLOAT:
+                map.put(key,Float.valueOf(defaultValue));
+                break;
+            case DOUBLE:
+                map.put(key,Double.valueOf(defaultValue));
+                break;
+            case BOOLEAN:
+                map.put(key,Boolean.valueOf(defaultValue));
+                break;
+            case STRING:
+                map.put(key,defaultValue);
+                break;
+        }
+    }
+
+    private boolean invokeMethod(Class<?> targetType, DefaultValue defaultValue, boolean b, Object arg) {
         if(b){
             if(arg instanceof java.util.Map){
                 java.util.Map map = (java.util.Map) arg;
