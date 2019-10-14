@@ -29,7 +29,7 @@ import java.util.Map;
 @Component
 public class DefaultValueAspect {
 
-    @Pointcut("@annotation(com.innovate.modules.enterprise.annotation.DefaultValue)")
+    @Pointcut("@annotation(com.innovate.modules.enterprise.annotation.DefaultValue) || @annotation(com.innovate.modules.enterprise.annotation.DefaultArrayValue)")
     public void logPointCut() {
 
     }

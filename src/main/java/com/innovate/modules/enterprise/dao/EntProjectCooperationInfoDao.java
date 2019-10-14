@@ -4,6 +4,9 @@ import com.baomidou.mybatisplus.mapper.BaseMapper;
 import com.innovate.modules.enterprise.entity.EntProjectCooperationInfoEntity;
 import org.apache.ibatis.annotations.Mapper;
 
+import java.util.List;
+import java.util.Map;
+
 /**
  * 项目合作信息表
  * 
@@ -13,5 +16,40 @@ import org.apache.ibatis.annotations.Mapper;
  */
 @Mapper
 public interface EntProjectCooperationInfoDao extends BaseMapper<EntProjectCooperationInfoEntity> {
-	
+
+    /**
+     * 项目合作信息列表
+     * @param params
+     * @return
+     */
+    List<EntProjectCooperationInfoEntity> queryProjectCooperationInfoList(java.util.Map<String,Object> params);
+
+    /**
+     * 项目合作信息 学生详情
+     * @param params
+     * @return
+     */
+    EntProjectCooperationInfoEntity queryProjectCooperationInfoListForPer(java.util.Map<String,Object> params);
+
+    /**
+     * 项目合作信息 教师详情
+     * @param params
+     * @return
+     */
+    EntProjectCooperationInfoEntity queryProjectCooperationInfoListForTeacher(java.util.Map<String,Object> params);
+
+    /**
+     * 项目合作信息 企业详情
+     * @param params
+     * @return
+     */
+    EntProjectCooperationInfoEntity queryProjectCooperationInfoListForEnt(java.util.Map<String,Object> params);
+
+    /**
+     * 更新项目合作审核状态
+     * @param params
+     * @return
+     */
+    boolean updateProjectExamine(Map<String, Object> params);
+
 }
