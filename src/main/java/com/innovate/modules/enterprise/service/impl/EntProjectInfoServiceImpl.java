@@ -15,14 +15,20 @@ import com.innovate.modules.enterprise.entity.EntEnterpriseInfoEntity;
 import com.innovate.modules.enterprise.entity.EntProjectInfoEntity;
 import com.innovate.modules.enterprise.enums.DefValueEnum;
 import com.innovate.modules.enterprise.service.EntProjectInfoService;
+import com.innovate.modules.sys.entity.SysUserEntity;
+import com.innovate.modules.sys.service.SysUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Map;
 
 
 @Service("entProjectInfoService")
 public class EntProjectInfoServiceImpl extends ServiceImpl<EntProjectInfoDao, EntProjectInfoEntity> implements EntProjectInfoService {
+
+    @Autowired
+    private SysUserService sysUserService;
 
     @DefaultValue(targetType = java.util.Map.class, index = 0, key = "inType", defValue = "userPerId", defValueEnum = DefValueEnum.STRING)
     @DefaultArrayValue(targetType = java.util.Map.class, index = 0, key = {"inApply"}, defValue = {"0"}, defValueEnum = {DefValueEnum.STRING})
@@ -46,24 +52,45 @@ public class EntProjectInfoServiceImpl extends ServiceImpl<EntProjectInfoDao, En
             wrapper.like("pro_name", (String) params.get("key"));
         }
         Page<EntProjectInfoEntity> page = this.selectPage( new Query<EntProjectInfoEntity>(params).getPage(),wrapper);
+        List<EntProjectInfoEntity> records = page.getRecords();
+        if(records != null && records.size() > 0){
+            for(int i=0;i<records.size();i++){
+                EntProjectInfoEntity entity = records.get(i);
+                SysUserEntity user = null;
+                if("userPerId".equals(type)){ // 学生
+                    user = sysUserService.selectById(entity.getUserPerId());
+                }else if("userTeacherId".equals(type)){ // 教师
+                    user = sysUserService.selectById(entity.getUserTeacherId());
+                }else if ("entInfoId".equals(type)){ // 企业
+                    user =  sysUserService.selectById(entity.getEntInfoId());
+                }
+                entity.setSysUser(user);
+            }
+        }
         return new PageUtils(page);
     }
 
     @Override
     public R queryEntProjectInfoByIdPerId(Long id) {
         EntProjectInfoEntity entity = baseMapper.queryEntProjectInfoByIdPerId(id);
+        SysUserEntity user = sysUserService.selectById(entity.getUserPerId());
+        entity.setSysUser(user);
         return R.ok().put("data", entity);
     }
 
     @Override
     public R queryEntProjectInfoByIdTeacherId(Long id) {
         EntProjectInfoEntity entity = baseMapper.queryEntProjectInfoByIdTeacherId(id);
+        SysUserEntity user = sysUserService.selectById(entity.getUserTeacherId());
+        entity.setSysUser(user);
         return R.ok().put("data",entity);
     }
 
     @Override
     public R queryEntProjectInfoByIdEntId(Long id) {
         EntProjectInfoEntity entity = baseMapper.queryEntProjectInfoByIdEntId(id);
+        SysUserEntity user = sysUserService.selectById(entity.getEntInfoId());
+        entity.setSysUser(user);
         return R.ok().put("data", entity);
     }
 

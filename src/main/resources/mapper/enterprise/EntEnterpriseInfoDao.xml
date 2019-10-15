@@ -36,16 +36,35 @@
             <result column="ent_attachment_url" property="entAttachmentUrl" />
         </collection>
     </resultMap>
-    <select id="queryEntEnterpriseInfo" resultMap="entEnterpriseInfo_attachment_Map">
+
+    <resultMap id="entEnterpriseInfo_attachment_user_Map" extends="entEnterpriseInfo_attachment_Map"  type="com.innovate.modules.enterprise.entity.EntEnterpriseInfoEntity" >
+        <association property="sysUser" javaType="com.innovate.modules.sys.entity.SysUserEntity">
+            <id column="s_u_user_id" property="userId" />
+            <result column="username" property="username" />
+            <result column="name" property="name" />
+            <result column="salt" property="salt" />
+            <result column="email" property="email" />
+            <result column="mobile" property="mobile" />
+            <result column="status" property="status" />
+            <result column="institute_id" property="instituteId" />
+            <result column="create_user_id" property="createUserId" />
+            <result column="create_time" property="createTime" />
+        </association>
+    </resultMap>
+
+    <select id="queryEntEnterpriseInfo" resultMap="entEnterpriseInfo_attachment_user_Map">
         SELECT
             e_e_i.ent_info_id, e_e_i.user_id , e_e_i.ent_name , e_e_i.ent_corporate , e_e_i.ent_business , e_e_i.ent_code,
             e_e_i.ent_register, e_e_i.ent_founding_time, e_e_i.ent_type, e_e_i.ent_status ,e_e_i.ent_register_address ,
             e_e_i.ent_address ,e_e_i.ent_introduce, e_e_i.new_high_zones, e_e_i.ent_logo, e_e_i.ent_in_time, e_e_i.in_apply,
             e_e_a.ent_attachment_id, e_e_a.pro_info_id, e_e_a.pro_cooperation_info_id, e_e_a.recruitment_info_id, e_e_a.patent_info_id,
-            e_e_a.ent_attachment_url
+            e_e_a.ent_attachment_url,
+            s_u.user_id AS s_u_user_id, s_u.username, s_u.name, s_u.salt, s_u.email, s_u.mobile, s_u.status, s_u.institute_id, s_u.create_user_id,
+            s_u.create_time
         FROM
             ent_enterprise_info e_e_i
-        LEFT JOIN ent_enterprise_attachment e_e_a ON e_e_a.ent_info_id = e_e_i.ent_info_id
+            LEFT JOIN ent_enterprise_attachment e_e_a ON e_e_a.ent_info_id = e_e_i.ent_info_id
+            LEFT JOIN sys_user s_u ON s_u.user_id = e_e_i.user_id
         WHERE
             e_e_i.ent_info_id = #{entInfoId}
             <if test="inApply != null and inApply != ''"> AND e_e_i.in_apply = #{inApply} </if>
