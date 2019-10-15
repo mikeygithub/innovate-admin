@@ -1,5 +1,6 @@
 package com.innovate.modules.innovate.entity;
 
+import com.baomidou.mybatisplus.annotations.TableField;
 import com.baomidou.mybatisplus.annotations.TableId;
 import com.baomidou.mybatisplus.annotations.TableName;
 import com.innovate.modules.sys.entity.SysUserEntity;
@@ -20,7 +21,9 @@ public class UserTeacherInfoEntity {
     private Long teacherSex;
     private String teacherPost;
     private Long teacherTitle;
+    @TableField(exist = false)
     private SysUserEntity sysUserEntity;
+    @TableField(exist = false)
     private Long isDel;
     private Integer teacherBackground;
     private Integer teacherDegree;

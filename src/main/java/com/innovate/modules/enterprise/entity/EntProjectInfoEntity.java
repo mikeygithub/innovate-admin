@@ -96,4 +96,10 @@ public class EntProjectInfoEntity implements Serializable {
 	@TableField(exist = false)
 	private SysUserEntity sysUser;
 
+	/**
+	 * 项目合作信息
+	 */
+	@TableField(exist = false)
+	private EntProjectCooperationInfoEntity projectCooperationInfo;
+
 }

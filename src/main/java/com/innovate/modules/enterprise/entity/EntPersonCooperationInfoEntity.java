@@ -1,8 +1,11 @@
 package com.innovate.modules.enterprise.entity;
 
 
+import com.baomidou.mybatisplus.annotations.TableField;
 import com.baomidou.mybatisplus.annotations.TableId;
 import com.baomidou.mybatisplus.annotations.TableName;
+import com.innovate.modules.innovate.entity.UserPersonInfoEntity;
+import com.innovate.modules.innovate.entity.UserTeacherInfoEntity;
 import lombok.Data;
 
 import java.io.Serializable;
@@ -45,5 +48,23 @@ public class EntPersonCooperationInfoEntity implements Serializable {
 	 * 审核状态，0待审核 1已审核
 	 */
 	private String inApply;
+
+	/**
+	 * 学生信息
+	 */
+	@TableField(exist = false)
+	private UserPersonInfoEntity userPersonInfo;
+
+	/**
+	 * 教师信息
+	 */
+	@TableField(exist = false)
+	private UserTeacherInfoEntity userTeacherInfo;
+
+	/**
+	 * 企业信息
+	 */
+	@TableField(exist = false)
+	private EntEnterpriseInfoEntity entEnterpriseInfo;
 
 }
