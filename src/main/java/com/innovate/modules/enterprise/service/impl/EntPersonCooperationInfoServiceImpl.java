@@ -10,6 +10,7 @@ import com.innovate.modules.enterprise.entity.EntPersonCooperationInfoEntity;
 import com.innovate.modules.enterprise.service.EntPersonCooperationInfoService;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Map;
 
 
@@ -24,6 +25,11 @@ public class EntPersonCooperationInfoServiceImpl extends ServiceImpl<EntPersonCo
         );
 
         return new PageUtils(page);
+    }
+
+    @Override
+    public List<EntPersonCooperationInfoEntity> queryPersonCooperationInfoByProCooperationInfoId(Long proCooperationInfoId) {
+        return baseMapper.queryPersonCooperationInfoByProCooperationInfoId(proCooperationInfoId);
     }
 
 }

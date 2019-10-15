@@ -4,6 +4,7 @@ import com.innovate.common.utils.PageUtils;
 import com.innovate.common.utils.R;
 import com.innovate.modules.enterprise.entity.EntPersonCooperationInfoEntity;
 import com.innovate.modules.enterprise.service.EntPersonCooperationInfoService;
+import com.innovate.modules.enterprise.service.EntProjectInfoService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -25,6 +26,9 @@ public class EntPersonCooperationInfoController {
     @Autowired
     private EntPersonCooperationInfoService entPersonCooperationInfoService;
 
+    @Autowired
+    private EntProjectInfoService entProjectInfoService;
+
     /**
      * 列表
      */
@@ -40,12 +44,12 @@ public class EntPersonCooperationInfoController {
     /**
      * 信息
      */
-    @RequestMapping("/info/{proCooperationId}")
-    @RequiresPermissions("enterprise:person:cooperation:info")
-    public R info(@PathVariable("proCooperationId") Long proCooperationId){
-		EntPersonCooperationInfoEntity entPersonCooperationInfo = entPersonCooperationInfoService.selectById(proCooperationId);
-
-        return R.ok().put("entPersonCooperationInfo", entPersonCooperationInfo);
+    @RequestMapping("/info/{proInfoId}/{inType}")
+    // @RequiresPermissions("enterprise:person:cooperation:info")
+    public R info(@PathVariable("proInfoId") Long proInfoId, @PathVariable("inType") String inType){
+		// EntPersonCooperationInfoEntity entPersonCooperationInfo = entPersonCooperationInfoService.selectById(proCooperationId);
+        //return R.ok().put("entPersonCooperationInfo", entPersonCooperationInfo);
+        return entProjectInfoService.queryProjectPersonCooperationInfo(proInfoId, inType);
     }
 
     /**

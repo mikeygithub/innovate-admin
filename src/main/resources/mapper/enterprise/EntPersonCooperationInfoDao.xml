@@ -38,4 +38,15 @@
             ent_project_cooperation_info e_p_c_i
 
     </select>
+
+    <!-- 根据项目合作信息id查询合作关系人员信息 -->
+    <select id="queryPersonCooperationInfoByProCooperationInfoId" parameterType="java.lang.Long" resultType="com.innovate.modules.enterprise.entity.EntPersonCooperationInfoEntity">
+        SELECT
+            *
+        FROM
+            ent_person_cooperation_info
+        WHERE
+            pro_cooperation_info_id = #{proCooperationInfoId}
+    </select>
+
 </mapper>
