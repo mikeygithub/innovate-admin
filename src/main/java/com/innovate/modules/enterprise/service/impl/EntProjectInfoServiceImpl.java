@@ -14,9 +14,16 @@ import com.innovate.modules.enterprise.dao.EntProjectInfoDao;
 import com.innovate.modules.enterprise.entity.EntEnterpriseInfoEntity;
 import com.innovate.modules.enterprise.entity.EntProjectInfoEntity;
 import com.innovate.modules.enterprise.enums.DefValueEnum;
+import com.innovate.modules.enterprise.service.EntEnterpriseInfoService;
+import com.innovate.modules.enterprise.service.EntProjectCooperationInfoService;
 import com.innovate.modules.enterprise.service.EntProjectInfoService;
+import com.innovate.modules.innovate.entity.UserPersonInfoEntity;
+import com.innovate.modules.innovate.entity.UserTeacherInfoEntity;
+import com.innovate.modules.innovate.service.UserPerInfoService;
+import com.innovate.modules.innovate.service.UserTeacherInfoService;
 import com.innovate.modules.sys.entity.SysUserEntity;
 import com.innovate.modules.sys.service.SysUserService;
+import net.bytebuddy.implementation.bind.annotation.Default;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -29,6 +36,18 @@ public class EntProjectInfoServiceImpl extends ServiceImpl<EntProjectInfoDao, En
 
     @Autowired
     private SysUserService sysUserService;
+
+    @Autowired
+    private EntProjectCooperationInfoService entProjectCooperationInfoService;
+
+    @Autowired
+    private UserTeacherInfoService userTeacherInfoService;
+
+    @Autowired
+    private UserPerInfoService userPerInfoService;
+
+    @Autowired
+    private EntEnterpriseInfoService entEnterpriseInfoService;
 
     @DefaultValue(targetType = java.util.Map.class, index = 0, key = "inType", defValue = "userPerId", defValueEnum = DefValueEnum.STRING)
     @DefaultArrayValue(targetType = java.util.Map.class, index = 0, key = {"inApply"}, defValue = {"0"}, defValueEnum = {DefValueEnum.STRING})
@@ -73,24 +92,42 @@ public class EntProjectInfoServiceImpl extends ServiceImpl<EntProjectInfoDao, En
     @Override
     public R queryEntProjectInfoByIdPerId(Long id) {
         EntProjectInfoEntity entity = baseMapper.queryEntProjectInfoByIdPerId(id);
-        SysUserEntity user = sysUserService.selectById(entity.getUserPerId());
-        entity.setSysUser(user);
+        if(entity.getUserPersonInfo() != null){
+            SysUserEntity user = sysUserService.selectById(entity.getUserPersonInfo().getUserId());
+            entity.setSysUser(user);
+        }else{
+            UserPersonInfoEntity personInfoEntity = userPerInfoService.selectById(entity.getUserPerId());
+            SysUserEntity sysUserEntity = sysUserService.selectById(personInfoEntity.getUserId());
+            entity.setSysUser(sysUserEntity);
+        }
         return R.ok().put("data", entity);
     }
 
     @Override
     public R queryEntProjectInfoByIdTeacherId(Long id) {
         EntProjectInfoEntity entity = baseMapper.queryEntProjectInfoByIdTeacherId(id);
-        SysUserEntity user = sysUserService.selectById(entity.getUserTeacherId());
-        entity.setSysUser(user);
+        if(entity.getUserTeacherInfo() != null){
+            SysUserEntity user = sysUserService.selectById(entity.getUserTeacherInfo().getUserId());
+            entity.setSysUser(user);
+        }else{
+            UserTeacherInfoEntity userTeacherInfoEntity = userTeacherInfoService.selectById(entity.getUserTeacherId());
+            SysUserEntity sysUserEntity = sysUserService.selectById(userTeacherInfoEntity.getUserId());
+            entity.setSysUser(sysUserEntity);
+        }
         return R.ok().put("data",entity);
     }
 
     @Override
     public R queryEntProjectInfoByIdEntId(Long id) {
         EntProjectInfoEntity entity = baseMapper.queryEntProjectInfoByIdEntId(id);
-        SysUserEntity user = sysUserService.selectById(entity.getEntInfoId());
-        entity.setSysUser(user);
+        if(entity.getEntEnterpriseInfo() != null){
+            SysUserEntity user = sysUserService.selectById(entity.getEntEnterpriseInfo().getUserId());
+            entity.setSysUser(user);
+        }else {
+            EntEnterpriseInfoEntity entEnterpriseInfoEntity = entEnterpriseInfoService.selectById(entity.getEntInfoId());
+            SysUserEntity sysUserEntity = sysUserService.selectById(entEnterpriseInfoEntity.getUserId());
+            entity.setSysUser(sysUserEntity);
+        }
         return R.ok().put("data", entity);
     }
 
@@ -99,6 +136,23 @@ public class EntProjectInfoServiceImpl extends ServiceImpl<EntProjectInfoDao, En
     public R updateEntExamine(Map<String, Object> params) {
         boolean b = baseMapper.updateEntExamine(params);
         return R.ok().put("data",b);
+    }
+
+    @DefaultValue(targetType = java.lang.String.class, index = 1, key = "",defValue = "userPerId", defValueEnum = DefValueEnum.STRING)
+    @Override
+    public R queryProjectPersonCooperationInfo(Long proInfoId, String inType) {
+        EntProjectInfoEntity project = baseMapper.selectById(proInfoId);
+        if(project == null){ return R.error();}
+        //entProjectCooperationInfoService.q
+        project.getProInfoId();
+        if("userPerId".equals(inType)){ // 学生
+
+        }else if("userTeacherId".equals(inType)){ // 教师
+
+        }else if ("entInfoId".equals(inType)){ // 企业
+
+        }
+        return null;
     }
 
 }

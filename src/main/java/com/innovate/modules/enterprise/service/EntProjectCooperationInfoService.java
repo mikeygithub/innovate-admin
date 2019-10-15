@@ -33,5 +33,12 @@ public interface EntProjectCooperationInfoService extends IService<EntProjectCoo
      */
     R updateProjectExamine(Map<String, Object> params);
 
+    /**
+     * 根据项目id查询合作信息
+     * @param projectId
+     * @return
+     */
+    EntProjectCooperationInfoEntity queryEntProjectCooperationInfoByProjectId(Long projectId);
+
 }
 

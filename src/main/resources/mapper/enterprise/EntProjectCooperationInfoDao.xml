@@ -184,4 +184,14 @@
         </where>
     </select>
 
+    <!-- 根据项目id查询合作信息 -->
+    <select id="queryEntProjectCooperationInfoByProjectId" parameterType="java.lang.Long" resultType="com.innovate.modules.enterprise.entity.EntProjectCooperationInfoEntity">
+        SELECT
+            *
+        FROM
+            ent_project_cooperation_info
+        WHERE
+            pro_info_id = #{projectId}
+    </select>
+
 </mapper>

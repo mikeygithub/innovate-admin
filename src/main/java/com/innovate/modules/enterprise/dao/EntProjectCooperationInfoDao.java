@@ -52,4 +52,11 @@ public interface EntProjectCooperationInfoDao extends BaseMapper<EntProjectCoope
      */
     boolean updateProjectExamine(Map<String, Object> params);
 
+    /**
+     * 根据项目id查询合作信息
+     * @param projectId
+     * @return
+     */
+    EntProjectCooperationInfoEntity queryEntProjectCooperationInfoByProjectId(Long projectId);
+
 }
