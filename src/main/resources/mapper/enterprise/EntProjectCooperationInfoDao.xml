@@ -43,9 +43,9 @@
             ent_project_cooperation_info e_p_c_i
             LEFT JOIN ent_project_info e_p_i ON e_p_c_i.pro_info_id = e_p_i.pro_info_id
         <where>
-            <if test="userPerId != null"> e_p_c_i.user_per_id IS NOT NULL </if>
-            <if test="userTeacherId != null"> AND e_p_c_i.user_teacher_id IS NOT NULL </if>
-            <if test="entInfoId != null"> AND e_p_c_i.ent_info_id IS NOT NULL </if>
+            <if test='inType != null and inType.trim() eq "userPerId"'> e_p_c_i.user_per_id IS NOT NULL </if>
+            <if test='inType != null and  inType.trim() eq "userTeacherId"'> AND e_p_c_i.user_teacher_id IS NOT NULL </if>
+            <if test='inType != null and inType.trim() eq "entInfoId"'> AND e_p_c_i.ent_info_id IS NOT NULL </if>
             <if test="inApply != null and inApply.trim() != ''"> AND e_p_c_i.in_apply = #{inApply} </if>
             <if test="key != null and key.trim() != ''"> AND e_p_i.pro_name LIKE CONCAT('%', #{key},'%') </if>
         </where>
@@ -182,6 +182,16 @@
                 AND e_p_c_i.ent_info_id = #{entInfoId}
             </if>
         </where>
+    </select>
+
+    <!-- 根据项目id查询合作信息 -->
+    <select id="queryEntProjectCooperationInfoByProjectId" parameterType="java.lang.Long" resultType="com.innovate.modules.enterprise.entity.EntProjectCooperationInfoEntity">
+        SELECT
+            *
+        FROM
+            ent_project_cooperation_info
+        WHERE
+            pro_info_id = #{projectId}
     </select>
 
 </mapper>

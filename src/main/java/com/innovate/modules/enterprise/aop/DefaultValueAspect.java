@@ -126,6 +126,9 @@ public class DefaultValueAspect {
                     enumType(defValueEnum, defaultValue, map);
                 }
             }
+            if(arg instanceof java.lang.String){
+                arg = defaultValue.defValue();
+            }
             return true;
         }
         return false;

@@ -12,6 +12,7 @@ import com.innovate.modules.enterprise.dao.EntEnterpriseInfoDao;
 import com.innovate.modules.enterprise.entity.EntEnterpriseInfoEntity;
 import com.innovate.modules.enterprise.enums.DefValueEnum;
 import com.innovate.modules.enterprise.service.EntEnterpriseInfoService;
+import com.innovate.modules.sys.entity.SysUserEntity;
 import com.innovate.modules.sys.service.SysUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -39,7 +40,14 @@ public class EntEnterpriseInfoServiceImpl extends ServiceImpl<EntEnterpriseInfoD
                 new Query<EntEnterpriseInfoEntity>(params).getPage(),
                 new EntityWrapper<EntEnterpriseInfoEntity>().eq("new_high_zones", params.get("new_high_zones")).eq("in_apply", params.get("inApply"))
         );
-
+        List<EntEnterpriseInfoEntity> records = page.getRecords();
+        if(records != null && records.size() > 0){
+            for(int i=0; i<records.size(); i++){
+                EntEnterpriseInfoEntity entity = records.get(i);
+                SysUserEntity userEntity = sysUserService.selectById(entity.getUserId());
+                entity.setSysUser(userEntity);
+            }
+        }
         return new PageUtils(page);
     }
 

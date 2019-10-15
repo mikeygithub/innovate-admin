@@ -27,11 +27,26 @@
     </resultMap>
 
     <!-- 项目合作人表 - 合作关系 - 学生 -->
-    <resultMap id="ProjectCooperationInfosForPer" type="com.innovate.modules.enterprise.entity.EntProjectCooperationInfoEntity">
+    <resultMap id="ProjectCooperationInfosForPer" type="com.innovate.modules.enterprise.entity.EntProjectCooperationInfoEntity" extends="entProjectCooperationInfoMap">
 
     </resultMap>
     <select id="queryProjectCooperationInfosForPer" parameterType="java.util.Map" resultMap="ProjectCooperationInfosForPer">
         SELECT
+            e_p_c_i.pro_cooperation_info_id, e_p_c_i.pro_info_id , e_p_c_i.cooperation_content , e_p_c_i.cooperation_type , e_p_c_i.cooperation_require ,
+            e_p_c_i.user_per_id, e_p_c_i.user_teacher_id, e_p_c_i.ent_info_id, e_p_c_i.in_apply
+        FROM
+            ent_project_cooperation_info e_p_c_i
 
     </select>
+
+    <!-- 根据项目合作信息id查询合作关系人员信息 -->
+    <select id="queryPersonCooperationInfoByProCooperationInfoId" parameterType="java.lang.Long" resultType="com.innovate.modules.enterprise.entity.EntPersonCooperationInfoEntity">
+        SELECT
+            *
+        FROM
+            ent_person_cooperation_info
+        WHERE
+            pro_cooperation_info_id = #{proCooperationInfoId}
+    </select>
+
 </mapper>

@@ -6,6 +6,8 @@ import com.innovate.modules.enterprise.entity.EntProjectCooperationInfoEntity;
 import com.innovate.modules.enterprise.entity.EntProjectInfoEntity;
 import org.apache.ibatis.annotations.Mapper;
 
+import java.util.List;
+
 /**
  * 项目合作人表
  * 
@@ -37,5 +39,12 @@ public interface EntPersonCooperationInfoDao extends BaseMapper<EntPersonCoopera
      */
     EntProjectCooperationInfoEntity queryProjectCooperationInfosForEnt(java.util.Map<String,Object> params);
 
+
+    /**
+     *  根据项目合作信息id查询合作关系人员信息
+     * @param proCooperationInfoId
+     * @return
+     */
+    List<EntPersonCooperationInfoEntity> queryPersonCooperationInfoByProCooperationInfoId(Long proCooperationInfoId);
 
 }

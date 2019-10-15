@@ -12,17 +12,48 @@ import com.innovate.modules.enterprise.annotation.DefaultArrayValue;
 import com.innovate.modules.enterprise.annotation.DefaultValue;
 import com.innovate.modules.enterprise.dao.EntProjectInfoDao;
 import com.innovate.modules.enterprise.entity.EntEnterpriseInfoEntity;
+import com.innovate.modules.enterprise.entity.EntPersonCooperationInfoEntity;
+import com.innovate.modules.enterprise.entity.EntProjectCooperationInfoEntity;
 import com.innovate.modules.enterprise.entity.EntProjectInfoEntity;
 import com.innovate.modules.enterprise.enums.DefValueEnum;
+import com.innovate.modules.enterprise.service.EntEnterpriseInfoService;
+import com.innovate.modules.enterprise.service.EntPersonCooperationInfoService;
+import com.innovate.modules.enterprise.service.EntProjectCooperationInfoService;
 import com.innovate.modules.enterprise.service.EntProjectInfoService;
+import com.innovate.modules.innovate.entity.UserPersonInfoEntity;
+import com.innovate.modules.innovate.entity.UserTeacherInfoEntity;
+import com.innovate.modules.innovate.service.UserPerInfoService;
+import com.innovate.modules.innovate.service.UserTeacherInfoService;
+import com.innovate.modules.sys.entity.SysUserEntity;
+import com.innovate.modules.sys.service.SysUserService;
+import net.bytebuddy.implementation.bind.annotation.Default;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Map;
 
 
 @Service("entProjectInfoService")
 public class EntProjectInfoServiceImpl extends ServiceImpl<EntProjectInfoDao, EntProjectInfoEntity> implements EntProjectInfoService {
+
+    @Autowired
+    private SysUserService sysUserService;
+
+    @Autowired
+    private EntProjectCooperationInfoService entProjectCooperationInfoService;
+
+    @Autowired
+    private UserTeacherInfoService userTeacherInfoService;
+
+    @Autowired
+    private UserPerInfoService userPerInfoService;
+
+    @Autowired
+    private EntEnterpriseInfoService entEnterpriseInfoService;
+
+    @Autowired
+    private EntPersonCooperationInfoService entPersonCooperationInfoService;
 
     @DefaultValue(targetType = java.util.Map.class, index = 0, key = "inType", defValue = "userPerId", defValueEnum = DefValueEnum.STRING)
     @DefaultArrayValue(targetType = java.util.Map.class, index = 0, key = {"inApply"}, defValue = {"0"}, defValueEnum = {DefValueEnum.STRING})
@@ -46,24 +77,63 @@ public class EntProjectInfoServiceImpl extends ServiceImpl<EntProjectInfoDao, En
             wrapper.like("pro_name", (String) params.get("key"));
         }
         Page<EntProjectInfoEntity> page = this.selectPage( new Query<EntProjectInfoEntity>(params).getPage(),wrapper);
+        List<EntProjectInfoEntity> records = page.getRecords();
+        if(records != null && records.size() > 0){
+            for(int i=0;i<records.size();i++){
+                EntProjectInfoEntity entity = records.get(i);
+                SysUserEntity user = null;
+                if("userPerId".equals(type)){ // 学生
+                    user = sysUserService.selectById(entity.getUserPerId());
+                }else if("userTeacherId".equals(type)){ // 教师
+                    user = sysUserService.selectById(entity.getUserTeacherId());
+                }else if ("entInfoId".equals(type)){ // 企业
+                    user =  sysUserService.selectById(entity.getEntInfoId());
+                }
+                entity.setSysUser(user);
+            }
+        }
         return new PageUtils(page);
     }
 
     @Override
     public R queryEntProjectInfoByIdPerId(Long id) {
         EntProjectInfoEntity entity = baseMapper.queryEntProjectInfoByIdPerId(id);
+        if(entity.getUserPersonInfo() != null){
+            SysUserEntity user = sysUserService.selectById(entity.getUserPersonInfo().getUserId());
+            entity.setSysUser(user);
+        }else{
+            UserPersonInfoEntity personInfoEntity = userPerInfoService.selectById(entity.getUserPerId());
+            SysUserEntity sysUserEntity = sysUserService.selectById(personInfoEntity.getUserId());
+            entity.setSysUser(sysUserEntity);
+        }
         return R.ok().put("data", entity);
     }
 
     @Override
     public R queryEntProjectInfoByIdTeacherId(Long id) {
         EntProjectInfoEntity entity = baseMapper.queryEntProjectInfoByIdTeacherId(id);
+        if(entity.getUserTeacherInfo() != null){
+            SysUserEntity user = sysUserService.selectById(entity.getUserTeacherInfo().getUserId());
+            entity.setSysUser(user);
+        }else{
+            UserTeacherInfoEntity userTeacherInfoEntity = userTeacherInfoService.selectById(entity.getUserTeacherId());
+            SysUserEntity sysUserEntity = sysUserService.selectById(userTeacherInfoEntity.getUserId());
+            entity.setSysUser(sysUserEntity);
+        }
         return R.ok().put("data",entity);
     }
 
     @Override
     public R queryEntProjectInfoByIdEntId(Long id) {
         EntProjectInfoEntity entity = baseMapper.queryEntProjectInfoByIdEntId(id);
+        if(entity.getEntEnterpriseInfo() != null){
+            SysUserEntity user = sysUserService.selectById(entity.getEntEnterpriseInfo().getUserId());
+            entity.setSysUser(user);
+        }else {
+            EntEnterpriseInfoEntity entEnterpriseInfoEntity = entEnterpriseInfoService.selectById(entity.getEntInfoId());
+            SysUserEntity sysUserEntity = sysUserService.selectById(entEnterpriseInfoEntity.getUserId());
+            entity.setSysUser(sysUserEntity);
+        }
         return R.ok().put("data", entity);
     }
 
@@ -72,6 +142,56 @@ public class EntProjectInfoServiceImpl extends ServiceImpl<EntProjectInfoDao, En
     public R updateEntExamine(Map<String, Object> params) {
         boolean b = baseMapper.updateEntExamine(params);
         return R.ok().put("data",b);
+    }
+
+    @DefaultValue(targetType = java.lang.String.class, index = 1, key = "",defValue = "userPerId", defValueEnum = DefValueEnum.STRING)
+    @Override
+    public R queryProjectPersonCooperationInfo(Long proInfoId, String inType) {
+        EntProjectInfoEntity project = baseMapper.selectById(proInfoId);
+        if(project == null){ return R.error();}
+        EntProjectCooperationInfoEntity projectCooperation = entProjectCooperationInfoService.queryEntProjectCooperationInfoByProjectId(project.getProInfoId());
+        List<EntPersonCooperationInfoEntity> persons = entPersonCooperationInfoService.queryPersonCooperationInfoByProCooperationInfoId(projectCooperation.getProCooperationInfoId());
+        if(persons != null && persons.size() > 0){
+            for(int i=0; i< persons.size(); i++){
+                EntPersonCooperationInfoEntity entity = persons.get(i);
+                // 合作者
+                if(null != entity.getUserPerId()){// 学生
+                    UserPersonInfoEntity userPersonInfoEntity = userPerInfoService.selectById(entity.getUserPerId());
+                    SysUserEntity sysUserEntity = sysUserService.selectById(userPersonInfoEntity.getUserId());
+                    userPersonInfoEntity.setSysUserEntity(sysUserEntity);
+                    entity.setUserPersonInfo(userPersonInfoEntity);
+                }else if (null != entity.getUserTeacherId()){ // 教师
+                    UserTeacherInfoEntity userTeacherInfoEntity = userTeacherInfoService.selectById(entity.getUserTeacherId());
+                    SysUserEntity sysUserEntity = sysUserService.selectById(userTeacherInfoEntity.getUserId());
+                    userTeacherInfoEntity.setSysUserEntity(sysUserEntity);
+                    entity.setUserTeacherInfo(userTeacherInfoEntity);
+                }else if (null != entity.getEntInfoId()){ // 企业
+                    EntEnterpriseInfoEntity entEnterpriseInfoEntity = entEnterpriseInfoService.selectById(entity.getEntInfoId());
+                    SysUserEntity sysUserEntity = sysUserService.selectById(entEnterpriseInfoEntity.getUserId());
+                    entEnterpriseInfoEntity.setSysUser(sysUserEntity);
+                    entity.setEntEnterpriseInfo(entEnterpriseInfoEntity);
+                }
+            }
+        }
+        projectCooperation.setPersonCooperationInfos(persons);
+        project.setProjectCooperationInfo(projectCooperation);
+        if("userPerId".equals(inType)){ // 学生
+            UserPersonInfoEntity userPersonInfoEntity = userPerInfoService.selectById(project.getUserPerId());
+            SysUserEntity sysUserEntity = sysUserService.selectById(userPersonInfoEntity.getUserId());
+            project.setSysUser(sysUserEntity);
+            project.setUserPersonInfo(userPersonInfoEntity);
+        }else if("userTeacherId".equals(inType)){ // 教师
+            UserTeacherInfoEntity userTeacherInfoEntity = userTeacherInfoService.selectById(project.getUserTeacherId());
+            SysUserEntity sysUserEntity = sysUserService.selectById(userTeacherInfoEntity.getUserId());
+            project.setSysUser(sysUserEntity);
+            project.setUserTeacherInfo(userTeacherInfoEntity);
+        }else if ("entInfoId".equals(inType)){ // 企业
+            EntEnterpriseInfoEntity entEnterpriseInfoEntity = entEnterpriseInfoService.selectById(project.getEntInfoId());
+            SysUserEntity sysUserEntity = sysUserService.selectById(entEnterpriseInfoEntity.getUserId());
+            project.setSysUser(sysUserEntity);
+            project.setEntEnterpriseInfo(entEnterpriseInfoEntity);
+        }
+         return R.ok().put("data", project);
     }
 
 }

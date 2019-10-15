@@ -9,6 +9,7 @@ import com.innovate.modules.innovate.entity.UserTeacherInfoEntity;
 import lombok.Data;
 
 import java.io.Serializable;
+import java.util.List;
 
 /**
  * 项目合作信息表
@@ -84,5 +85,11 @@ public class EntProjectCooperationInfoEntity implements Serializable {
 	 */
 	@TableField(exist = false)
 	private UserTeacherInfoEntity userTeacherInfo;
+
+	/**
+	 * 项目合作人
+	 */
+	@TableField(exist = false)
+	private List<EntPersonCooperationInfoEntity> personCooperationInfos;
 
 }

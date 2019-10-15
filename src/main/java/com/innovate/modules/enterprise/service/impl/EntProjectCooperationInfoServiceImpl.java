@@ -64,6 +64,11 @@ public class EntProjectCooperationInfoServiceImpl extends ServiceImpl<EntProject
         return R.ok();
     }
 
+    @Override
+    public EntProjectCooperationInfoEntity queryEntProjectCooperationInfoByProjectId(Long projectId) {
+        return baseMapper.queryEntProjectCooperationInfoByProjectId(projectId);
+    }
+
     // ================ 放弃列表方法，请勿删除 ====================
 //    private void template(){
 //        EntityWrapper<EntProjectCooperationInfoEntity> wrapper = new EntityWrapper<>();

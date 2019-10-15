@@ -49,5 +49,13 @@ public interface EntProjectInfoService extends IService<EntProjectInfoEntity> {
      */
     R updateEntExamine(Map<String, Object> params);
 
+    /**
+     * 项目关系信息 -- 返回项目实体，包含项目信息（发布者）、项目合作信息（合作者信息）
+     * @param proInfoId
+     * @param inType
+     * @return
+     */
+    R queryProjectPersonCooperationInfo(Long proInfoId, String inType);
+
 }
 

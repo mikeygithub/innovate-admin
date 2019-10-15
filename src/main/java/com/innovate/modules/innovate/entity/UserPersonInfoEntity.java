@@ -1,5 +1,6 @@
 package com.innovate.modules.innovate.entity;
 
+import com.baomidou.mybatisplus.annotations.TableField;
 import com.baomidou.mybatisplus.annotations.TableId;
 import com.baomidou.mybatisplus.annotations.TableName;
 import com.innovate.modules.sys.entity.SysUserEntity;
@@ -31,7 +32,9 @@ public class UserPersonInfoEntity implements Serializable {
     private String perSchoolPost;
     private String perSchoolHonor;
     private String perSocialPractice;
+    @TableField(exist = false)
     private SysUserEntity sysUserEntity;
+    @TableField(exist = false)
     private Long isDel;
     private Integer perWorking;          //'工作方式',
     private Integer perAge;              //'年龄',

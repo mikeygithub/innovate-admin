@@ -3,6 +3,7 @@ package com.innovate.modules.enterprise.entity;
 import com.baomidou.mybatisplus.annotations.TableField;
 import com.baomidou.mybatisplus.annotations.TableId;
 import com.baomidou.mybatisplus.annotations.TableName;
+import com.innovate.modules.sys.entity.SysUserEntity;
 import lombok.Data;
 
 import java.io.Serializable;
@@ -99,5 +100,13 @@ public class EntEnterpriseInfoEntity implements Serializable {
 	 */
 	@TableField(exist = false)
 	private List<EntEnterpriseAttachmentEntity> attachments;
+
+
+	/**
+	 * 企业用户信息
+	 */
+	@TableField(exist = false)
+	private SysUserEntity sysUser;
+
 
 }
