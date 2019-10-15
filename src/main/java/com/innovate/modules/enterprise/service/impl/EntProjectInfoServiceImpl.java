@@ -191,7 +191,7 @@ public class EntProjectInfoServiceImpl extends ServiceImpl<EntProjectInfoDao, En
             project.setSysUser(sysUserEntity);
             project.setEntEnterpriseInfo(entEnterpriseInfoEntity);
         }
-        return R.ok().put("data", project);
+         return R.ok().put("data", project);
     }
 
 }
