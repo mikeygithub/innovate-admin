@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.annotations.TableId;
 import com.baomidou.mybatisplus.annotations.TableName;
 import com.innovate.modules.innovate.entity.UserPersonInfoEntity;
 import com.innovate.modules.innovate.entity.UserTeacherInfoEntity;
+import com.innovate.modules.sys.entity.SysUserEntity;
 import lombok.Data;
 
 import java.io.Serializable;
@@ -88,5 +89,11 @@ public class EntProjectInfoEntity implements Serializable {
 	 */
 	@TableField(exist = false)
 	private EntEnterpriseInfoEntity entEnterpriseInfo;
+
+	/**
+	 * 用户数据
+	 */
+	@TableField(exist = false)
+	private SysUserEntity sysUser;
 
 }
