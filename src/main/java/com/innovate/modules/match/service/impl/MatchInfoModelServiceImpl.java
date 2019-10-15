@@ -149,6 +149,11 @@ public class MatchInfoModelServiceImpl implements MatchInfoModelService {
             matchTeacherEntity.setMatchId(matchId);
             matchTeacherService.insertOrUpdate(matchTeacherEntity);
         }
+        //移除文件
+        Map<String,Object> params = new HashMap<>();
+        params.put("matchId", matchInfoModel.getMatchInfoEntity().getMatchId());
+        matchAttachService.remove(params);
+        //保存文件
         for (MatchAttachEntity matchAttachEntity : matchInfoModel.getMatchAttachEntities()) {
             matchAttachEntity.setMatchId(matchId);
             matchAttachService.insertOrUpdate(matchAttachEntity);
