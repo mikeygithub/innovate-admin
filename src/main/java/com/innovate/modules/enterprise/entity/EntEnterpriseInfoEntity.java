@@ -3,6 +3,7 @@ package com.innovate.modules.enterprise.entity;
 import com.baomidou.mybatisplus.annotations.TableField;
 import com.baomidou.mybatisplus.annotations.TableId;
 import com.baomidou.mybatisplus.annotations.TableName;
+import com.innovate.modules.sys.entity.SysUserEntity;
 import lombok.Data;
 
 import java.io.Serializable;
@@ -11,7 +12,7 @@ import java.util.List;
 
 /**
  * 企业基本信息表
- *
+ * 
  * @author 莫智帆
  * @email 1217567927@qq.com
  * @date 2019-09-10 22:18:36
@@ -88,13 +89,24 @@ public class EntEnterpriseInfoEntity implements Serializable {
 	 * 入驻申请时间
 	 */
 	private Date entInTime;
+
+	/**
+	 * 是否审核
+	 */
+	private String inApply;
+
 	/**
 	 * 企业证明材料，附件
 	 */
 	@TableField(exist = false)
 	private List<EntEnterpriseAttachmentEntity> attachments;
+
+
 	/**
-	 * 审核状态：0待审核，1已审核
+	 * 企业用户信息
 	 */
-	private String inApply;
+	@TableField(exist = false)
+	private SysUserEntity sysUser;
+
+
 }
