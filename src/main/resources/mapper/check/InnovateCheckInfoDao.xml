@@ -209,7 +209,7 @@
             and a.check_score_avg is not null
         </if>
 
-        <if test="starPage != null and endPage != null">
+        <if test="startPage != null and endPage != null">
             limit #{startPage}, #{endPage}
         </if>
     </select>

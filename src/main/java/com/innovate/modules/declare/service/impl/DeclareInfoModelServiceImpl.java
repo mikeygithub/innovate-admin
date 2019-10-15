@@ -170,6 +170,11 @@ public class DeclareInfoModelServiceImpl implements DeclareInfoModelService {
             declareTeacherEntity.setDeclareId(declareId);
             declareTeacherService.insertOrUpdate(declareTeacherEntity);
         }
+        //移除文件
+        Map<String,Object> params = new HashMap<>();
+        params.put("declareId", declareId);
+        declareAttachService.remove(params);
+        //保存文件
         for (DeclareAttachEntity declareAttachEntity : declareInfoModel.getDeclareAttachEntities()) {
             declareAttachEntity.setDeclareId(declareId);
             declareAttachService.insertOrUpdate(declareAttachEntity);

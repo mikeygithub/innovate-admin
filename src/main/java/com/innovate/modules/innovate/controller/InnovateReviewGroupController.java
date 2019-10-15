@@ -30,6 +30,7 @@ public class InnovateReviewGroupController extends AbstractController {
     @GetMapping("/list")
     @RequiresPermissions("innovate:group:list")
     public R list(@RequestParam Map<String, Object> params){
+
         PageUtils page = innovateReviewGroupService.queryPage(params);
 
         return R.ok().put("page", page);

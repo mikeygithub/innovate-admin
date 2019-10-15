@@ -45,15 +45,15 @@
         <if test="instituteId != null and instituteId != ''">
             and a.institute_id = #{instituteId}
         </if>
-        <if test="project_audit_apply_status != null and projectAuditApplyStatus != ''">
+        <if test="project_audit_apply_status != null and project_audit_apply_status != ''">
             and project_audit_apply_status = #{project_audit_apply_status}
         </if>
 
-        <if test="project_audit_apply_status_more != null and projectAuditApplyStatusMore != ''">
+        <if test="project_audit_apply_status_more != null and project_audit_apply_status_more != ''">
             and project_audit_apply_status &gt; #{project_audit_apply_status_more}
         </if>
 
-        <if test="project_audit_apply_status_less != null and projectAuditApplyStatusLess != ''">
+        <if test="project_audit_apply_status_less != null and project_audit_apply_status_less != ''">
             and project_audit_apply_status &lt; #{project_audit_apply_status_less}
         </if>
 
@@ -178,15 +178,15 @@
         <if test="instituteId != null and instituteId != ''">
             and a.institute_id = #{instituteId}
         </if>
-        <if test="project_audit_apply_status != null and projectAuditApplyStatus != ''">
+        <if test="project_audit_apply_status != null and project_audit_apply_status != ''">
             and project_audit_apply_status = #{project_audit_apply_status}
         </if>
 
-        <if test="project_audit_apply_status_more != null and projectAuditApplyStatusMore != ''">
+        <if test="project_audit_apply_status_more != null and project_audit_apply_status_more != ''">
             and project_audit_apply_status &gt; #{project_audit_apply_status_more}
         </if>
 
-        <if test="project_audit_apply_status_less != null and projectAuditApplyStatusLess != ''">
+        <if test="project_audit_apply_status_less != null and project_audit_apply_status_less != ''">
             and project_audit_apply_status &lt; #{project_audit_apply_status_less}
         </if>
 
