@@ -76,6 +76,8 @@ public class ShiroConfig {
         filterMap.put("/swagger-resources/**", "anon");
         filterMap.put("/captcha.jpg", "anon");
         filterMap.put("/enterprise/**", "anon");
+        // 前端游客方式请求数据放行
+        filterMap.put("/webpage/**", "anon");
         filterMap.put("/**", "oauth2");
         shiroFilter.setFilterChainDefinitionMap(filterMap);
 

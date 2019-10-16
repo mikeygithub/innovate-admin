@@ -194,4 +194,41 @@ public class EntProjectInfoServiceImpl extends ServiceImpl<EntProjectInfoDao, En
          return R.ok().put("data", project);
     }
 
+    @DefaultArrayValue(targetType = java.util.Map.class, index = 0,
+            key = { "inApply", "pageSize", "currPage", "proType" }, defValue = { "1", "12", "1", "0" },
+            defValueEnum = { DefValueEnum.STRING, DefValueEnum.INTEGER, DefValueEnum.INTEGER , DefValueEnum.INTEGER})
+    @Override
+    public R queryWebEntProjectInfos(Map<String, Object> params) {
+        EntityWrapper<EntProjectInfoEntity> wrapper = new EntityWrapper<>();
+        wrapper.eq("in_apply", params.get("inApply"));
+        if(params.get("proType") != null && Integer.valueOf(params.get("proType").toString()) != 0){
+            wrapper.eq("pro_type", params.get("proType"));
+        }
+        Page<EntProjectInfoEntity> page = this.selectPage( new Query<EntProjectInfoEntity>(params).getPage(),wrapper);
+        List<EntProjectInfoEntity> records = page.getRecords();
+        if(records != null && records.size() > 0){
+            for (int i = 0; i < records.size(); i++){
+                EntProjectInfoEntity project = records.get(i);
+                // 项目发布者
+                if(project.getUserPerId() != null){ // 学生
+                    UserPersonInfoEntity userPersonInfoEntity = userPerInfoService.selectById(project.getUserPerId());
+                    SysUserEntity sysUserEntity = sysUserService.selectById(userPersonInfoEntity.getUserId());
+                    userPersonInfoEntity.setSysUserEntity(sysUserEntity);
+                    project.setUserPersonInfo(userPersonInfoEntity);
+                }else if(project.getUserTeacherId() != null){ // 教师
+                    UserTeacherInfoEntity userTeacherInfoEntity = userTeacherInfoService.selectById(project.getUserTeacherId());
+                    SysUserEntity sysUserEntity = sysUserService.selectById(userTeacherInfoEntity.getUserId());
+                    userTeacherInfoEntity.setSysUserEntity(sysUserEntity);
+                    project.setUserTeacherInfo(userTeacherInfoEntity);
+                }else if(project.getEntInfoId() != null){ // 企业
+                    EntEnterpriseInfoEntity entEnterpriseInfoEntity = entEnterpriseInfoService.selectById(project.getEntInfoId());
+                    SysUserEntity sysUserEntity = sysUserService.selectById(entEnterpriseInfoEntity.getUserId());
+                    entEnterpriseInfoEntity.setSysUser(sysUserEntity);
+                    project.setEntEnterpriseInfo(entEnterpriseInfoEntity);
+                }
+            }
+        }
+        return R.ok().put("data", page);
+    }
+
 }

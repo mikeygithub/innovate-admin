@@ -1,5 +1,6 @@
 package com.innovate.modules.innovate.service.impl;
 
+import com.baomidou.mybatisplus.enums.SqlLike;
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.plugins.Page;
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
@@ -30,9 +31,16 @@ public class InnovateReviewGroupServiceImpl extends ServiceImpl<InnovateReviewGr
 
     @Override
     public PageUtils queryPage(Map<String, Object> params) {
+
+        String key = params.get("key").toString();
+
+        EntityWrapper<InnovateReviewGroupEntity> ew = new EntityWrapper<>();
+
+        if (key!=null&&key!="")ew.like("group_name",key, SqlLike.DEFAULT);
+
         Page<InnovateReviewGroupEntity> page = this.selectPage(
                 new Query<InnovateReviewGroupEntity>(params).getPage(),
-                new EntityWrapper<InnovateReviewGroupEntity>()
+                ew
         );
         return new PageUtils(page);
     }
