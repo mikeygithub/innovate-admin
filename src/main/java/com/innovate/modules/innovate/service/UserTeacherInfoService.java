@@ -28,4 +28,12 @@ public interface UserTeacherInfoService extends IService<UserTeacherInfoEntity> 
 
     @Transactional
     void saveOrUpdate(UserTeacherInfoEntity userTeacherInfoEntity);
+
+    /**
+     * 用户id 查教师id
+     * @param userId
+     * @return
+     */
+    Long queryUserTeacherIdByUserId(Long userId);
+
 }

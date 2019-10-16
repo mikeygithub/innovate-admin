@@ -28,4 +28,12 @@ public interface UserTeacherInfoDao extends BaseMapper<UserTeacherInfoEntity> {
     List<UserTeacherInfoEntity> queryAll(Long userTeacherId);
     Long deleteByProjectId(Long projectId);
     UserTeacherInfoEntity queryByUserId(Long userId);
+
+    /**
+     * 用户id 查教师id
+     * @param userId
+     * @return
+     */
+    Long queryUserTeacherIdByUserId(Long userId);
+
 }

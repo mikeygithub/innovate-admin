@@ -64,5 +64,18 @@ public interface EntProjectInfoService extends IService<EntProjectInfoEntity> {
      */
     R queryWebEntProjectInfos(Map<String, Object> params);
 
+    /**
+     * 保存项目
+     * @param entProjectInfoEntity
+     * @return
+     */
+    R insertEntProject(EntProjectInfoEntity entProjectInfoEntity);
+
+    /**
+     * 用户 的 项目列表
+     * @return
+     */
+    R queryPeojects();
+
 }
 
