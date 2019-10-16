@@ -165,7 +165,7 @@
 
     <!-- 处理项目信息审核 -->
     <update id="updateEntExamine" parameterType="java.util.Map">
-        UPDATE
+        UPDATE ent_project_info
         <set>
             <if test="inApply != null"> in_apply = #{inApply} </if>
         </set>
