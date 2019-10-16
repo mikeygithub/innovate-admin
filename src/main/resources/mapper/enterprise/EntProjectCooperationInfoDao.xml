@@ -194,4 +194,13 @@
             pro_info_id = #{projectId}
     </select>
 
+    <!-- 更新项目合作审核状态 -->
+    <update id="updateProjectExamine" parameterType="java.util.Map">
+        UPDATE ent_project_cooperation_info
+        <set>
+            <if test="inApply != null"> in_apply = #{inApply}</if>
+        </set>
+        WHERE pro_cooperation_info_id = #{proCooperationInfoId}
+    </update>
+
 </mapper>
