@@ -68,7 +68,7 @@ public class EntProjectCooperationInfoController extends AbstractController {
     @RequestMapping("/save")
     //@RequiresPermissions("enterprise:project:cooperation:save")
     public R save(@RequestBody EntProjectCooperationInfoEntity entProjectCooperationInfo){
-		entProjectCooperationInfoService.insert(entProjectCooperationInfo);
+		entProjectCooperationInfoService.insertProjectCooperation(entProjectCooperationInfo);
 
         return R.ok();
     }
