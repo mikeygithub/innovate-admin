@@ -72,4 +72,9 @@ public class UserPerInfoServiceImpl extends ServiceImpl<UserPersonInfoDao, UserP
     public List<UserPersonInfoEntity> queryByUserInstituteIds(Long instituteId) {
         return baseMapper.queryByUserInstituteIds(instituteId);
     }
+
+    @Override
+    public Long queryUserPerIdByUserId(Long userId) {
+        return baseMapper.queryUserPerIdByUserId(userId);
+    }
 }

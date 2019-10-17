@@ -25,11 +25,14 @@ import com.innovate.modules.innovate.entity.UserTeacherInfoEntity;
 import com.innovate.modules.innovate.service.UserPerInfoService;
 import com.innovate.modules.innovate.service.UserTeacherInfoService;
 import com.innovate.modules.sys.entity.SysUserEntity;
+import com.innovate.modules.sys.service.SysUserRoleService;
 import com.innovate.modules.sys.service.SysUserService;
 import net.bytebuddy.implementation.bind.annotation.Default;
+import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -54,6 +57,9 @@ public class EntProjectInfoServiceImpl extends ServiceImpl<EntProjectInfoDao, En
 
     @Autowired
     private EntPersonCooperationInfoService entPersonCooperationInfoService;
+
+    @Autowired
+    private SysUserRoleService sysUserRoleService;
 
     @DefaultValue(targetType = java.util.Map.class, index = 0, key = "inType", defValue = "userPerId", defValueEnum = DefValueEnum.STRING)
     @DefaultArrayValue(targetType = java.util.Map.class, index = 0, key = {"inApply"}, defValue = {"0"}, defValueEnum = {DefValueEnum.STRING})
@@ -229,6 +235,74 @@ public class EntProjectInfoServiceImpl extends ServiceImpl<EntProjectInfoDao, En
             }
         }
         return R.ok().put("data", page);
+    }
+
+    @Override
+    public R insertEntProject(EntProjectInfoEntity entProjectInfo) {
+        HashMap<Long, Long> roleMap = new HashMap<>();
+        roleMap.put(2L, 2L);
+        roleMap.put(3L, 3L);
+        roleMap.put(7L, 7L);
+        SysUserEntity user = (SysUserEntity) SecurityUtils.getSubject().getPrincipal();
+        if(user == null){
+            return  R.error("未登录系统或已过期，请重新登录。");
+        }
+        List<Long> roles = sysUserRoleService.queryRoleIdList(user.getUserId());
+        if(roles != null && roles.size() > 0){
+            for(int i = 0; i < roles.size(); i++){
+                Long aLong = roles.get(i);
+                Long aLong1 = roleMap.get(aLong);
+                if(aLong1 != null && aLong1 == 2L){ // 学生
+                    Long userPerId = userPerInfoService.queryUserPerIdByUserId(user.getUserId());
+                    entProjectInfo.setUserPerId(userPerId);
+                    break;
+                }else if (aLong1 != null && aLong1 == 3L){ // 教师
+                    Long userTeacherId = userTeacherInfoService.queryUserTeacherIdByUserId(user.getUserId());
+                    entProjectInfo.setUserTeacherId(userTeacherId);
+                    break;
+                }else if (aLong1 != null && aLong1 == 7L){ // 企业
+                    Long entInfoId = entEnterpriseInfoService.queryEntInfoIdByUserId(user.getUserId());
+                    entProjectInfo.setEntInfoId(entInfoId);
+                    break;
+                }
+            }
+        }
+        baseMapper.insert(entProjectInfo);
+        return R.ok();
+    }
+
+    @Override
+    public R queryPeojects() {
+        HashMap<Long, Long> roleMap = new HashMap<>();
+        roleMap.put(2L, 2L);
+        roleMap.put(3L, 3L);
+        roleMap.put(7L, 7L);
+        SysUserEntity user = (SysUserEntity) SecurityUtils.getSubject().getPrincipal();
+        if(user == null){
+            return  R.error("未登录系统或已过期，请重新登录。");
+        }
+        List<Long> roles = sysUserRoleService.queryRoleIdList(user.getUserId());
+        List<EntProjectInfoEntity> result = null;
+        if(roles != null && roles.size() > 0){
+            for(int i = 0; i < roles.size(); i++){
+                Long aLong = roles.get(i);
+                Long aLong1 = roleMap.get(aLong);
+                if(aLong1 != null && aLong1 == 2L){ // 学生
+                    Long userPerId = userPerInfoService.queryUserPerIdByUserId(user.getUserId());
+                    result = baseMapper.queryProjectsByUserPerId(userPerId);
+                    break;
+                }else if (aLong1 != null && aLong1 == 3L){ // 教师
+                    Long userTeacherId = userTeacherInfoService.queryUserTeacherIdByUserId(user.getUserId());
+                    result = baseMapper.queryProjectsByUserTeacherId(userTeacherId);
+                    break;
+                }else if (aLong1 != null && aLong1 == 7L){ // 企业
+                    Long entInfoId = entEnterpriseInfoService.queryEntInfoIdByUserId(user.getUserId());
+                    result = baseMapper.queryProjectsByEnterId(entInfoId);
+                    break;
+                }
+            }
+        }
+        return R.ok().put("data", result);
     }
 
 }

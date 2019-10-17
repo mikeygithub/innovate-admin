@@ -15,15 +15,33 @@ import com.innovate.modules.enterprise.entity.EntProjectCooperationInfoEntity;
 import com.innovate.modules.enterprise.enums.DefValueEnum;
 import com.innovate.modules.enterprise.service.EntEnterpriseInfoService;
 import com.innovate.modules.enterprise.service.EntProjectCooperationInfoService;
+import com.innovate.modules.innovate.service.UserPerInfoService;
+import com.innovate.modules.innovate.service.UserTeacherInfoService;
+import com.innovate.modules.sys.entity.SysUserEntity;
+import com.innovate.modules.sys.service.SysUserRoleService;
+import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 
 @Service("entProjectCooperationInfoService")
 public class EntProjectCooperationInfoServiceImpl extends ServiceImpl<EntProjectCooperationInfoDao, EntProjectCooperationInfoEntity> implements EntProjectCooperationInfoService {
+
+    @Autowired
+    private SysUserRoleService sysUserRoleService;
+
+    @Autowired
+    private UserTeacherInfoService userTeacherInfoService;
+
+    @Autowired
+    private UserPerInfoService userPerInfoService;
+
+    @Autowired
+    private EntEnterpriseInfoService entEnterpriseInfoService;
 
     @DefaultArrayValue(targetType = java.util.Map.class, index = 0, key = {"inApply", "inType"}, defValue = {"0", "userPerId"}, defValueEnum = {DefValueEnum.STRING, DefValueEnum.STRING})
     @Override
@@ -67,6 +85,39 @@ public class EntProjectCooperationInfoServiceImpl extends ServiceImpl<EntProject
     @Override
     public EntProjectCooperationInfoEntity queryEntProjectCooperationInfoByProjectId(Long projectId) {
         return baseMapper.queryEntProjectCooperationInfoByProjectId(projectId);
+    }
+
+    @Override
+    public R insertProjectCooperation(EntProjectCooperationInfoEntity entProjectCooperationInfo) {
+        HashMap<Long, Long> roleMap = new HashMap<>();
+        roleMap.put(2L, 2L);
+        roleMap.put(3L, 3L);
+        roleMap.put(7L, 7L);
+        SysUserEntity user = (SysUserEntity) SecurityUtils.getSubject().getPrincipal();
+        if(user == null){
+            return  R.error("未登录系统或已过期，请重新登录。");
+        }
+        List<Long> roles = sysUserRoleService.queryRoleIdList(user.getUserId());
+        if(roles != null && roles.size() > 0){
+            for(int i = 0; i < roles.size(); i++){
+                Long aLong = roles.get(i);
+                Long aLong1 = roleMap.get(aLong);
+                if(aLong1 != null && aLong1 == 2L){ // 学生
+                    Long userPerId = userPerInfoService.queryUserPerIdByUserId(user.getUserId());
+                    entProjectCooperationInfo.setUserPerId(userPerId);
+                    break;
+                }else if (aLong1 != null && aLong1 == 3L){ // 教师
+                    Long userTeacherId = userTeacherInfoService.queryUserTeacherIdByUserId(user.getUserId());
+                    entProjectCooperationInfo.setUserTeacherId(userTeacherId);
+                    break;
+                }else if (aLong1 != null && aLong1 == 7L){ // 企业
+                    Long entInfoId = entEnterpriseInfoService.queryEntInfoIdByUserId(user.getUserId());
+                    entProjectCooperationInfo.setEntInfoId(entInfoId);
+                    break;
+                }
+            }
+        }
+        return R.ok();
     }
 
     // ================ 放弃列表方法，请勿删除 ====================
