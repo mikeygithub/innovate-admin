@@ -40,5 +40,12 @@ public interface EntProjectCooperationInfoService extends IService<EntProjectCoo
      */
     EntProjectCooperationInfoEntity queryEntProjectCooperationInfoByProjectId(Long projectId);
 
+    /**
+     * 新增项目合作关系
+     * @param entProjectCooperationInfo
+     * @return
+     */
+    R insertProjectCooperation(EntProjectCooperationInfoEntity entProjectCooperationInfo);
+
 }
 

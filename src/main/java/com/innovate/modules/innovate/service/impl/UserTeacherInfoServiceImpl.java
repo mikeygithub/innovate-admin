@@ -74,4 +74,9 @@ public class UserTeacherInfoServiceImpl extends ServiceImpl<UserTeacherInfoDao, 
         this.insertOrUpdate(userTeacherInfoEntity);
         sysUserService.insertOrUpdate(sysUserEntity);
     }
+
+    @Override
+    public Long queryUserTeacherIdByUserId(Long userId) {
+        return baseMapper.queryUserTeacherIdByUserId(userId);
+    }
 }

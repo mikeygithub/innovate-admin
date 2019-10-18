@@ -90,4 +90,15 @@
         select * from innovate_user_person_info
         where user_per_id = #{perId}
     </select>
+    
+    <!-- 用户id 查学生id -->
+    <select id="queryUserPerIdByUserId" parameterType="java.lang.Long" resultType="java.lang.Long">
+        SELECT
+            user_per_id
+        FROM
+            innovate_user_person_info
+        WHERE
+            user_id = #{userId}
+    </select>
+    
 </mapper>

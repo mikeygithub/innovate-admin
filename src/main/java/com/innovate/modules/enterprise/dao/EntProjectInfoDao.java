@@ -66,4 +66,27 @@ public interface EntProjectInfoDao extends BaseMapper<EntProjectInfoEntity> {
      */
     boolean updateEntExamine(Map<String, Object> params);
 
+
+    /**
+     * 学生用户项目
+     * @param userPerId
+     * @return
+     */
+    List<EntProjectInfoEntity> queryProjectsByUserPerId(Long userPerId);
+
+    /**
+     * 教师用户项目
+     * @param userTeacherId
+     * @return
+     */
+    List<EntProjectInfoEntity> queryProjectsByUserTeacherId(Long userTeacherId);
+
+    /**
+     * 企业用户项目
+     * @param entInfoId
+     * @return
+     */
+    List<EntProjectInfoEntity> queryProjectsByEnterId(Long entInfoId);
+
+
 }

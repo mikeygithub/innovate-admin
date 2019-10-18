@@ -84,4 +84,14 @@
         where user_teacher_id = #{userTeacherId}
     </select>
 
+    <!-- 用户id 查教师id -->
+    <select id="queryUserTeacherIdByUserId" parameterType="java.lang.Long" resultType="java.lang.Long">
+        SELECT
+            user_teacher_id
+        FROM
+            innovate_user_teacher_info
+        WHERE
+            user_id = #{userId}
+    </select>
+
 </mapper>

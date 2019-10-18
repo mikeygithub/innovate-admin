@@ -2,14 +2,24 @@ package com.innovate.modules.enterprise.controller;
 
 import com.innovate.common.utils.PageUtils;
 import com.innovate.common.utils.R;
+import com.innovate.modules.enterprise.entity.EntEnterpriseInfoEntity;
 import com.innovate.modules.enterprise.entity.EntProjectInfoEntity;
+import com.innovate.modules.enterprise.service.EntEnterpriseInfoService;
 import com.innovate.modules.enterprise.service.EntProjectInfoService;
+import com.innovate.modules.innovate.entity.UserPersonInfoEntity;
+import com.innovate.modules.innovate.entity.UserTeacherInfoEntity;
+import com.innovate.modules.innovate.service.UserPerInfoService;
+import com.innovate.modules.innovate.service.UserTeacherInfoService;
 import com.innovate.modules.sys.controller.AbstractController;
+import com.innovate.modules.sys.entity.SysUserEntity;
+import com.innovate.modules.sys.service.SysUserRoleService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 
@@ -55,6 +65,15 @@ public class EntProjectInfoController extends AbstractController {
     }
 
     /**
+     * 查询用户对应的项目信息
+     * @return
+     */
+    @RequestMapping("/queryPeojects")
+    public R queryPeojects(){
+        return entProjectInfoService.queryPeojects();
+    }
+
+    /**
      * 处理项目信息审核
      * @return
      */
@@ -68,11 +87,9 @@ public class EntProjectInfoController extends AbstractController {
      * 保存
      */
     @RequestMapping("/save")
-    @RequiresPermissions("enterprise:project:info:save")
+    // @RequiresPermissions("enterprise:project:info:save")
     public R save(@RequestBody EntProjectInfoEntity entProjectInfo){
-		entProjectInfoService.insert(entProjectInfo);
-
-        return R.ok();
+        return entProjectInfoService.insertEntProject(entProjectInfo);
     }
 
     /**
