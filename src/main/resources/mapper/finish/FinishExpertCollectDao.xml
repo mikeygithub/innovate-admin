@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.innovate.modules.finish.dao.FinishExpertCollectDao">
+
+	<!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="com.innovate.modules.finish.entity.FinishExpertCollectEntity" id="innovateFinishExpertCollectMap">
+        <result property="expertCollectId" column="expert_collect_id"/>
+        <result property="expertCollectTime" column="expert_collect_time"/>
+        <result property="expertCollectInstituteId" column="expert_collect_institute_id"/>
+        <result property="expertCollectInstituteEmail" column="expert_collect_institute_email"/>
+        <result property="expertCollectWriter" column="expert_collect_writer"/>
+        <result property="expertCollectWriterPhone" column="expert_collect_writer_phone"/>
+        <result property="isDel" column="is_del"/>
+    </resultMap>
+
+
+</mapper>

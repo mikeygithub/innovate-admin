@@ -33,7 +33,7 @@ public class EntPersonCooperationInfoController {
      * 列表
      */
     @RequestMapping("/list")
-    @RequiresPermissions("enterprise:person:cooperation:list")
+    // @RequiresPermissions("enterprise:person:cooperation:list")
     public R list(@RequestParam Map<String, Object> params){
         PageUtils page = entPersonCooperationInfoService.queryPage(params);
 
