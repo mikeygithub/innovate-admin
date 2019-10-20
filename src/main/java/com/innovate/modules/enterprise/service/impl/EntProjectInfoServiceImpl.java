@@ -290,19 +290,43 @@ public class EntProjectInfoServiceImpl extends ServiceImpl<EntProjectInfoDao, En
                 if(aLong1 != null && aLong1 == 2L){ // 学生
                     Long userPerId = userPerInfoService.queryUserPerIdByUserId(user.getUserId());
                     result = baseMapper.queryProjectsByUserPerId(userPerId);
+                    List<Long> pcids = entProjectCooperationInfoService.queryProjectInfoIdByType("user_per_id", userPerId);
+                    invokeProject(result, pcids);
                     break;
                 }else if (aLong1 != null && aLong1 == 3L){ // 教师
                     Long userTeacherId = userTeacherInfoService.queryUserTeacherIdByUserId(user.getUserId());
                     result = baseMapper.queryProjectsByUserTeacherId(userTeacherId);
+                    List<Long> pcids = entProjectCooperationInfoService.queryProjectInfoIdByType("user_teacher_id", userTeacherId);
+                    invokeProject(result, pcids);
                     break;
                 }else if (aLong1 != null && aLong1 == 7L){ // 企业
                     Long entInfoId = entEnterpriseInfoService.queryEntInfoIdByUserId(user.getUserId());
                     result = baseMapper.queryProjectsByEnterId(entInfoId);
+                    List<Long> pcids = entProjectCooperationInfoService.queryProjectInfoIdByType("ent_info_id", entInfoId);
+                    invokeProject(result, pcids);
                     break;
                 }
             }
         }
         return R.ok().put("data", result);
     }
+
+    /**
+     * 提出已存在合作关系的项目
+     * @param result
+     * @param pcids
+     */
+    private void invokeProject(List<EntProjectInfoEntity> result, List<Long> pcids) {
+        if (result != null && pcids != null) {
+            for (int j = 0; j < result.size(); j++) {
+                for (int k = 0; k < pcids.size(); k++) {
+                    if (result.get(j).getProInfoId() == pcids.get(k)) {
+                        result.remove(j);
+                    }
+                }
+            }
+        }
+    }
+
 
 }

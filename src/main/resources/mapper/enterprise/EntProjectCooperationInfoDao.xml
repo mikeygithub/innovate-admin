@@ -194,6 +194,20 @@
             pro_info_id = #{projectId}
     </select>
 
+    <!-- 根据类型获取相关合作项目 -->
+    <select id="queryProjectInfoIdByType" resultType="java.lang.Long">
+        SELECT
+            pro_info_id
+        FROM
+            ent_project_cooperation_info
+        <where>
+            <if test="type != null and type eq 'user_per_id'"> and user_per_id = #{id} </if>
+            <if test="type != null and type eq 'user_teacher_id'"> and user_teacher_id = #{id} </if>
+            <if test="type != null and type eq 'ent_info_id'"> and ent_info_id = #{id} </if>
+        </where>
+
+    </select>
+
     <!-- 更新项目合作审核状态 -->
     <update id="updateProjectExamine" parameterType="java.util.Map">
         UPDATE ent_project_cooperation_info
