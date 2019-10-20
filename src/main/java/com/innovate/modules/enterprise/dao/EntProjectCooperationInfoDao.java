@@ -59,4 +59,12 @@ public interface EntProjectCooperationInfoDao extends BaseMapper<EntProjectCoope
      */
     EntProjectCooperationInfoEntity queryEntProjectCooperationInfoByProjectId(Long projectId);
 
+    /**
+     * 根据类型获取相关合作项目
+     * @param type
+     * @param id
+     * @return
+     */
+    List<Long> queryProjectInfoIdByType(String type, long id);
+
 }

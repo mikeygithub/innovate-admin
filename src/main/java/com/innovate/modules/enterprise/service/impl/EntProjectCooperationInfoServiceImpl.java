@@ -116,8 +116,14 @@ public class EntProjectCooperationInfoServiceImpl extends ServiceImpl<EntProject
                     break;
                 }
             }
+            baseMapper.insert(entProjectCooperationInfo);
         }
         return R.ok();
+    }
+
+    @Override
+    public List<Long> queryProjectInfoIdByType(String type, long id) {
+        return baseMapper.queryProjectInfoIdByType(type, id);
     }
 
     // ================ 放弃列表方法，请勿删除 ====================
