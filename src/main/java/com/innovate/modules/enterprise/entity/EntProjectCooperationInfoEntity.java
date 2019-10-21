@@ -87,9 +87,27 @@ public class EntProjectCooperationInfoEntity implements Serializable {
 	private UserTeacherInfoEntity userTeacherInfo;
 
 	/**
-	 * 项目合作人
+	 * 项目所有合作人
 	 */
 	@TableField(exist = false)
 	private List<EntPersonCooperationInfoEntity> personCooperationInfos;
+
+	/**
+	 * 项目学生合作人
+	 */
+	@TableField(exist = false)
+	private List<EntPersonCooperationInfoEntity> personCooperationPer;
+
+	/**
+	 * 项目教师合作人
+	 */
+	@TableField(exist = false)
+	private List<EntPersonCooperationInfoEntity> personCooperationTeacher;
+
+	/**
+	 * 项目企业合作人
+	 */
+	@TableField(exist = false)
+	private List<EntPersonCooperationInfoEntity> personCooperationEnt;
 
 }
