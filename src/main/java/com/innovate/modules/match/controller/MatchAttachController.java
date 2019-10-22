@@ -47,6 +47,7 @@ public class MatchAttachController extends AbstractController {
     @RequiresPermissions("innovate:match:save")
     public Object uploadFile(@RequestParam("file") List<MultipartFile> files, HttpServletRequest request) {
         String matchName = request.getParameter("matchName");
+        if (matchName==null||matchName.equals(""))matchName="MatchNameISNull";
         String UPLOAD_FILES_PATH = ConfigApi.UPLOAD_URL + matchName + "/" + RandomUtils.getRandomNums() + "/";
         if (Objects.isNull(files) || files.isEmpty()) {
             return R.error("文件为空，请重新上传");

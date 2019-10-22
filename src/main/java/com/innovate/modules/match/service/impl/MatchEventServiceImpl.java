@@ -1,5 +1,6 @@
 package com.innovate.modules.match.service.impl;
 
+import com.baomidou.mybatisplus.enums.SqlLike;
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.plugins.Page;
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
@@ -36,9 +37,18 @@ public class MatchEventServiceImpl extends ServiceImpl<MatchEventDao, MatchEvent
 
     @Override
     public PageUtils queryPage(Map<String, Object> params) {
+
+        String key = params.get("key").toString();
+
+        EntityWrapper<MatchEventEntity> ew = new EntityWrapper<>();
+
+        ew.setEntity(new MatchEventEntity());
+
+        if (key!=null&&!key.equals(""))ew.like("event_name",key, SqlLike.DEFAULT);
+
         Page<MatchEventEntity> page = this.selectPage(
                 new Query<MatchEventEntity>(params).getPage(),
-                new EntityWrapper<MatchEventEntity>()
+                ew
         );
         return new PageUtils(page);
     }
