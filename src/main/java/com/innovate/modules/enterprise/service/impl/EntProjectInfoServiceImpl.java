@@ -1,15 +1,14 @@
 package com.innovate.modules.enterprise.service.impl;
 
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
-import com.baomidou.mybatisplus.mapper.Wrapper;
 import com.baomidou.mybatisplus.plugins.Page;
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
-import com.innovate.common.utils.Constant;
 import com.innovate.common.utils.PageUtils;
 import com.innovate.common.utils.Query;
 import com.innovate.common.utils.R;
 import com.innovate.modules.enterprise.annotation.DefaultArrayValue;
 import com.innovate.modules.enterprise.annotation.DefaultValue;
+import com.innovate.modules.enterprise.annotation.HasAdminRole;
 import com.innovate.modules.enterprise.dao.EntProjectInfoDao;
 import com.innovate.modules.enterprise.entity.EntEnterpriseInfoEntity;
 import com.innovate.modules.enterprise.entity.EntPersonCooperationInfoEntity;
@@ -27,7 +26,6 @@ import com.innovate.modules.innovate.service.UserTeacherInfoService;
 import com.innovate.modules.sys.entity.SysUserEntity;
 import com.innovate.modules.sys.service.SysUserRoleService;
 import com.innovate.modules.sys.service.SysUserService;
-import net.bytebuddy.implementation.bind.annotation.Default;
 import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -74,6 +72,14 @@ public class EntProjectInfoServiceImpl extends ServiceImpl<EntProjectInfoDao, En
             wrapper.isNotNull("user_teacher_id");
         }else if ("entInfoId".equals(type)){ // 企业
             wrapper.isNotNull("ent_info_id");
+        }
+        // 角色条件
+        if(params.get("user_per_id") != null){ // 学生
+            wrapper.eq("user_per_id",params.get("user_per_id"));
+        }else if(params.get("user_teacher_id") != null){// 教师
+            wrapper.eq("user_teacher_id",params.get("user_teacher_id"));
+        }else if(params.get("ent_info_id") != null){// 企业
+            wrapper.eq("ent_info_id",params.get("ent_info_id"));
         }
         if("0".equals(params.get("inApply"))){
             wrapper.eq("in_apply", "0");

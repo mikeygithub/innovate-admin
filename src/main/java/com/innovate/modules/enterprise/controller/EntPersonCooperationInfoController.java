@@ -2,6 +2,7 @@ package com.innovate.modules.enterprise.controller;
 
 import com.innovate.common.utils.PageUtils;
 import com.innovate.common.utils.R;
+import com.innovate.modules.enterprise.annotation.HasAdminRole;
 import com.innovate.modules.enterprise.entity.EntPersonCooperationInfoEntity;
 import com.innovate.modules.enterprise.service.EntPersonCooperationInfoService;
 import com.innovate.modules.enterprise.service.EntProjectInfoService;
@@ -32,6 +33,12 @@ public class EntPersonCooperationInfoController {
     /**
      * 列表
      */
+    @HasAdminRole(
+            targetType = java.util.Map.class,
+            index = 0, roleIds = {"9","10"}, perRoleId = "2",
+            perRoleKey = "user_per_id", teacherRoleId = "3",
+            teacherRoleKey = "user_teacher_id", entRoleId = "7",entRoleKey = "ent_info_id"
+    )
     @RequestMapping("/list")
     // @RequiresPermissions("enterprise:person:cooperation:list")
     public R list(@RequestParam Map<String, Object> params){

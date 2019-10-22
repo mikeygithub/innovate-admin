@@ -1,16 +1,14 @@
 package com.innovate.modules.enterprise.service.impl;
 
-import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
 import com.github.pagehelper.Page;
 import com.innovate.common.utils.PageUtils;
 import com.innovate.common.utils.PagingTool;
-import com.innovate.common.utils.Query;
 import com.innovate.common.utils.R;
 import com.innovate.modules.enterprise.annotation.DefaultArrayValue;
 import com.innovate.modules.enterprise.annotation.DefaultValue;
+import com.innovate.modules.enterprise.annotation.HasAdminRole;
 import com.innovate.modules.enterprise.dao.EntProjectCooperationInfoDao;
-import com.innovate.modules.enterprise.entity.EntEnterpriseInfoEntity;
 import com.innovate.modules.enterprise.entity.EntProjectCooperationInfoEntity;
 import com.innovate.modules.enterprise.enums.DefValueEnum;
 import com.innovate.modules.enterprise.service.EntEnterpriseInfoService;

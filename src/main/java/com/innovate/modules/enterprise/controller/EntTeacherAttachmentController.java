@@ -66,7 +66,7 @@ public class EntTeacherAttachmentController {
      * 保存
      */
     @RequestMapping("/save")
-    @RequiresPermissions("enterprise:teacher:attachment:save")
+//    @RequiresPermissions("enterprise:teacher:attachment:save")
     public R save(@RequestParam("file") List<MultipartFile> files, HttpServletRequest request) {
 
         String teacherId = request.getParameter("teacherId");

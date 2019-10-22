@@ -10,6 +10,8 @@ import com.innovate.modules.innovate.service.InnovateGradeService;
 import com.innovate.modules.innovate.service.InnovateInstituteService;
 import com.innovate.modules.innovate.service.UserPerInfoService;
 import com.innovate.modules.sys.controller.AbstractController;
+import com.innovate.modules.sys.entity.SysUserEntity;
+import com.innovate.modules.sys.service.SysUserService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -31,6 +33,8 @@ public class UserPersonInfoController extends AbstractController {
     private InnovateInstituteService innovateInstituteService;
     @Autowired
     private InnovateGradeService innovateGradeService;
+    @Autowired
+    private SysUserService sysUserService;
 
     /**
      * 获取信息
@@ -44,6 +48,18 @@ public class UserPersonInfoController extends AbstractController {
                 .put("userPerson",userPerson)
                 .put("institute", institute)
                 .put("grade", grade);
+    }
+
+    /**
+     * 学生详细信息
+     * @return
+     */
+    @RequestMapping("/perInfo/{id}")
+    public R perInfo(@PathVariable("id") Long id){
+        UserPersonInfoEntity entity = userPerInfoService.selectById(id);
+        SysUserEntity sysUserEntity = sysUserService.selectById(entity.getUserId());
+        entity.setSysUserEntity(sysUserEntity);
+        return R.ok().put("data", entity);
     }
 
     /**

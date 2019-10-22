@@ -24,4 +24,7 @@ public class MatchEventEntity implements Serializable {
     private Long eventProjectNum;
     @JsonSerialize(using= ToStringSerializer.class)
     private Double eventAwardMoney;
+    private String attachName;
+    private String attachPath;
+    private String fileAskContent;
 }
