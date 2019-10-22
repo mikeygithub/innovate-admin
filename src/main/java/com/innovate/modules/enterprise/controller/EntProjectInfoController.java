@@ -2,24 +2,15 @@ package com.innovate.modules.enterprise.controller;
 
 import com.innovate.common.utils.PageUtils;
 import com.innovate.common.utils.R;
-import com.innovate.modules.enterprise.entity.EntEnterpriseInfoEntity;
+import com.innovate.modules.enterprise.annotation.HasAdminRole;
 import com.innovate.modules.enterprise.entity.EntProjectInfoEntity;
-import com.innovate.modules.enterprise.service.EntEnterpriseInfoService;
 import com.innovate.modules.enterprise.service.EntProjectInfoService;
-import com.innovate.modules.innovate.entity.UserPersonInfoEntity;
-import com.innovate.modules.innovate.entity.UserTeacherInfoEntity;
-import com.innovate.modules.innovate.service.UserPerInfoService;
-import com.innovate.modules.innovate.service.UserTeacherInfoService;
 import com.innovate.modules.sys.controller.AbstractController;
-import com.innovate.modules.sys.entity.SysUserEntity;
-import com.innovate.modules.sys.service.SysUserRoleService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 
@@ -39,6 +30,12 @@ public class EntProjectInfoController extends AbstractController {
     /**
      * 列表
      */
+    @HasAdminRole(
+            targetType = java.util.Map.class,
+            index = 0, roleIds = {"9","10"}, perRoleId = "2",
+            perRoleKey = "user_per_id", teacherRoleId = "3",
+            teacherRoleKey = "user_teacher_id", entRoleId = "7",entRoleKey = "ent_info_id"
+    )
     @RequestMapping("/list")
     // @RequiresPermissions("enterprise:project:info:list")
     public R list(@RequestParam Map<String, Object> params){

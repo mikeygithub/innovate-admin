@@ -69,7 +69,7 @@ public class UserTeacherInfoController extends AbstractController {
     }
 
     /**
-     * 学生详细信息
+     * 教师详细信息
      * @return
      */
     @RequestMapping("/teacherInfo/{id}")
