@@ -3,11 +3,13 @@ package com.innovate.modules.innovate.controller;
 import com.innovate.common.utils.PageUtils;
 import com.innovate.common.utils.R;
 import com.innovate.modules.innovate.entity.InnovateInstituteEntity;
+import com.innovate.modules.innovate.entity.UserPersonInfoEntity;
 import com.innovate.modules.innovate.entity.UserTeacherInfoEntity;
 import com.innovate.modules.innovate.service.InnovateInstituteService;
 import com.innovate.modules.innovate.service.UserTeacherInfoService;
 import com.innovate.modules.sys.controller.AbstractController;
 import com.innovate.modules.sys.entity.SysUserEntity;
+import com.innovate.modules.sys.service.SysUserService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -27,6 +29,8 @@ public class UserTeacherInfoController extends AbstractController {
     private UserTeacherInfoService userTeacherInfoService;
     @Autowired
     private InnovateInstituteService innovateInstituteService;
+    @Autowired
+    private SysUserService sysUserService;
 
 
     /**
@@ -62,6 +66,18 @@ public class UserTeacherInfoController extends AbstractController {
         return R.ok()
                 .put("userTeacher",userTeacher)
                 .put("institute", institute);
+    }
+
+    /**
+     * 学生详细信息
+     * @return
+     */
+    @RequestMapping("/teacherInfo/{id}")
+    public R teacherInfo(@PathVariable("id") Long id){
+        UserTeacherInfoEntity entity = userTeacherInfoService.selectById(id);
+        SysUserEntity sysUserEntity = sysUserService.selectById(entity.getUserId());
+        entity.setSysUserEntity(sysUserEntity);
+        return R.ok().put("data", entity);
     }
 
     /**
