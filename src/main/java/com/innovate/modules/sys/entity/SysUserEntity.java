@@ -3,6 +3,7 @@ package com.innovate.modules.sys.entity;
 import com.baomidou.mybatisplus.annotations.TableField;
 import com.baomidou.mybatisplus.annotations.TableId;
 import com.baomidou.mybatisplus.annotations.TableName;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.innovate.common.validator.group.AddGroup;
 import com.innovate.common.validator.group.UpdateGroup;
 import lombok.Data;
@@ -46,6 +47,7 @@ public class SysUserEntity implements Serializable {
 	/**
 	 * 密码
 	 */
+	@JsonIgnore
 	@NotBlank(message="密码不能为空", groups = AddGroup.class)
 	private String password;
 

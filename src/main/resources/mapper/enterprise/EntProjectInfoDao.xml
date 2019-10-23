@@ -197,7 +197,17 @@
             e_p_i.ent_info_id = #{entInfoId}
     </select>
 
-
+    <!-- 查询项目 -->
+    <select id="queryProjectByProjectIdAndInApply" resultType="com.innovate.modules.enterprise.entity.EntProjectInfoEntity">
+        SELECT
+            *
+        FROM
+            ent_project_info
+        <where>
+            <if test="proInfoId != null"> pro_info_id = #{proInfoId} </if>
+            <if test="inApply != null"> AND in_apply = #{inApply} </if>
+        </where>
+    </select>
 
     <!-- 处理项目信息审核 -->
     <update id="updateEntExamine" parameterType="java.util.Map">

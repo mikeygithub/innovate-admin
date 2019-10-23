@@ -55,7 +55,9 @@ public class EntProjectCooperationInfoServiceImpl extends ServiceImpl<EntProject
     @Override
     public R queryProjectCooperationInfo(Map<String, Object> params) {
         String type = (String) params.get("inType");
+        SysUserEntity sysUserEntity = (SysUserEntity) SecurityUtils.getSubject().getPrincipal();
         if("userPerId".equals(type)){ // 学生
+            //userPerInfoService.queryUserPerIdByUserId(sysUserEntity.get)
             EntProjectCooperationInfoEntity entity = baseMapper.queryProjectCooperationInfoListForPer(params);
             return R.ok().put("data", entity);
         }else if("userTeacherId".equals(type)){ // 教师
@@ -122,6 +124,11 @@ public class EntProjectCooperationInfoServiceImpl extends ServiceImpl<EntProject
     @Override
     public List<Long> queryProjectInfoIdByType(String type, long id) {
         return baseMapper.queryProjectInfoIdByType(type, id);
+    }
+
+    @Override
+    public List<Long> queryProInfoIdsByInApply(String inApply) {
+        return baseMapper.queryProInfoIdsByInApply(inApply);
     }
 
     // ================ 放弃列表方法，请勿删除 ====================

@@ -226,6 +226,11 @@ public class EntProjectInfoServiceImpl extends ServiceImpl<EntProjectInfoDao, En
     @Override
     public R queryWebEntProjectInfos(Map<String, Object> params) {
         EntityWrapper<EntProjectInfoEntity> wrapper = new EntityWrapper<>();
+        List<Long> proInfoIds = entProjectCooperationInfoService.queryProInfoIdsByInApply("1");
+        if(proInfoIds == null){
+            return R.ok().put("data", null);
+        }
+        wrapper.in("pro_info_id", proInfoIds);
         wrapper.eq("in_apply", params.get("inApply"));
         if(params.get("proType") != null && Integer.valueOf(params.get("proType").toString()) != 0){
             wrapper.eq("pro_type", params.get("proType"));
@@ -331,6 +336,31 @@ public class EntProjectInfoServiceImpl extends ServiceImpl<EntProjectInfoDao, En
         return R.ok().put("data", result);
     }
 
+    @Override
+    public R queryWebEntProjectInfo(Long projectId, String inApply) {
+        EntProjectInfoEntity project = baseMapper.queryProjectByProjectIdAndInApply(projectId, inApply);
+        if(project != null ){
+            // 项目发布者
+            if(project.getUserPerId() != null){ // 学生
+                UserPersonInfoEntity userPersonInfoEntity = userPerInfoService.selectById(project.getUserPerId());
+                SysUserEntity sysUserEntity = sysUserService.selectById(userPersonInfoEntity.getUserId());
+                project.setSysUser(sysUserEntity);
+                project.setUserPersonInfo(userPersonInfoEntity);
+            }else if(project.getUserTeacherId() != null){ // 教师
+                UserTeacherInfoEntity userTeacherInfoEntity = userTeacherInfoService.selectById(project.getUserTeacherId());
+                SysUserEntity sysUserEntity = sysUserService.selectById(userTeacherInfoEntity.getUserId());
+                project.setSysUser(sysUserEntity);
+                project.setUserTeacherInfo(userTeacherInfoEntity);
+            }else if(project.getEntInfoId() != null){ // 企业
+                EntEnterpriseInfoEntity entEnterpriseInfoEntity = entEnterpriseInfoService.selectById(project.getEntInfoId());
+                SysUserEntity sysUserEntity = sysUserService.selectById(entEnterpriseInfoEntity.getUserId());
+                project.setSysUser(sysUserEntity);
+                project.setEntEnterpriseInfo(entEnterpriseInfoEntity);
+            }
+        }
+        return R.ok().put("data", project);
+    }
+
     /**
      * 提出已存在合作关系的项目
      * @param result
@@ -338,10 +368,10 @@ public class EntProjectInfoServiceImpl extends ServiceImpl<EntProjectInfoDao, En
      */
     private void invokeProject(List<EntProjectInfoEntity> result, List<Long> pcids) {
         if (result != null && pcids != null) {
-            for (int j = 0; j < result.size(); j++) {
-                for (int k = 0; k < pcids.size(); k++) {
-                    if (result.get(j).getProInfoId() == pcids.get(k)) {
-                        result.remove(j);
+            for (int j = 0; j < pcids.size(); j++) {
+                for (int k = 0; k < result.size(); k++) {
+                    if (result.get(k).getProInfoId() == pcids.get(j)) {
+                        result.remove(k);
                     }
                 }
             }

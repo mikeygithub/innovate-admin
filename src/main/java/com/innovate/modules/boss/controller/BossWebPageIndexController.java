@@ -3,6 +3,7 @@ package com.innovate.modules.boss.controller;
 import com.innovate.common.utils.R;
 import com.innovate.modules.enterprise.service.EntProjectInfoService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -25,6 +26,16 @@ public class BossWebPageIndexController {
     @RequestMapping("projectInfos")
     public R projectInfos(@RequestParam Map<String,Object> params){
         return  entProjectInfoService.queryWebEntProjectInfos(params);
+    }
+
+    /**
+     * 项目详情
+     * @param projectId
+     * @return
+     */
+    @RequestMapping("projectInfo/{projectId}")
+    public R projectInfo(@PathVariable("projectId")Long projectId){
+        return entProjectInfoService.queryWebEntProjectInfo(projectId, "1");
     }
 
 }
