@@ -91,8 +91,8 @@ public class EntProjectCooperationInfoServiceImpl extends ServiceImpl<EntProject
     @Override
     public R insertProjectCooperation(EntProjectCooperationInfoEntity entProjectCooperationInfo) {
         HashMap<Long, Long> roleMap = new HashMap<>();
-        roleMap.put(2L, 2L);
-        roleMap.put(3L, 3L);
+        roleMap.put(11L, 11L);
+        roleMap.put(12L, 12L);
         roleMap.put(7L, 7L);
         SysUserEntity user = (SysUserEntity) SecurityUtils.getSubject().getPrincipal();
         if(user == null){
@@ -103,11 +103,11 @@ public class EntProjectCooperationInfoServiceImpl extends ServiceImpl<EntProject
             for(int i = 0; i < roles.size(); i++){
                 Long aLong = roles.get(i);
                 Long aLong1 = roleMap.get(aLong);
-                if(aLong1 != null && aLong1 == 2L){ // 学生
+                if(aLong1 != null && aLong1 == 11L){ // 学生
                     Long userPerId = userPerInfoService.queryUserPerIdByUserId(user.getUserId());
                     entProjectCooperationInfo.setUserPerId(userPerId);
                     break;
-                }else if (aLong1 != null && aLong1 == 3L){ // 教师
+                }else if (aLong1 != null && aLong1 == 12L){ // 教师
                     Long userTeacherId = userTeacherInfoService.queryUserTeacherIdByUserId(user.getUserId());
                     entProjectCooperationInfo.setUserTeacherId(userTeacherId);
                     break;

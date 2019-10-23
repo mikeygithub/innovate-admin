@@ -43,11 +43,11 @@ public class EntEnterpriseInfoController extends AbstractController {
      */
     @RequestMapping("/list")
     // @RequiresPermissions("enterprise:info:list")
-    @HasRole(name = "企业入驻审核", roles = {"8", "9"})
+    @HasRole(name = "企业入驻审核", roles = {"9", "10"})
     public R list(@RequestParam Map<String, Object> params){
         // parmas ==> 传递一个数企业类型
         String newHighZones = (String) params.get("_queryType");
-        if(newHighZones.equals("8")){
+        if(newHighZones.equals("10")){
             params.put("new_high_zones", "1");
         }else{
             params.put("new_high_zones", "0");
