@@ -6,6 +6,7 @@ import com.innovate.modules.enterprise.annotation.HasAdminRole;
 import com.innovate.modules.enterprise.entity.EntPersonCooperationInfoEntity;
 import com.innovate.modules.enterprise.service.EntPersonCooperationInfoService;
 import com.innovate.modules.enterprise.service.EntProjectInfoService;
+import com.innovate.modules.sys.controller.AbstractController;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -23,7 +24,7 @@ import java.util.Map;
  */
 @RestController
 @RequestMapping("enterprise/person/cooperation")
-public class EntPersonCooperationInfoController {
+public class EntPersonCooperationInfoController extends AbstractController {
     @Autowired
     private EntPersonCooperationInfoService entPersonCooperationInfoService;
 
@@ -63,11 +64,9 @@ public class EntPersonCooperationInfoController {
      * 保存
      */
     @RequestMapping("/save")
-    @RequiresPermissions("enterprise:person:cooperation:save")
-    public R save(@RequestBody EntPersonCooperationInfoEntity entPersonCooperationInfo){
-		entPersonCooperationInfoService.insert(entPersonCooperationInfo);
-
-        return R.ok();
+    // @RequiresPermissions("enterprise:person:cooperation:save")
+    public R save(Long proInfoId){
+		return entPersonCooperationInfoService.savePersonCooper(proInfoId, getUserId());
     }
 
     /**

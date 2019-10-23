@@ -67,4 +67,12 @@ public interface EntProjectCooperationInfoDao extends BaseMapper<EntProjectCoope
      */
     List<Long> queryProjectInfoIdByType(String type, long id);
 
+
+    /**
+     * 获取指定inApply的项目id
+     * @param inApply
+     * @return
+     */
+    List<Long> queryProInfoIdsByInApply(String inApply);
+
 }
