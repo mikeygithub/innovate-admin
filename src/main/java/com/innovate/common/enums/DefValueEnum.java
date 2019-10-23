@@ -1,4 +1,4 @@
-package com.innovate.modules.enterprise.enums;
+package com.innovate.common.enums;
 
 /**
  * @author spring

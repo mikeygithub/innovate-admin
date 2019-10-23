@@ -54,6 +54,19 @@
     </select>
 
     <!-- 招聘信息表 -》 id 查招聘信息 + 企业信息 - > 列表 -->
+    <select id="queryCountPage" resultType="java.lang.Integer" parameterType="java.util.Map">
+        SELECT
+            COUNT(*)
+        FROM
+        ent_recruitment_info e_r_i
+        LEFT JOIN ent_enterprise_info e_e_i ON e_r_i.ent_info_id = e_e_i.ent_info_id
+        <where>
+            <if test="inApply != null">
+                e_r_i.in_apply = #{inApply}
+            </if>
+            <if test="recruitmentPost != null and recruitmentPost.trim() != ''"> AND e_r_i.recruitment_post like concat('%',#{recruitmentPost},'%')  </if>
+        </where>
+    </select>
     <select id="entRecruitmentInfoList" resultMap="entRecruitmentInfoByIdMap" parameterType="java.util.Map">
         SELECT
             e_r_i.recruitment_info_id, e_r_i.ent_info_id, e_r_i.job_content, e_r_i.recruitment_post, e_r_i.post_require, e_r_i.recruitment_people_number,
@@ -70,7 +83,9 @@
             </if>
             <if test="recruitmentPost != null and recruitmentPost.trim() != ''"> AND e_r_i.recruitment_post like concat('%',#{recruitmentPost},'%')  </if>
         </where>
-
+        <if test="pageSize != null and page != null">
+            limit #{page}, #{pageSize}
+        </if>
     </select>
 
 

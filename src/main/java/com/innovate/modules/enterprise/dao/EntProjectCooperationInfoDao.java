@@ -17,6 +17,8 @@ import java.util.Map;
 @Mapper
 public interface EntProjectCooperationInfoDao extends BaseMapper<EntProjectCooperationInfoEntity> {
 
+    Integer queryCountPage(Map<String, Object> params);
+
     /**
      * 项目合作信息列表
      * @param params

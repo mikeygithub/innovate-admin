@@ -52,7 +52,30 @@
             <if test="inApply != null and inApply.trim() != ''"> AND e_p_c_i.in_apply = #{inApply} </if>
             <if test="key != null and key.trim() != ''"> AND e_p_i.pro_name LIKE CONCAT('%', #{key},'%') </if>
         </where>
+        <if test="pageSize != null and page != null">
+            limit #{page}, #{pageSize}
+        </if>
     </select>
+
+    <!-- 分页记录数 -->
+    <select id="queryCountPage" parameterType="java.util.Map" resultType="java.lang.Integer" >
+        SELECT
+            COUNT(*)
+        FROM
+        ent_project_cooperation_info e_p_c_i
+        LEFT JOIN ent_project_info e_p_i ON e_p_c_i.pro_info_id = e_p_i.pro_info_id
+        <where>
+            <if test='inType != null and inType.trim() eq "userPerId"'> e_p_c_i.user_per_id IS NOT NULL </if>
+            <if test='user_per_id != null'> AND e_p_c_i.user_per_id = #{user_per_id} </if>
+            <if test='inType != null and  inType.trim() eq "userTeacherId"'> AND e_p_c_i.user_teacher_id IS NOT NULL </if>
+            <if test='user_teacher_id != null '> AND e_p_c_i.user_teacher_id = #{user_teacher_id} </if>
+            <if test='inType != null and inType.trim() eq "entInfoId"'> AND e_p_c_i.ent_info_id IS NOT NULL </if>
+            <if test='ent_info_id != null '> AND e_p_c_i.ent_info_id = #{ent_info_id} </if>
+            <if test="inApply != null and inApply.trim() != ''"> AND e_p_c_i.in_apply = #{inApply} </if>
+            <if test="key != null and key.trim() != ''"> AND e_p_i.pro_name LIKE CONCAT('%', #{key},'%') </if>
+        </where>
+    </select>
+
 
     <!-- 项目合作信息 学生详情 -->
     <resultMap id="ProjectCooperationInfoListForPer" type="com.innovate.modules.enterprise.entity.EntProjectCooperationInfoEntity" extends="ProjectCooperationInfoList">

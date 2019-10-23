@@ -12,7 +12,7 @@ import com.innovate.modules.enterprise.entity.EntEnterpriseInfoEntity;
 import com.innovate.modules.enterprise.entity.EntPersonCooperationInfoEntity;
 import com.innovate.modules.enterprise.entity.EntProjectCooperationInfoEntity;
 import com.innovate.modules.enterprise.entity.EntProjectInfoEntity;
-import com.innovate.modules.enterprise.enums.DefValueEnum;
+import com.innovate.common.enums.DefValueEnum;
 import com.innovate.modules.enterprise.service.EntEnterpriseInfoService;
 import com.innovate.modules.enterprise.service.EntPersonCooperationInfoService;
 import com.innovate.modules.enterprise.service.EntProjectCooperationInfoService;

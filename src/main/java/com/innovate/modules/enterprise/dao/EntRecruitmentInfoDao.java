@@ -16,6 +16,8 @@ import java.util.List;
 @Mapper
 public interface EntRecruitmentInfoDao extends BaseMapper<EntRecruitmentInfoEntity> {
 
+    Integer queryCountPage(Map<String, Object> params);
+
     /**
      * 招聘信息表 --》 id 查招聘信息 + 企业信息
      * @return
