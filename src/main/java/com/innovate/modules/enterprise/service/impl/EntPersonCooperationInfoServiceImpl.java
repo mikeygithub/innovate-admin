@@ -56,9 +56,6 @@ public class EntPersonCooperationInfoServiceImpl extends ServiceImpl<EntPersonCo
     @Autowired
     private SysUserRoleService sysUserRoleService;
 
-    @Autowired
-    private EntPersonCooperationInfoService entPersonCooperationInfoService;
-
     @DefaultArrayValue(targetType = java.util.Map.class, index = 0, key = {"inApply", "inType"}, defValue = {"0", "userPerId"}, defValueEnum = {DefValueEnum.STRING, DefValueEnum.STRING})
     @Override
     public PageUtils queryPage(Map<String, Object> params) {
@@ -123,13 +120,18 @@ public class EntPersonCooperationInfoServiceImpl extends ServiceImpl<EntPersonCo
     }
 
     @Override
+    public List<EntPersonCooperationInfoEntity> queryPersonCooperationInfoByProCooperationInfoIdAndApply(Long proCooperationInfoId, String inApply) {
+        return baseMapper.queryPersonCooperationInfoByProCooperationInfoIdAndApply(proCooperationInfoId, inApply);
+    }
+
+    @Override
     public R savePersonCooper(Long proInfoId, Long userId) {
         EntProjectCooperationInfoEntity entity = entProjectCooperationInfoService.queryEntProjectCooperationInfoByProjectId(proInfoId);
         // 先处理当前用户是否已加如该项目
         if(entity == null){
             return R.error("该项目合作项目不存在！");
         }
-        List<EntPersonCooperationInfoEntity> list = entPersonCooperationInfoService.queryPersonCooperationInfoByProCooperationInfoId(entity.getProCooperationInfoId());
+        List<EntPersonCooperationInfoEntity> list = queryPersonCooperationInfoByProCooperationInfoIdAndApply(entity.getProCooperationInfoId(), "1");
         boolean flag = false;
         if(list != null){
             for(int i = 0; i < list.size(); i++){
