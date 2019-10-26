@@ -138,10 +138,12 @@ public class SysLoginController extends AbstractController {
 			Long type = Long.parseLong((String) params.get("type"));
 			if (1 == type){//项目负责人
 				longList.add(2L);
+				longList.add(11L);
 				user.setRoleIdList(longList);
 				user.setInstituteId(Long.parseLong(params.get("instituteId").toString()));
 			}else if(2 == type){//指导老师
 				longList.add(3L);
+				longList.add(12L);
 				user.setRoleIdList(longList);
 				user.setInstituteId(Long.parseLong(params.get("instituteId").toString()));
 			}else if (3 == type){

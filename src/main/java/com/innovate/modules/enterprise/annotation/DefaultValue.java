@@ -1,6 +1,6 @@
 package com.innovate.modules.enterprise.annotation;
 
-import com.innovate.modules.enterprise.enums.DefValueEnum;
+import com.innovate.common.enums.DefValueEnum;
 
 import java.lang.annotation.*;
 
