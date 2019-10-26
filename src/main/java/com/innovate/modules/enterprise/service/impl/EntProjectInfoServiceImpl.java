@@ -162,7 +162,7 @@ public class EntProjectInfoServiceImpl extends ServiceImpl<EntProjectInfoDao, En
         EntProjectInfoEntity project = baseMapper.selectById(proInfoId);
         if(project == null){ return R.error();}
         EntProjectCooperationInfoEntity projectCooperation = entProjectCooperationInfoService.queryEntProjectCooperationInfoByProjectId(project.getProInfoId());
-        List<EntPersonCooperationInfoEntity> persons = entPersonCooperationInfoService.queryPersonCooperationInfoByProCooperationInfoId(projectCooperation.getProCooperationInfoId());
+        List<EntPersonCooperationInfoEntity> persons = entPersonCooperationInfoService.queryPersonCooperationInfoByProCooperationInfoIdAndApply(projectCooperation.getProCooperationInfoId(),"1");
 
         List<EntPersonCooperationInfoEntity> pers = new ArrayList<>();
 
