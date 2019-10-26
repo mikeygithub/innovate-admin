@@ -56,6 +56,7 @@ public class EntPersonCooperationInfoServiceImpl extends ServiceImpl<EntPersonCo
     @Autowired
     private SysUserRoleService sysUserRoleService;
 
+
     @DefaultArrayValue(targetType = java.util.Map.class, index = 0, key = {"inApply", "inType"}, defValue = {"0", "userPerId"}, defValueEnum = {DefValueEnum.STRING, DefValueEnum.STRING})
     @Override
     public PageUtils queryPage(Map<String, Object> params) {
@@ -131,7 +132,7 @@ public class EntPersonCooperationInfoServiceImpl extends ServiceImpl<EntPersonCo
         if(entity == null){
             return R.error("该项目合作项目不存在！");
         }
-        List<EntPersonCooperationInfoEntity> list = queryPersonCooperationInfoByProCooperationInfoIdAndApply(entity.getProCooperationInfoId(), "1");
+        List<EntPersonCooperationInfoEntity> list = baseMapper.queryPersonCooperationInfoByProCooperationInfoId(entity.getProCooperationInfoId());
         boolean flag = false;
         if(list != null){
             for(int i = 0; i < list.size(); i++){
