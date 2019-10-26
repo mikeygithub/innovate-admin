@@ -49,6 +49,13 @@ public interface EntPersonCooperationInfoDao extends BaseMapper<EntPersonCoopera
     List<EntPersonCooperationInfoEntity> queryPersonCooperationInfoByProCooperationInfoId(Long proCooperationInfoId);
 
     /**
+     *  根据项目合作信息id查询合作关系人员信息
+     * @param proCooperationInfoId
+     * @return
+     */
+    List<EntPersonCooperationInfoEntity> queryPersonCooperationInfoByProCooperationInfoIdAndApply(Long proCooperationInfoId, String inApply);
+
+    /**
      * 更新合作者状态
      * @param id
      * @param typeId
