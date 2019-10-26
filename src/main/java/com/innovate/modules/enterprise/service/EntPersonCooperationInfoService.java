@@ -34,5 +34,12 @@ public interface EntPersonCooperationInfoService extends IService<EntPersonCoope
      */
     R savePersonCooper(Long proInfoId, Long userId);
 
+    /**
+     * 更新用户合作关系
+     * @param params
+     * @return
+     */
+    R updatePersonCooperation(Map<String, Object> params);
+
 }
 

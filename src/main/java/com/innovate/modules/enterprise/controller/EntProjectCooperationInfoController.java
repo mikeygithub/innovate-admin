@@ -32,8 +32,8 @@ public class EntProjectCooperationInfoController extends AbstractController {
      */
     @HasAdminRole(
             targetType = java.util.Map.class,
-            index = 0, roleIds = {"9","10"}, perRoleId = "2",
-            perRoleKey = "user_per_id", teacherRoleId = "3",
+            index = 0, roleIds = {"9","10"}, perRoleId = "11",
+            perRoleKey = "user_per_id", teacherRoleId = "12",
             teacherRoleKey = "user_teacher_id", entRoleId = "7",entRoleKey = "ent_info_id"
     )
     @RequestMapping("/list")

@@ -183,4 +183,14 @@ public class EntPersonCooperationInfoServiceImpl extends ServiceImpl<EntPersonCo
         return R.ok("加入项目成功，祝您合作愉快");
     }
 
+    @Override
+    public R updatePersonCooperation(Map<String, Object> params) {
+        if(params.get("proCooperationId") != null){
+            baseMapper.updatePersonCooperation(Long.valueOf(params.get("proCooperationId").toString()), "pro_cooperation_id", "1");
+        }else if(params.get("proCooperationInfoId") != null){
+            baseMapper.updatePersonCooperation(Long.valueOf(params.get("proCooperationInfoId").toString()), "pro_cooperation_info_id", "1");
+        }
+        return R.ok();
+    }
+
 }
