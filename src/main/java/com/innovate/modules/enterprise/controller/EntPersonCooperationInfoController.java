@@ -73,11 +73,9 @@ public class EntPersonCooperationInfoController extends AbstractController {
      * 修改
      */
     @RequestMapping("/update")
-    @RequiresPermissions("enterprise:person:cooperation:update")
-    public R update(@RequestBody EntPersonCooperationInfoEntity entPersonCooperationInfo){
-		entPersonCooperationInfoService.updateById(entPersonCooperationInfo);
-
-        return R.ok();
+    //@RequiresPermissions("enterprise:person:cooperation:update")
+    public R update(@RequestParam Map<String,Object> params){
+		return entPersonCooperationInfoService.updatePersonCooperation(params);
     }
 
     /**

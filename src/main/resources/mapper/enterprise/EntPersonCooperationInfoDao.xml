@@ -49,4 +49,13 @@
             pro_cooperation_info_id = #{proCooperationInfoId}
     </select>
 
+    <!-- 更新合作者状态 -->
+    <update id="updatePersonCooperation" >
+        UPDATE ent_person_cooperation_info
+            SET in_apply = #{inApply}
+        WHERE
+            <if test='typeId != null and typeId.trim() eq "pro_cooperation_id"'> pro_cooperation_id = #{id}</if>
+        <if test='typeId != null and typeId.trim() eq "pro_cooperation_info_id"'> pro_cooperation_info_id = #{id}</if>
+    </update>
+
 </mapper>
