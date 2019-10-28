@@ -74,7 +74,7 @@ public class EntProjectCooperationInfoServiceImpl extends ServiceImpl<EntProject
     @DefaultValue(targetType = java.util.Map.class, index = 0, key = "inApply", defValue = "1", defValueEnum = DefValueEnum.STRING)
     @Override
     public R updateProjectExamine(Map<String, Object> params) {
-        if(params.get("inApply") != null){
+        if(params.get("inApply") != null || !"".equals(params.get("inApply"))){
             baseMapper.updateProjectExamine( params);
         }else if("0".equals(params.get("inApply"))){
             String id = String.valueOf(params.get("proCooperationInfoId"));

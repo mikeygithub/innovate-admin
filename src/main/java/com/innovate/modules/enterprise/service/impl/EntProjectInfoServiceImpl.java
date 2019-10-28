@@ -156,13 +156,13 @@ public class EntProjectInfoServiceImpl extends ServiceImpl<EntProjectInfoDao, En
         return R.ok().put("data",b);
     }
 
-    @DefaultValue(targetType = java.lang.String.class, index = 1, key = "",defValue = "userPerId", defValueEnum = DefValueEnum.STRING)
+    @DefaultValue(targetType = java.lang.String.class, index = 1, key = "inType",defValue = "userPerId", defValueEnum = DefValueEnum.STRING)
     @Override
     public R queryProjectPersonCooperationInfo(Long proInfoId, String inType) {
         EntProjectInfoEntity project = baseMapper.selectById(proInfoId);
         if(project == null){ return R.error();}
         EntProjectCooperationInfoEntity projectCooperation = entProjectCooperationInfoService.queryEntProjectCooperationInfoByProjectId(project.getProInfoId());
-        List<EntPersonCooperationInfoEntity> persons = entPersonCooperationInfoService.queryPersonCooperationInfoByProCooperationInfoIdAndApply(projectCooperation.getProCooperationInfoId(),"1");
+        List<EntPersonCooperationInfoEntity> persons = entPersonCooperationInfoService.queryPersonCooperationInfoByProCooperationInfoIdAndApply(projectCooperation.getProCooperationInfoId(),"0");
 
         List<EntPersonCooperationInfoEntity> pers = new ArrayList<>();
 
