@@ -52,12 +52,12 @@ public class EntPersonCooperationInfoController extends AbstractController {
     /**
      * 信息
      */
-    @RequestMapping("/info/{proInfoId}/{inType}")
+    @RequestMapping("/info/{proInfoId}/{inType}/{inApply}")
     // @RequiresPermissions("enterprise:person:cooperation:info")
-    public R info(@PathVariable("proInfoId") Long proInfoId, @PathVariable("inType") String inType){
+    public R info(@PathVariable("proInfoId") Long proInfoId, @PathVariable("inType") String inType, @PathVariable("inApply") String inApply){
 		// EntPersonCooperationInfoEntity entPersonCooperationInfo = entPersonCooperationInfoService.selectById(proCooperationId);
         //return R.ok().put("entPersonCooperationInfo", entPersonCooperationInfo);
-        return entProjectInfoService.queryProjectPersonCooperationInfo(proInfoId, inType);
+        return entProjectInfoService.queryProjectPersonCooperationInfo(proInfoId, inType, inApply);
     }
 
     /**
