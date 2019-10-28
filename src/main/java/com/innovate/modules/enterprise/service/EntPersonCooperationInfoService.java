@@ -48,5 +48,12 @@ public interface EntPersonCooperationInfoService extends IService<EntPersonCoope
      */
     R updatePersonCooperation(Map<String, Object> params);
 
+    /**
+     * 合作关系
+     * @param params
+     * @return
+     */
+    PageUtils queryPageList(Map<String, Object> params);
+
 }
 

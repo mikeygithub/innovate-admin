@@ -48,6 +48,24 @@ public class EntPersonCooperationInfoController extends AbstractController {
         return R.ok().put("page", page);
     }
 
+    /**
+     * 列表
+     */
+    @HasAdminRole(
+            targetType = java.util.Map.class,
+            index = 0, roleIds = {"9","10"}, perRoleId = "11",
+            perRoleKey = "user_per_id", teacherRoleId = "12",
+            teacherRoleKey = "user_teacher_id", entRoleId = "7",entRoleKey = "ent_info_id"
+    )
+    @RequestMapping("/proList")
+    // @RequiresPermissions("enterprise:project:info:list")
+    public R proList(@RequestParam Map<String, Object> params){
+        PageUtils page = entPersonCooperationInfoService.queryPageList(params);
+
+        return R.ok().put("page", page);
+    }
+
+
 
     /**
      * 信息

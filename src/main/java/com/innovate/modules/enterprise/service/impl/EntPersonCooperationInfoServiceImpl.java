@@ -27,6 +27,7 @@ import com.innovate.modules.sys.service.SysUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -64,55 +65,8 @@ public class EntPersonCooperationInfoServiceImpl extends ServiceImpl<EntPersonCo
 //                new Query<EntPersonCooperationInfoEntity>(params).getPage(),
 //                new EntityWrapper<EntPersonCooperationInfoEntity>()
 //        );
-        EntityWrapper<EntProjectInfoEntity> wrapper = new EntityWrapper<EntProjectInfoEntity>();
-        String type = (String) params.get("inType");
-        if("userPerId".equals(type)){ // 学生
-            wrapper.isNotNull("user_per_id");
-        }else if("userTeacherId".equals(type)){ // 教师
-            wrapper.isNotNull("user_teacher_id");
-        }else if ("entInfoId".equals(type)){ // 企业
-            wrapper.isNotNull("ent_info_id");
-        }
-        // 角色条件
-        if(params.get("user_per_id") != null){ // 学生
-            wrapper.eq("user_per_id",params.get("user_per_id"));
-        }else if(params.get("user_teacher_id") != null){// 教师
-            wrapper.eq("user_teacher_id",params.get("user_teacher_id"));
-        }else if(params.get("ent_info_id") != null){// 企业
-            wrapper.eq("ent_info_id",params.get("ent_info_id"));
-        }
-        if("0".equals(params.get("inApply"))){
-            wrapper.eq("in_apply", "0");
-        }else {
-            wrapper.eq("in_apply", "1");
-        }
-        if(params.get("key") != null){
-            wrapper.like("pro_name", (String) params.get("key"));
-        }
-        Page<EntProjectInfoEntity> page = entProjectInfoService.selectPage( new Query<EntProjectInfoEntity>(params).getPage(), wrapper);
-        List<EntProjectInfoEntity> records = page.getRecords();
-        if(records != null && records.size() > 0){
-            for(int i=0; i<records.size(); i++){
-                EntProjectInfoEntity project = records.get(i);
-                if("userPerId".equals(type)){ // 学生
-                    UserPersonInfoEntity userPersonInfoEntity = userPerInfoService.selectById(project.getUserPerId());
-                    SysUserEntity sysUserEntity = sysUserService.selectById(userPersonInfoEntity.getUserId());
-                    project.setUserPersonInfo(userPersonInfoEntity);
-                    project.setSysUser(sysUserEntity);
-                }else if("userTeacherId".equals(type)){ // 教师
-                    UserTeacherInfoEntity userTeacherInfoEntity = userTeacherInfoService.selectById(project.getUserTeacherId());
-                    SysUserEntity sysUserEntity = sysUserService.selectById(userTeacherInfoEntity.getUserId());
-                    project.setSysUser(sysUserEntity);
-                    project.setUserTeacherInfo(userTeacherInfoEntity);
-                }else if ("entInfoId".equals(type)){ // 企业
-                    EntEnterpriseInfoEntity entEnterpriseInfoEntity = entEnterpriseInfoService.selectById(project.getEntInfoId());
-                    SysUserEntity sysUserEntity = sysUserService.selectById(entEnterpriseInfoEntity.getUserId());
-                    project.setSysUser(sysUserEntity);
-                    project.setEntEnterpriseInfo(entEnterpriseInfoEntity);
-                }
-            }
-        }
-        return new PageUtils(page);
+        Page<EntProjectInfoEntity> pages = pages(params, true);
+        return new PageUtils(pages);
     }
 
     @Override
@@ -194,6 +148,98 @@ public class EntPersonCooperationInfoServiceImpl extends ServiceImpl<EntPersonCo
             baseMapper.updatePersonCooperation(Long.valueOf(params.get("proCooperationInfoId").toString()), "pro_cooperation_info_id", "1");
         }
         return R.ok();
+    }
+
+    @DefaultArrayValue(targetType = java.util.Map.class, index = 0, key = {"inApply", "inType"}, defValue = {"0", "userPerId"}, defValueEnum = {DefValueEnum.STRING, DefValueEnum.STRING})
+    @Override
+    public PageUtils queryPageList(Map<String, Object> params) {
+        Page<EntProjectInfoEntity> pages = pages(params, false);
+        return new PageUtils(pages);
+    }
+
+
+    /**
+     * 列表
+     * @param params
+     * @param falg
+     * @return
+     */
+    private Page<EntProjectInfoEntity> pages(Map<String, Object> params, boolean falg){
+        EntityWrapper<EntProjectInfoEntity> wrapper = new EntityWrapper<EntProjectInfoEntity>();
+        String type = (String) params.get("inType");
+        if("userPerId".equals(type)){ // 学生
+            wrapper.isNotNull("user_per_id");
+        }else if("userTeacherId".equals(type)){ // 教师
+            wrapper.isNotNull("user_teacher_id");
+        }else if ("entInfoId".equals(type)){ // 企业
+            wrapper.isNotNull("ent_info_id");
+        }
+        // 角色条件
+        if(params.get("user_per_id") != null){ // 学生
+            wrapper.eq("user_per_id",params.get("user_per_id"));
+        }else if(params.get("user_teacher_id") != null){// 教师
+            wrapper.eq("user_teacher_id",params.get("user_teacher_id"));
+        }else if(params.get("ent_info_id") != null){// 企业
+            wrapper.eq("ent_info_id",params.get("ent_info_id"));
+        }
+        if("0".equals(params.get("inApply"))){
+            wrapper.eq("in_apply", "0");
+        }else {
+            wrapper.eq("in_apply", "1");
+        }
+        if(params.get("key") != null){
+            wrapper.like("pro_name", (String) params.get("key"));
+        }
+        Page<EntProjectInfoEntity> page = entProjectInfoService.selectPage( new Query<EntProjectInfoEntity>(params).getPage(), wrapper);
+        List<EntProjectInfoEntity> records = page.getRecords();
+        if(records != null && records.size() > 0){
+            if(!falg){
+                ArrayList<Long> proIds = new ArrayList<Long>();
+                for(int a=0; a<records.size(); a++){
+                    proIds.add(records.get(a).getProInfoId());
+                }
+                ArrayList<Long> dbProIds = entProjectCooperationInfoService.queryProInfoIdsByProInfoId(proIds);
+                if(dbProIds != null && dbProIds.size() > 0){
+                    proIds.removeAll(dbProIds);
+                }
+                for(int b=0; b<proIds.size(); b++){
+                    for(int c=0; c<records.size(); c++){
+                        if(proIds.get(b).longValue() == records.get(c).getProInfoId().longValue()){
+                            records.remove(c);
+                        }
+                    }
+                }
+            }
+            invokeItem(type, records);
+        }
+        return page;
+    }
+
+    /**
+     * 数据项处理
+     * @param type
+     * @param records
+     */
+    private void invokeItem(String type, List<EntProjectInfoEntity> records) {
+        for(int i=0; i<records.size(); i++){
+            EntProjectInfoEntity project = records.get(i);
+            if("userPerId".equals(type)){ // 学生
+                UserPersonInfoEntity userPersonInfoEntity = userPerInfoService.selectById(project.getUserPerId());
+                SysUserEntity sysUserEntity = sysUserService.selectById(userPersonInfoEntity.getUserId());
+                project.setUserPersonInfo(userPersonInfoEntity);
+                project.setSysUser(sysUserEntity);
+            }else if("userTeacherId".equals(type)){ // 教师
+                UserTeacherInfoEntity userTeacherInfoEntity = userTeacherInfoService.selectById(project.getUserTeacherId());
+                SysUserEntity sysUserEntity = sysUserService.selectById(userTeacherInfoEntity.getUserId());
+                project.setSysUser(sysUserEntity);
+                project.setUserTeacherInfo(userTeacherInfoEntity);
+            }else if ("entInfoId".equals(type)){ // 企业
+                EntEnterpriseInfoEntity entEnterpriseInfoEntity = entEnterpriseInfoService.selectById(project.getEntInfoId());
+                SysUserEntity sysUserEntity = sysUserService.selectById(entEnterpriseInfoEntity.getUserId());
+                project.setSysUser(sysUserEntity);
+                project.setEntEnterpriseInfo(entEnterpriseInfoEntity);
+            }
+        }
     }
 
 }

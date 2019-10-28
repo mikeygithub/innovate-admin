@@ -18,6 +18,7 @@ import com.innovate.modules.sys.service.SysUserRoleService;
 import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -130,6 +131,11 @@ public class EntProjectCooperationInfoServiceImpl extends ServiceImpl<EntProject
     @Override
     public List<Long> queryProInfoIdsByInApply(String inApply) {
         return baseMapper.queryProInfoIdsByInApply(inApply);
+    }
+
+    @Override
+    public ArrayList<Long> queryProInfoIdsByProInfoId(ArrayList<Long> projectIds) {
+        return baseMapper.queryProInfoIdsByProInfoId(projectIds);
     }
 
     // ================ 放弃列表方法，请勿删除 ====================

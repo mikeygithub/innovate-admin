@@ -254,6 +254,20 @@
     </select>
 
 
+    <!-- 列表项目是否有合作 -->
+    <select id="queryProInfoIdsByProInfoId" parameterType="java.lang.Long" resultType="java.lang.Long">
+        SELECT
+            pro_info_id
+        FROM
+            ent_project_cooperation_info
+        WHERE
+            pro_info_id in
+        <foreach item="id" collection="list" separator="," open="(" close=")">
+            #{id}
+        </foreach>
+    </select>
+
+
     <!-- 更新项目合作审核状态 -->
     <update id="updateProjectExamine" parameterType="java.util.Map">
         UPDATE ent_project_cooperation_info

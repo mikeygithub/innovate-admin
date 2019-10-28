@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.mapper.BaseMapper;
 import com.innovate.modules.enterprise.entity.EntProjectCooperationInfoEntity;
 import org.apache.ibatis.annotations.Mapper;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -76,5 +77,12 @@ public interface EntProjectCooperationInfoDao extends BaseMapper<EntProjectCoope
      * @return
      */
     List<Long> queryProInfoIdsByInApply(String inApply);
+
+    /**
+     * 列表项目是否有合作
+     * @param projectIds
+     * @return
+     */
+    ArrayList<Long> queryProInfoIdsByProInfoId(ArrayList<Long> projectIds);
 
 }
