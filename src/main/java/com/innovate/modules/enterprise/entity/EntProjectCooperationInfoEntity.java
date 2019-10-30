@@ -13,7 +13,7 @@ import java.util.List;
 
 /**
  * 项目合作信息表
- * 
+ *
  * @author mozhifan
  * @email 1217567927@qq.com
  * @date 2019-09-10 22:19:50
@@ -61,7 +61,14 @@ public class EntProjectCooperationInfoEntity implements Serializable {
 	 * 审核状态，0待审核 1已审核
 	 */
 	private String inApply;
-
+	/**
+	 * 结束报名状态，0未结束 1已结束
+	 */
+	private String inFinish;
+	/**
+	 * 发布类型，1科研项目，2横向项目，3大创项目，4企业招聘，5实习项目对接
+	 */
+	private String releaseType;
 	/**
 	 * 项目信息实体
 	 */
