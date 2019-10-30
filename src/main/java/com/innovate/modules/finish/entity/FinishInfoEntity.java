@@ -9,11 +9,14 @@ import lombok.Data;
 import java.io.Serializable;
 import java.util.Date;
 
+
 /**
- * @author:tz
- * @create:2018-11-08
- * @description:大创结题项目信息
- **/
+ * 大创结题项目信息
+ *
+ * @author Mikey
+ * @email 1625017540@qq.com
+ * @date 2019-09-18 22:20:42
+ */
 @Data
 @TableName("innovate_finish_info")
 public class FinishInfoEntity implements Serializable {
@@ -23,6 +26,7 @@ public class FinishInfoEntity implements Serializable {
     private Long groupId;
     private String finishName;
     private Long finishType;
+    private String finishDescribe;
     private Long projectFinishApplyStatus;
     private Long isUpdate;
     private Long applyUpdate;
