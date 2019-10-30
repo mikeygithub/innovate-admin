@@ -10,7 +10,7 @@ import java.io.Serializable;
 
 /**
  * 招聘信息表
- * 
+ *
  * @author mozhifan
  * @email 1217567927@qq.com
  * @date 2019-09-10 22:19:50
@@ -30,10 +30,6 @@ public class EntRecruitmentInfoEntity implements Serializable {
 	 * 企业id
 	 */
 	private Long entInfoId;
-	/**
-	 * 项目信息外键
-	 */
-	private Long proInfoId;
 	/**
 	 * 工作内容
 	 */
@@ -58,9 +54,8 @@ public class EntRecruitmentInfoEntity implements Serializable {
 	 * 工作方式
 	 */
 	private String workWay;
-
 	/**
-	 * 审核状态
+	 * 审核状态：0待审核，1已审核
 	 */
 	private String inApply;
 

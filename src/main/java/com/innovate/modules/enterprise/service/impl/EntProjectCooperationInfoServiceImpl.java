@@ -1,18 +1,14 @@
 package com.innovate.modules.enterprise.service.impl;
 
-import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
-import com.github.pagehelper.Page;
+import com.innovate.common.annotation.LimitPage;
 import com.innovate.common.utils.PageUtils;
-import com.innovate.common.utils.PagingTool;
-import com.innovate.common.utils.Query;
 import com.innovate.common.utils.R;
 import com.innovate.modules.enterprise.annotation.DefaultArrayValue;
 import com.innovate.modules.enterprise.annotation.DefaultValue;
 import com.innovate.modules.enterprise.dao.EntProjectCooperationInfoDao;
-import com.innovate.modules.enterprise.entity.EntEnterpriseInfoEntity;
 import com.innovate.modules.enterprise.entity.EntProjectCooperationInfoEntity;
-import com.innovate.modules.enterprise.enums.DefValueEnum;
+import com.innovate.common.enums.DefValueEnum;
 import com.innovate.modules.enterprise.service.EntEnterpriseInfoService;
 import com.innovate.modules.enterprise.service.EntProjectCooperationInfoService;
 import com.innovate.modules.innovate.service.UserPerInfoService;
@@ -22,7 +18,7 @@ import com.innovate.modules.sys.service.SysUserRoleService;
 import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -43,21 +39,27 @@ public class EntProjectCooperationInfoServiceImpl extends ServiceImpl<EntProject
     @Autowired
     private EntEnterpriseInfoService entEnterpriseInfoService;
 
+    @LimitPage(targetType = java.util.Map.class, name = "项目合作分页", index = 0, pageSize = 10,  currPage = 1)
     @DefaultArrayValue(targetType = java.util.Map.class, index = 0, key = {"inApply", "inType"}, defValue = {"0", "userPerId"}, defValueEnum = {DefValueEnum.STRING, DefValueEnum.STRING})
     @Override
     public PageUtils queryPage(Map<String, Object> params) {
-        Page<?> objects = PagingTool.handlerPage(params);
+        Integer pageSize = (Integer) params.get("pageSize");
+        Integer currPage = (Integer) params.get("currPage");
+        //params.put("currPage", startPage);
+        //Page<?> objects = PagingTool.handlerPage(params);
         //String type = (String) params.get("inType");
         List<EntProjectCooperationInfoEntity> list = baseMapper.queryProjectCooperationInfoList(params);
-        PageUtils page = PagingTool.page(list, objects);
-        return page;
+        // PageUtils page = PagingTool.page(list, objects);
+        return new PageUtils(list, baseMapper.queryCountPage(params), pageSize, currPage);
     }
 
     @DefaultArrayValue(targetType = java.util.Map.class, index = 0, key = {"inApply", "inType"}, defValue = {"0", "userPerId"}, defValueEnum = {DefValueEnum.STRING, DefValueEnum.STRING})
     @Override
     public R queryProjectCooperationInfo(Map<String, Object> params) {
         String type = (String) params.get("inType");
+        SysUserEntity sysUserEntity = (SysUserEntity) SecurityUtils.getSubject().getPrincipal();
         if("userPerId".equals(type)){ // 学生
+            //userPerInfoService.queryUserPerIdByUserId(sysUserEntity.get)
             EntProjectCooperationInfoEntity entity = baseMapper.queryProjectCooperationInfoListForPer(params);
             return R.ok().put("data", entity);
         }else if("userTeacherId".equals(type)){ // 教师
@@ -73,7 +75,7 @@ public class EntProjectCooperationInfoServiceImpl extends ServiceImpl<EntProject
     @DefaultValue(targetType = java.util.Map.class, index = 0, key = "inApply", defValue = "1", defValueEnum = DefValueEnum.STRING)
     @Override
     public R updateProjectExamine(Map<String, Object> params) {
-        if(params.get("inApply") != null){
+        if(params.get("inApply") != null || !"".equals(params.get("inApply"))){
             baseMapper.updateProjectExamine( params);
         }else if("0".equals(params.get("inApply"))){
             String id = String.valueOf(params.get("proCooperationInfoId"));
@@ -90,8 +92,8 @@ public class EntProjectCooperationInfoServiceImpl extends ServiceImpl<EntProject
     @Override
     public R insertProjectCooperation(EntProjectCooperationInfoEntity entProjectCooperationInfo) {
         HashMap<Long, Long> roleMap = new HashMap<>();
-        roleMap.put(2L, 2L);
-        roleMap.put(3L, 3L);
+        roleMap.put(11L, 11L);
+        roleMap.put(12L, 12L);
         roleMap.put(7L, 7L);
         SysUserEntity user = (SysUserEntity) SecurityUtils.getSubject().getPrincipal();
         if(user == null){
@@ -102,11 +104,11 @@ public class EntProjectCooperationInfoServiceImpl extends ServiceImpl<EntProject
             for(int i = 0; i < roles.size(); i++){
                 Long aLong = roles.get(i);
                 Long aLong1 = roleMap.get(aLong);
-                if(aLong1 != null && aLong1 == 2L){ // 学生
+                if(aLong1 != null && aLong1 == 11L){ // 学生
                     Long userPerId = userPerInfoService.queryUserPerIdByUserId(user.getUserId());
                     entProjectCooperationInfo.setUserPerId(userPerId);
                     break;
-                }else if (aLong1 != null && aLong1 == 3L){ // 教师
+                }else if (aLong1 != null && aLong1 == 12L){ // 教师
                     Long userTeacherId = userTeacherInfoService.queryUserTeacherIdByUserId(user.getUserId());
                     entProjectCooperationInfo.setUserTeacherId(userTeacherId);
                     break;
@@ -124,6 +126,16 @@ public class EntProjectCooperationInfoServiceImpl extends ServiceImpl<EntProject
     @Override
     public List<Long> queryProjectInfoIdByType(String type, long id) {
         return baseMapper.queryProjectInfoIdByType(type, id);
+    }
+
+    @Override
+    public List<Long> queryProInfoIdsByInApply(String inApply) {
+        return baseMapper.queryProInfoIdsByInApply(inApply);
+    }
+
+    @Override
+    public ArrayList<Long> queryProInfoIdsByProInfoId(ArrayList<Long> projectIds) {
+        return baseMapper.queryProInfoIdsByProInfoId(projectIds);
     }
 
     // ================ 放弃列表方法，请勿删除 ====================

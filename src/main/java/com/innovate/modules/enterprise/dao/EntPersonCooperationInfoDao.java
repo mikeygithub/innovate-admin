@@ -5,6 +5,7 @@ import com.innovate.modules.enterprise.entity.EntPersonCooperationInfoEntity;
 import com.innovate.modules.enterprise.entity.EntProjectCooperationInfoEntity;
 import com.innovate.modules.enterprise.entity.EntProjectInfoEntity;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -46,5 +47,20 @@ public interface EntPersonCooperationInfoDao extends BaseMapper<EntPersonCoopera
      * @return
      */
     List<EntPersonCooperationInfoEntity> queryPersonCooperationInfoByProCooperationInfoId(Long proCooperationInfoId);
+
+    /**
+     *  根据项目合作信息id查询合作关系人员信息
+     * @param proCooperationInfoId
+     * @return
+     */
+    List<EntPersonCooperationInfoEntity> queryPersonCooperationInfoByProCooperationInfoIdAndApply(Long proCooperationInfoId, String inApply);
+
+    /**
+     * 更新合作者状态
+     * @param id
+     * @param typeId
+     * @param inApply
+     */
+    void updatePersonCooperation(@Param("id") Long id, @Param("typeId") String typeId, @Param("inApply") String inApply);
 
 }

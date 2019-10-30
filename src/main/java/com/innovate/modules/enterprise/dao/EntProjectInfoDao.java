@@ -1,10 +1,9 @@
 package com.innovate.modules.enterprise.dao;
 
 import com.baomidou.mybatisplus.mapper.BaseMapper;
-import com.innovate.modules.enterprise.entity.EntEnterpriseInfoEntity;
 import com.innovate.modules.enterprise.entity.EntProjectInfoEntity;
 import org.apache.ibatis.annotations.Mapper;
-
+import org.apache.ibatis.annotations.Param;
 import java.util.List;
 import java.util.Map;
 /**
@@ -88,5 +87,12 @@ public interface EntProjectInfoDao extends BaseMapper<EntProjectInfoEntity> {
      */
     List<EntProjectInfoEntity> queryProjectsByEnterId(Long entInfoId);
 
+    /**
+     * 查询项目
+     * @param proId
+     * @param inApply
+     * @return
+     */
+    EntProjectInfoEntity queryProjectByProjectIdAndInApply(@Param("proInfoId") Long proId, @Param("inApply") String inApply);
 
 }

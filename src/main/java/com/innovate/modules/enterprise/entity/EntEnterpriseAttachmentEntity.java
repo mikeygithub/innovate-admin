@@ -9,7 +9,7 @@ import java.io.Serializable;
 
 /**
  * 企业附件表
- * 
+ *
  * @author 莫智帆
  * @email 1217567927@qq.com
  * @date 2019-09-10 22:18:36
@@ -48,5 +48,9 @@ public class  EntEnterpriseAttachmentEntity implements Serializable {
 	 * 文件路径
 	 */
 	private String entAttachmentUrl;
+	/**
+	 * 审核状态：0待审核，1已审核
+	 */
+	private String inApply;
 
 }

@@ -1,10 +1,8 @@
 package com.innovate.modules.enterprise.service.impl;
 
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
-import com.baomidou.mybatisplus.mapper.Wrapper;
 import com.baomidou.mybatisplus.plugins.Page;
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
-import com.innovate.common.utils.Constant;
 import com.innovate.common.utils.PageUtils;
 import com.innovate.common.utils.Query;
 import com.innovate.common.utils.R;
@@ -15,7 +13,7 @@ import com.innovate.modules.enterprise.entity.EntEnterpriseInfoEntity;
 import com.innovate.modules.enterprise.entity.EntPersonCooperationInfoEntity;
 import com.innovate.modules.enterprise.entity.EntProjectCooperationInfoEntity;
 import com.innovate.modules.enterprise.entity.EntProjectInfoEntity;
-import com.innovate.modules.enterprise.enums.DefValueEnum;
+import com.innovate.common.enums.DefValueEnum;
 import com.innovate.modules.enterprise.service.EntEnterpriseInfoService;
 import com.innovate.modules.enterprise.service.EntPersonCooperationInfoService;
 import com.innovate.modules.enterprise.service.EntProjectCooperationInfoService;
@@ -27,11 +25,9 @@ import com.innovate.modules.innovate.service.UserTeacherInfoService;
 import com.innovate.modules.sys.entity.SysUserEntity;
 import com.innovate.modules.sys.service.SysUserRoleService;
 import com.innovate.modules.sys.service.SysUserService;
-import net.bytebuddy.implementation.bind.annotation.Default;
 import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -74,6 +70,14 @@ public class EntProjectInfoServiceImpl extends ServiceImpl<EntProjectInfoDao, En
             wrapper.isNotNull("user_teacher_id");
         }else if ("entInfoId".equals(type)){ // 企业
             wrapper.isNotNull("ent_info_id");
+        }
+        // 角色条件
+        if(params.get("user_per_id") != null){ // 学生
+            wrapper.eq("user_per_id",params.get("user_per_id"));
+        }else if(params.get("user_teacher_id") != null){// 教师
+            wrapper.eq("user_teacher_id",params.get("user_teacher_id"));
+        }else if(params.get("ent_info_id") != null){// 企业
+            wrapper.eq("ent_info_id",params.get("ent_info_id"));
         }
         if("0".equals(params.get("inApply"))){
             wrapper.eq("in_apply", "0");
@@ -151,13 +155,13 @@ public class EntProjectInfoServiceImpl extends ServiceImpl<EntProjectInfoDao, En
         return R.ok().put("data",b);
     }
 
-    @DefaultValue(targetType = java.lang.String.class, index = 1, key = "",defValue = "userPerId", defValueEnum = DefValueEnum.STRING)
+    @DefaultValue(targetType = java.lang.String.class, index = 1, key = "inType",defValue = "userPerId", defValueEnum = DefValueEnum.STRING)
     @Override
-    public R queryProjectPersonCooperationInfo(Long proInfoId, String inType) {
+    public R queryProjectPersonCooperationInfo(Long proInfoId, String inType, String inApply) {
         EntProjectInfoEntity project = baseMapper.selectById(proInfoId);
         if(project == null){ return R.error();}
         EntProjectCooperationInfoEntity projectCooperation = entProjectCooperationInfoService.queryEntProjectCooperationInfoByProjectId(project.getProInfoId());
-        List<EntPersonCooperationInfoEntity> persons = entPersonCooperationInfoService.queryPersonCooperationInfoByProCooperationInfoId(projectCooperation.getProCooperationInfoId());
+        List<EntPersonCooperationInfoEntity> persons = entPersonCooperationInfoService.queryPersonCooperationInfoByProCooperationInfoIdAndApply(projectCooperation.getProCooperationInfoId(),inApply);
 
         List<EntPersonCooperationInfoEntity> pers = new ArrayList<>();
 
@@ -220,6 +224,11 @@ public class EntProjectInfoServiceImpl extends ServiceImpl<EntProjectInfoDao, En
     @Override
     public R queryWebEntProjectInfos(Map<String, Object> params) {
         EntityWrapper<EntProjectInfoEntity> wrapper = new EntityWrapper<>();
+        List<Long> proInfoIds = entProjectCooperationInfoService.queryProInfoIdsByInApply("1");
+        if(proInfoIds == null){
+            return R.ok().put("data", null);
+        }
+        wrapper.in("pro_info_id", proInfoIds);
         wrapper.eq("in_apply", params.get("inApply"));
         if(params.get("proType") != null && Integer.valueOf(params.get("proType").toString()) != 0){
             wrapper.eq("pro_type", params.get("proType"));
@@ -254,8 +263,8 @@ public class EntProjectInfoServiceImpl extends ServiceImpl<EntProjectInfoDao, En
     @Override
     public R insertEntProject(EntProjectInfoEntity entProjectInfo) {
         HashMap<Long, Long> roleMap = new HashMap<>();
-        roleMap.put(2L, 2L);
-        roleMap.put(3L, 3L);
+        roleMap.put(11L, 11L);
+        roleMap.put(12L, 12L);
         roleMap.put(7L, 7L);
         SysUserEntity user = (SysUserEntity) SecurityUtils.getSubject().getPrincipal();
         if(user == null){
@@ -266,11 +275,11 @@ public class EntProjectInfoServiceImpl extends ServiceImpl<EntProjectInfoDao, En
             for(int i = 0; i < roles.size(); i++){
                 Long aLong = roles.get(i);
                 Long aLong1 = roleMap.get(aLong);
-                if(aLong1 != null && aLong1 == 2L){ // 学生
+                if(aLong1 != null && aLong1 == 11L){ // 学生
                     Long userPerId = userPerInfoService.queryUserPerIdByUserId(user.getUserId());
                     entProjectInfo.setUserPerId(userPerId);
                     break;
-                }else if (aLong1 != null && aLong1 == 3L){ // 教师
+                }else if (aLong1 != null && aLong1 == 12L){ // 教师
                     Long userTeacherId = userTeacherInfoService.queryUserTeacherIdByUserId(user.getUserId());
                     entProjectInfo.setUserTeacherId(userTeacherId);
                     break;
@@ -288,8 +297,8 @@ public class EntProjectInfoServiceImpl extends ServiceImpl<EntProjectInfoDao, En
     @Override
     public R queryPeojects() {
         HashMap<Long, Long> roleMap = new HashMap<>();
-        roleMap.put(2L, 2L);
-        roleMap.put(3L, 3L);
+        roleMap.put(11L, 11L);
+        roleMap.put(12L, 12L);
         roleMap.put(7L, 7L);
         SysUserEntity user = (SysUserEntity) SecurityUtils.getSubject().getPrincipal();
         if(user == null){
@@ -301,13 +310,13 @@ public class EntProjectInfoServiceImpl extends ServiceImpl<EntProjectInfoDao, En
             for(int i = 0; i < roles.size(); i++){
                 Long aLong = roles.get(i);
                 Long aLong1 = roleMap.get(aLong);
-                if(aLong1 != null && aLong1 == 2L){ // 学生
+                if(aLong1 != null && aLong1 == 11L){ // 学生
                     Long userPerId = userPerInfoService.queryUserPerIdByUserId(user.getUserId());
                     result = baseMapper.queryProjectsByUserPerId(userPerId);
                     List<Long> pcids = entProjectCooperationInfoService.queryProjectInfoIdByType("user_per_id", userPerId);
                     invokeProject(result, pcids);
                     break;
-                }else if (aLong1 != null && aLong1 == 3L){ // 教师
+                }else if (aLong1 != null && aLong1 == 12L){ // 教师
                     Long userTeacherId = userTeacherInfoService.queryUserTeacherIdByUserId(user.getUserId());
                     result = baseMapper.queryProjectsByUserTeacherId(userTeacherId);
                     List<Long> pcids = entProjectCooperationInfoService.queryProjectInfoIdByType("user_teacher_id", userTeacherId);
@@ -325,6 +334,31 @@ public class EntProjectInfoServiceImpl extends ServiceImpl<EntProjectInfoDao, En
         return R.ok().put("data", result);
     }
 
+    @Override
+    public R queryWebEntProjectInfo(Long projectId, String inApply) {
+        EntProjectInfoEntity project = baseMapper.queryProjectByProjectIdAndInApply(projectId, inApply);
+        if(project != null ){
+            // 项目发布者
+            if(project.getUserPerId() != null){ // 学生
+                UserPersonInfoEntity userPersonInfoEntity = userPerInfoService.selectById(project.getUserPerId());
+                SysUserEntity sysUserEntity = sysUserService.selectById(userPersonInfoEntity.getUserId());
+                project.setSysUser(sysUserEntity);
+                project.setUserPersonInfo(userPersonInfoEntity);
+            }else if(project.getUserTeacherId() != null){ // 教师
+                UserTeacherInfoEntity userTeacherInfoEntity = userTeacherInfoService.selectById(project.getUserTeacherId());
+                SysUserEntity sysUserEntity = sysUserService.selectById(userTeacherInfoEntity.getUserId());
+                project.setSysUser(sysUserEntity);
+                project.setUserTeacherInfo(userTeacherInfoEntity);
+            }else if(project.getEntInfoId() != null){ // 企业
+                EntEnterpriseInfoEntity entEnterpriseInfoEntity = entEnterpriseInfoService.selectById(project.getEntInfoId());
+                SysUserEntity sysUserEntity = sysUserService.selectById(entEnterpriseInfoEntity.getUserId());
+                project.setSysUser(sysUserEntity);
+                project.setEntEnterpriseInfo(entEnterpriseInfoEntity);
+            }
+        }
+        return R.ok().put("data", project);
+    }
+
     /**
      * 提出已存在合作关系的项目
      * @param result
@@ -332,10 +366,10 @@ public class EntProjectInfoServiceImpl extends ServiceImpl<EntProjectInfoDao, En
      */
     private void invokeProject(List<EntProjectInfoEntity> result, List<Long> pcids) {
         if (result != null && pcids != null) {
-            for (int j = 0; j < result.size(); j++) {
-                for (int k = 0; k < pcids.size(); k++) {
-                    if (result.get(j).getProInfoId() == pcids.get(k)) {
-                        result.remove(j);
+            for (int j = 0; j < pcids.size(); j++) {
+                for (int k = 0; k < result.size(); k++) {
+                    if (result.get(k).getProInfoId() == pcids.get(j)) {
+                        result.remove(k);
                     }
                 }
             }

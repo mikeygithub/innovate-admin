@@ -1,11 +1,5 @@
 package com.innovate.common.utils;
 
-//import com.github.pagehelper.Page;
-//import com.github.pagehelper.PageHelper;
-
-import java.util.Map;
-import java.util.List;
-
 /**
  * @author spring
  * email: 4298293220@qq.com
@@ -30,8 +24,8 @@ public class PagingTool {
 //            pageSize = Integer.valueOf(15);
 //            currPage = Integer.valueOf(1);
 //        }
-////        Page objectPage = PageHelper.startPage(currPage, pageSize);
-////        return objectPage;
+//        Page objectPage = PageHelper.startPage(currPage, pageSize);
+//        return objectPage;
 //    }
 
     public static final String DATA_KEY = "data";

@@ -3,6 +3,7 @@ package com.innovate.modules.enterprise.service;
 
 import com.baomidou.mybatisplus.service.IService;
 import com.innovate.common.utils.PageUtils;
+import com.innovate.common.utils.R;
 import com.innovate.modules.enterprise.entity.EntPersonCooperationInfoEntity;
 
 import java.util.List;
@@ -25,6 +26,34 @@ public interface EntPersonCooperationInfoService extends IService<EntPersonCoope
      * @return
      */
     List<EntPersonCooperationInfoEntity> queryPersonCooperationInfoByProCooperationInfoId(Long proCooperationInfoId);
+
+    /**
+     *  根据项目合作信息id查询合作关系人员信息
+     * @param proCooperationInfoId
+     * @return
+     */
+    List<EntPersonCooperationInfoEntity> queryPersonCooperationInfoByProCooperationInfoIdAndApply(Long proCooperationInfoId, String inApply);
+
+    /**
+     * 保存项目合作关系
+     * @param proInfoId
+     * @return
+     */
+    R savePersonCooper(Long proInfoId, Long userId);
+
+    /**
+     * 更新用户合作关系
+     * @param params
+     * @return
+     */
+    R updatePersonCooperation(Map<String, Object> params);
+
+    /**
+     * 合作关系
+     * @param params
+     * @return
+     */
+    PageUtils queryPageList(Map<String, Object> params);
 
 }
 

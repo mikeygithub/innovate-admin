@@ -10,7 +10,7 @@ import java.util.Date;
 
 /**
  * 企业/教师知识产权信息表
- * 
+ *
  * @author mozhifan
  * @email 1217567927@qq.com
  * @date 2019-09-10 22:19:50
@@ -57,5 +57,8 @@ public class EntPatentInfoEntity implements Serializable {
 	 * 项目信息外键
 	 */
 	private Long proInfoId;
-
+	/**
+	 * 审核状态：0待审核，1已审核
+	 */
+	private String inApply;
 }

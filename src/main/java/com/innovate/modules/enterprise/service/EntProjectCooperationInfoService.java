@@ -6,6 +6,7 @@ import com.innovate.common.utils.PageUtils;
 import com.innovate.common.utils.R;
 import com.innovate.modules.enterprise.entity.EntProjectCooperationInfoEntity;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -56,5 +57,14 @@ public interface EntProjectCooperationInfoService extends IService<EntProjectCoo
      */
     List<Long> queryProjectInfoIdByType(String type, long id);
 
+    /**
+     * 获取指定inApply的项目id
+     * @param inApply
+     * @return
+     */
+    List<Long> queryProInfoIdsByInApply(String inApply);
+
+    ArrayList<Long> queryProInfoIdsByProInfoId(ArrayList<Long> projectIds);
+    
 }
 
