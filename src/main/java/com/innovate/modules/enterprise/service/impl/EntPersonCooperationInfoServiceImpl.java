@@ -188,10 +188,12 @@ public class EntPersonCooperationInfoServiceImpl extends ServiceImpl<EntPersonCo
         if(params.get("proCooperationId") != null){
             baseMapper.updatePersonCooperation(Long.valueOf(params.get("proCooperationId").toString()), "pro_cooperation_id", "1");
         }else if(params.get("proCooperationInfoId") != null){
-            HashMap<String,Object> paras = new HashMap<>();
-            paras.put("inApply","1");
-            paras.put("proCooperationInfoId",Long.valueOf(params.get("proCooperationInfoId").toString()));
-            entProjectCooperationInfoService.updateProjectExamine(paras);
+            EntProjectCooperationInfoEntity cooperationInfo = entProjectCooperationInfoService.selectById(Long.valueOf(params.get("proCooperationInfoId").toString()));
+            if(cooperationInfo != null){
+                cooperationInfo.setInApply("1");
+                cooperationInfo.setInFinish("1");
+                entProjectCooperationInfoService.insertOrUpdate(cooperationInfo);
+            }
             baseMapper.updatePersonCooperation(Long.valueOf(params.get("proCooperationInfoId").toString()), "pro_cooperation_info_id", "1");
         }
         return R.ok();

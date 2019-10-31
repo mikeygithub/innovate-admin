@@ -118,7 +118,7 @@ public class EntPersonCooperationInfoController extends AbstractController {
     @RequestMapping("/deleteCoId")
     // @RequiresPermissions("enterprise:person:cooperation:delete")
     public R deleteByProjectCoId(@RequestParam Map<String,Object> params){
-        Long proCooperationId = Long.valueOf(params.get("proCooperationId").toString());
+        Long proCooperationId = Long.valueOf(params.get("proCooperationInfoId").toString());
         List<Long> longs = entPersonCooperationInfoService.queryProCooperationId(proCooperationId);
         if(longs != null && longs.size() > 0){
             for(Long id : longs){
