@@ -55,5 +55,12 @@ public interface EntPersonCooperationInfoService extends IService<EntPersonCoope
      */
     PageUtils queryPageList(Map<String, Object> params);
 
+    /**
+     * 删除合作人员
+     * @param proCooperationInfoId
+     * @return
+     */
+    boolean deleteByProCooperationInfoId(Long proCooperationInfoId);
+
 }
 

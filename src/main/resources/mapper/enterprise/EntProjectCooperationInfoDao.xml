@@ -277,4 +277,11 @@
         WHERE pro_cooperation_info_id = #{proCooperationInfoId}
     </update>
 
+
+    <!-- 删除合作项目 -->
+    <delete id="deleteByProInfoId" parameterType="java.lang.Long">
+        DELETE FROM ent_project_cooperation_info WHERE pro_info_id = #{proInfoId}
+    </delete>
+
+
 </mapper>

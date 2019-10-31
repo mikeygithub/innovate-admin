@@ -200,6 +200,11 @@ public class EntPersonCooperationInfoServiceImpl extends ServiceImpl<EntPersonCo
         return new PageUtils(page);
     }
 
+    @Override
+    public boolean deleteByProCooperationInfoId(Long proCooperationInfoId) {
+        return baseMapper.deleteByProCooperationInfoId(proCooperationInfoId);
+    }
+
 
     /**
      * 列表

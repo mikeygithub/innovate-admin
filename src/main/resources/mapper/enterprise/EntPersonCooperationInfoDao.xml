@@ -69,4 +69,10 @@
         <if test='typeId != null and typeId.trim() eq "pro_cooperation_info_id"'> pro_cooperation_info_id = #{id}</if>
     </update>
 
+
+    <!-- 删除合作人员 -->
+    <delete id="deleteByProCooperationInfoId" parameterType="java.lang.Long">
+        DELETE FROM ent_person_cooperation_info WHERE pro_cooperation_info_id = #{proCooperationInfoId}
+    </delete>
+
 </mapper>

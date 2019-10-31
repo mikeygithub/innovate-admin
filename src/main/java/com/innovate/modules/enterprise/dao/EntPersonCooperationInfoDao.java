@@ -63,4 +63,12 @@ public interface EntPersonCooperationInfoDao extends BaseMapper<EntPersonCoopera
      */
     void updatePersonCooperation(@Param("id") Long id, @Param("typeId") String typeId, @Param("inApply") String inApply);
 
+
+    /**
+     * 删除合作人员
+     * @param proCooperationInfoId
+     * @return
+     */
+    boolean deleteByProCooperationInfoId(Long proCooperationInfoId);
+
 }

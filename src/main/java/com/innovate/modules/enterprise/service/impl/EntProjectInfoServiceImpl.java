@@ -28,6 +28,8 @@ import com.innovate.modules.sys.service.SysUserService;
 import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -148,10 +150,22 @@ public class EntProjectInfoServiceImpl extends ServiceImpl<EntProjectInfoDao, En
         return R.ok().put("data", entity);
     }
 
+    @Transactional
     @DefaultValue(targetType = java.util.Map.class, index = 0, key = "inApply", defValue = "1", defValueEnum = DefValueEnum.STRING)
     @Override
     public R updateEntExamine(Map<String, Object> params) {
-        boolean b = baseMapper.updateEntExamine(params);
+        boolean b = false;
+        if("1".equals(params.get("inApply"))){
+            b = baseMapper.updateEntExamine(params);
+        }else if ("0".equals(params.get("inApply"))){
+            Long proInfoId = Long.valueOf(params.get("proInfoId").toString());
+            baseMapper.deleteById(proInfoId);
+            EntProjectCooperationInfoEntity cooperationInfo = entProjectCooperationInfoService.queryEntProjectCooperationInfoByProjectId(proInfoId);
+            b = entProjectCooperationInfoService.deleteByProInfoId(proInfoId);
+            if(cooperationInfo != null) {
+                b = entPersonCooperationInfoService.deleteByProCooperationInfoId(cooperationInfo.getProCooperationInfoId());
+            }
+        }
         return R.ok().put("data",b);
     }
 

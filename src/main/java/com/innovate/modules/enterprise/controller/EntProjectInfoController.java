@@ -3,14 +3,19 @@ package com.innovate.modules.enterprise.controller;
 import com.innovate.common.utils.PageUtils;
 import com.innovate.common.utils.R;
 import com.innovate.modules.enterprise.annotation.HasAdminRole;
+import com.innovate.modules.enterprise.entity.EntProjectCooperationInfoEntity;
 import com.innovate.modules.enterprise.entity.EntProjectInfoEntity;
+import com.innovate.modules.enterprise.service.EntPersonCooperationInfoService;
+import com.innovate.modules.enterprise.service.EntProjectCooperationInfoService;
 import com.innovate.modules.enterprise.service.EntProjectInfoService;
 import com.innovate.modules.sys.controller.AbstractController;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 
 
@@ -26,6 +31,12 @@ import java.util.Map;
 public class EntProjectInfoController extends AbstractController {
     @Autowired
     private EntProjectInfoService entProjectInfoService;
+
+    @Autowired
+    private EntProjectCooperationInfoService entProjectCooperationInfoService;
+
+    @Autowired
+    private EntPersonCooperationInfoService entPersonCooperationInfoService;
 
     /**
      * 列表
@@ -103,11 +114,19 @@ public class EntProjectInfoController extends AbstractController {
     /**
      * 删除
      */
+    @Transactional
     @RequestMapping("/delete")
     @RequiresPermissions("enterprise:project:info:delete")
     public R delete(@RequestBody Long[] proInfoIds){
-		entProjectInfoService.deleteBatchIds(Arrays.asList(proInfoIds));
-
+        List<Long> projectIds = Arrays.asList(proInfoIds);
+        entProjectInfoService.deleteBatchIds(projectIds);
+        for(Long proInfoId : projectIds){
+            EntProjectCooperationInfoEntity cooperationInfo = entProjectCooperationInfoService.queryEntProjectCooperationInfoByProjectId(proInfoId);
+            entProjectCooperationInfoService.deleteByProInfoId(proInfoId);
+            if(cooperationInfo != null) {
+                entPersonCooperationInfoService.deleteByProCooperationInfoId(cooperationInfo.getProCooperationInfoId());
+            }
+        }
         return R.ok();
     }
 

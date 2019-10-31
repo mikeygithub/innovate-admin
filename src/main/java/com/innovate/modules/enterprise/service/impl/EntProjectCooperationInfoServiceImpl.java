@@ -138,6 +138,11 @@ public class EntProjectCooperationInfoServiceImpl extends ServiceImpl<EntProject
         return baseMapper.queryProInfoIdsByProInfoId(projectIds);
     }
 
+    @Override
+    public boolean deleteByProInfoId(Long proInfoId) {
+        return baseMapper.deleteByProInfoId(proInfoId);
+    }
+
     // ================ 放弃列表方法，请勿删除 ====================
 //    private void template(){
 //        EntityWrapper<EntProjectCooperationInfoEntity> wrapper = new EntityWrapper<>();

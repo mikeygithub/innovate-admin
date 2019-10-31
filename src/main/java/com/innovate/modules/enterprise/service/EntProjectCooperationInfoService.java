@@ -65,6 +65,13 @@ public interface EntProjectCooperationInfoService extends IService<EntProjectCoo
     List<Long> queryProInfoIdsByInApply(String inApply);
 
     ArrayList<Long> queryProInfoIdsByProInfoId(ArrayList<Long> projectIds);
-    
+
+    /**
+     * 删除合作项目
+     * @param proInfoId 项目id
+     * @return
+     */
+    boolean deleteByProInfoId(Long proInfoId);
+
 }
 
