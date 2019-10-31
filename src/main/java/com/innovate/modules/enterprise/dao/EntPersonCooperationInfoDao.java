@@ -11,7 +11,7 @@ import java.util.List;
 
 /**
  * 项目合作人表
- * 
+ *
  * @author 莫智帆
  * @email 1217567927@qq.com
  * @date 2019-09-10 22:18:36
@@ -70,5 +70,11 @@ public interface EntPersonCooperationInfoDao extends BaseMapper<EntPersonCoopera
      * @return
      */
     boolean deleteByProCooperationInfoId(Long proCooperationInfoId);
+
+    /**
+     * 查询项目合作用户编号
+     * @return
+     */
+    List<Long> queryProCooperationId(Long proCooperationInfoId);
 
 }

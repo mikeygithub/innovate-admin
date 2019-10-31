@@ -60,6 +60,11 @@
             AND in_apply = #{inApply}
     </select>
 
+    <!-- 查询项目合作用户编号 -->
+    <select id="queryProCooperationId" parameterType="java.lang.Long" resultType="java.lang.Long">
+        SELECT pro_cooperation_id FROM ent_person_cooperation_info WHERE pro_cooperation_info_id = #{proCooperationInfoId}
+    </select>
+
     <!-- 更新合作者状态 -->
     <update id="updatePersonCooperation" >
         UPDATE ent_person_cooperation_info

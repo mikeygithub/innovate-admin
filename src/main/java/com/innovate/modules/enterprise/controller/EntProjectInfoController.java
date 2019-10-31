@@ -116,7 +116,7 @@ public class EntProjectInfoController extends AbstractController {
      */
     @Transactional
     @RequestMapping("/delete")
-    @RequiresPermissions("enterprise:project:info:delete")
+    //@RequiresPermissions("enterprise:project:info:delete")
     public R delete(@RequestBody Long[] proInfoIds){
         List<Long> projectIds = Arrays.asList(proInfoIds);
         entProjectInfoService.deleteBatchIds(projectIds);

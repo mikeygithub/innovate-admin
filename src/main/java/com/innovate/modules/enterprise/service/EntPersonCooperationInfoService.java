@@ -62,5 +62,11 @@ public interface EntPersonCooperationInfoService extends IService<EntPersonCoope
      */
     boolean deleteByProCooperationInfoId(Long proCooperationInfoId);
 
+    /**
+     * 查询项目合作用户编号
+     * @return
+     */
+    List<Long> queryProCooperationId(Long proCooperationInfoId);
+
 }
 

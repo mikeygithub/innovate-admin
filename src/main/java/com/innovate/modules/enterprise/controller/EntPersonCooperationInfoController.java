@@ -5,6 +5,7 @@ import com.innovate.common.utils.R;
 import com.innovate.modules.enterprise.annotation.HasAdminRole;
 import com.innovate.modules.enterprise.entity.EntPersonCooperationInfoEntity;
 import com.innovate.modules.enterprise.service.EntPersonCooperationInfoService;
+import com.innovate.modules.enterprise.service.EntProjectCooperationInfoService;
 import com.innovate.modules.enterprise.service.EntProjectInfoService;
 import com.innovate.modules.sys.controller.AbstractController;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
@@ -12,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 
 
@@ -30,6 +32,9 @@ public class EntPersonCooperationInfoController extends AbstractController {
 
     @Autowired
     private EntProjectInfoService entProjectInfoService;
+
+    @Autowired
+    private EntProjectCooperationInfoService entProjectCooperationInfoService;
 
     /**
      * 列表
@@ -104,6 +109,22 @@ public class EntPersonCooperationInfoController extends AbstractController {
     public R delete(@RequestBody Long[] proCooperationIds){
 		entPersonCooperationInfoService.deleteBatchIds(Arrays.asList(proCooperationIds));
 
+        return R.ok();
+    }
+
+    /**
+     * 删除全部合作人员
+     */
+    @RequestMapping("/deleteCoId")
+    // @RequiresPermissions("enterprise:person:cooperation:delete")
+    public R deleteByProjectCoId(@RequestParam Map<String,Object> params){
+        Long proCooperationId = Long.valueOf(params.get("proCooperationId").toString());
+        List<Long> longs = entPersonCooperationInfoService.queryProCooperationId(proCooperationId);
+        if(longs != null && longs.size() > 0){
+            for(Long id : longs){
+                entPersonCooperationInfoService.deleteById(id);
+            }
+        }
         return R.ok();
     }
 

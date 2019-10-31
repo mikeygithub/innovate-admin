@@ -26,7 +26,9 @@ import com.innovate.modules.sys.service.SysUserRoleService;
 import com.innovate.modules.sys.service.SysUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.beans.Transient;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -179,11 +181,17 @@ public class EntPersonCooperationInfoServiceImpl extends ServiceImpl<EntPersonCo
         return R.ok("加入项目成功，祝您合作愉快");
     }
 
+    @Transactional
+    @DefaultArrayValue(targetType = java.util.Map.class, index = 0, key = {"inApply"}, defValue = {"1"}, defValueEnum = {DefValueEnum.STRING})
     @Override
     public R updatePersonCooperation(Map<String, Object> params) {
         if(params.get("proCooperationId") != null){
             baseMapper.updatePersonCooperation(Long.valueOf(params.get("proCooperationId").toString()), "pro_cooperation_id", "1");
         }else if(params.get("proCooperationInfoId") != null){
+            HashMap<String,Object> paras = new HashMap<>();
+            paras.put("inApply","1");
+            paras.put("proCooperationInfoId",Long.valueOf(params.get("proCooperationInfoId").toString()));
+            entProjectCooperationInfoService.updateProjectExamine(paras);
             baseMapper.updatePersonCooperation(Long.valueOf(params.get("proCooperationInfoId").toString()), "pro_cooperation_info_id", "1");
         }
         return R.ok();
@@ -203,6 +211,11 @@ public class EntPersonCooperationInfoServiceImpl extends ServiceImpl<EntPersonCo
     @Override
     public boolean deleteByProCooperationInfoId(Long proCooperationInfoId) {
         return baseMapper.deleteByProCooperationInfoId(proCooperationInfoId);
+    }
+
+    @Override
+    public List<Long> queryProCooperationId(Long proCooperationInfoId) {
+        return baseMapper.queryProCooperationId(proCooperationInfoId);
     }
 
 
