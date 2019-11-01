@@ -220,6 +220,98 @@ public class EntPersonCooperationInfoServiceImpl extends ServiceImpl<EntPersonCo
         return baseMapper.queryProCooperationId(proCooperationInfoId);
     }
 
+    @DefaultArrayValue(targetType = java.util.Map.class, index = 0, key = {"inApply", "inType"}, defValue = {"1"}, defValueEnum = {DefValueEnum.STRING})
+    @Override
+    public R queryMyPersonProject(Map<String, Object> params) {
+        EntityWrapper<EntPersonCooperationInfoEntity> wrapper = new EntityWrapper<EntPersonCooperationInfoEntity>();
+        // 角色条件
+        if(params.get("user_per_id") != null){ // 学生
+            wrapper.eq("user_per_id",params.get("user_per_id"));
+        }else if(params.get("user_teacher_id") != null){// 教师
+            wrapper.eq("user_teacher_id",params.get("user_teacher_id"));
+        }else if(params.get("ent_info_id") != null){// 企业
+            wrapper.eq("ent_info_id",params.get("ent_info_id"));
+        }
+        if("0".equals(params.get("inApply"))){
+            wrapper.eq("in_apply", "0");
+        }else  if("1".equals(params.get("inApply"))){
+            wrapper.eq("in_apply", "1");
+        }
+        Page<EntPersonCooperationInfoEntity> page = this.selectPage(new Query<EntPersonCooperationInfoEntity>(params).getPage(), wrapper);
+        // 查询合作信息
+        List<EntPersonCooperationInfoEntity> records = page.getRecords();
+        if(records != null && records.size() > 0) {
+            for(int i=0; i < records.size(); i++){
+                EntPersonCooperationInfoEntity person = records.get(i);
+                // 合作项目信息
+                EntProjectCooperationInfoEntity projectCoo = entProjectCooperationInfoService.selectById(person.getProCooperationInfoId());
+                person.setEntProjectCooperationInfo(projectCoo);
+                // 项目信息
+                if(projectCoo != null) {
+                    EntProjectInfoEntity project = entProjectInfoService.selectById(projectCoo.getProInfoId());
+                    person.setEntProjectInfo(project);
+                    // 项目发布者信息
+                    // 角色条件
+                    if(project != null){
+                        if(project.getUserPerId() != null){ // 学生
+                            UserPersonInfoEntity userPersonInfo = userPerInfoService.selectById(project.getUserPerId());
+                            project.setUserPersonInfo(userPersonInfo);
+                        }else if(project.getUserTeacherId() != null){// 教师
+                            UserTeacherInfoEntity userTeacherInfo = userTeacherInfoService.selectById(project.getUserTeacherId());
+                            project.setUserTeacherInfo(userTeacherInfo);
+                        }else if(project.getEntInfoId() != null){// 企业
+                            EntEnterpriseInfoEntity entEnterpriseInfo = entEnterpriseInfoService.selectById(project.getEntInfoId());
+                            project.setEntEnterpriseInfo(entEnterpriseInfo);
+                        }
+                    }
+                }
+            }
+        }
+
+        return R.ok().put("page", new PageUtils(page));
+    }
+
+    @DefaultArrayValue(targetType = java.util.Map.class, index = 0, key = {"inApply", "inFinish"}, defValue = {"1", "1"}, defValueEnum = {DefValueEnum.STRING, DefValueEnum.STRING})
+    @Override
+    public R queryPersonProject(Map<String, Object> params) {
+        EntityWrapper<EntProjectCooperationInfoEntity> wrapper = new EntityWrapper<>();
+        // 角色条件
+        if(params.get("user_per_id") != null){ // 学生
+            wrapper.eq("user_per_id",params.get("user_per_id"));
+        }else if(params.get("user_teacher_id") != null){// 教师
+            wrapper.eq("user_teacher_id",params.get("user_teacher_id"));
+        }else if(params.get("ent_info_id") != null){// 企业
+            wrapper.eq("ent_info_id",params.get("ent_info_id"));
+        }
+        wrapper.eq("in_apply", params.get("inApply"));
+        wrapper.eq("in_finish", params.get("inFinish"));
+        Page<EntProjectCooperationInfoEntity> page = entProjectCooperationInfoService.selectPage(new Query<EntProjectCooperationInfoEntity>(params).getPage(), wrapper);
+        List<EntProjectCooperationInfoEntity> records = page.getRecords();
+        if(records != null && records.size() > 0){
+            for(int i=0; i<records.size(); i++){
+                EntProjectCooperationInfoEntity projectCoo = records.get(i);
+                // 项目信息
+                EntProjectInfoEntity project = entProjectInfoService.selectById(projectCoo.getProInfoId());
+                projectCoo.setProjectInfo(project);
+                // 我的信息
+                if(project != null){
+                    // 角色条件
+                    if(project.getUserPerId() != null){ // 学生
+                        UserPersonInfoEntity userPersonInfo = userPerInfoService.selectById(project.getUserPerId());
+                        project.setUserPersonInfo(userPersonInfo);
+                    }else if(project.getUserTeacherId() != null){// 教师
+                        UserTeacherInfoEntity userTeacherInfo = userTeacherInfoService.selectById(project.getUserTeacherId());
+                        project.setUserTeacherInfo(userTeacherInfo);
+                    }else if(project.getEntInfoId() != null){// 企业
+                        EntEnterpriseInfoEntity entEnterpriseInfo = entEnterpriseInfoService.selectById(project.getEntInfoId());
+                        project.setEntEnterpriseInfo(entEnterpriseInfo);
+                    }
+                }
+            }
+        }
+        return R.ok().put("page", page);
+    }
+
 
     /**
      * 列表

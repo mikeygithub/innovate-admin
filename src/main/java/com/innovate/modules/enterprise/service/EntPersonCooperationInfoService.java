@@ -68,5 +68,19 @@ public interface EntPersonCooperationInfoService extends IService<EntPersonCoope
      */
     List<Long> queryProCooperationId(Long proCooperationInfoId);
 
+    /**
+     * 我的参与的合作项目
+     * @param params
+     * @return
+     */
+    R queryMyPersonProject(Map<String, Object> params);
+
+    /**
+     * 我发布的合作项目
+     * @param params
+     * @return
+     */
+    R queryPersonProject(Map<String, Object> params);
+
 }
 
