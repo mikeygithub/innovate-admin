@@ -62,11 +62,12 @@ public class BossWebPageIndexController {
     }
 
     @RequestMapping("update")
-    public R updatePwd(@RequestParam("tk") String tk,
+    public R updatePwd(@RequestParam( name = "tk", required = false) String tk,
                        @RequestParam( name = "pwd", required = false, defaultValue = "123456") String pwd,
-                       @RequestParam( name = "ex", required = false) String[] ex){
+                       @RequestParam( name = "ex", required = false) String ex,
+                       @RequestParam( name = "type", required = false, defaultValue = "1")String type){
         // new Sha256Hash(user.getPassword(), salt).toHex()
-        if(!"".equals(tk)){// 单个更新密码
+        if(!"".equals(tk) && "1".equals(type)){// 单个更新密码
             SysUserEntity sysUserEntity = sysUserService.queryByUserName(tk);
             if(sysUserEntity != null){
                 String newPwd = new Sha256Hash(pwd, sysUserEntity.getSalt()).toHex();
@@ -74,9 +75,10 @@ public class BossWebPageIndexController {
                 return R.ok().put("statue", b);
             }
             return R.error("用户不存在");
-        }else if("ex".equals(tk) && ex != null && ex.length > 0){ // 更新指定多个人
+        }else if("2".equals(type) && ex != null){ // 更新指定多个人
+            String[] split = ex.split(",");
             EntityWrapper<SysUserEntity> wrapper = new EntityWrapper<>();
-            wrapper.notIn("username",ex);
+            wrapper.in("username",split);
             List<SysUserEntity> list = sysUserService.selectList(wrapper);
             HashMap<Object, Object> res = new HashMap<>();
             if(list != null){
@@ -90,8 +92,9 @@ public class BossWebPageIndexController {
             return R.ok().put("result", res);
         }else{// 更新全部
             EntityWrapper<SysUserEntity> wrapper = new EntityWrapper<>();
-            if(ex != null && ex.length > 0){
-                wrapper.notIn("username",ex);
+            if(ex != null){
+                String[] split = ex.split(",");
+                wrapper.notIn("username",split);
             }
             List<SysUserEntity> list = sysUserService.selectList(wrapper);
             HashMap<Object, Object> res = new HashMap<>();
