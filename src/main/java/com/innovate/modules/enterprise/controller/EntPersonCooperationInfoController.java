@@ -70,6 +70,36 @@ public class EntPersonCooperationInfoController extends AbstractController {
         return R.ok().put("page", page);
     }
 
+    /**
+     * 我的参与的合作项目
+     * @return
+     */
+    @HasAdminRole(
+            targetType = java.util.Map.class,
+            index = 0, roleIds = {"9","10"}, perRoleId = "11",
+            perRoleKey = "user_per_id", teacherRoleId = "12",
+            teacherRoleKey = "user_teacher_id", entRoleId = "7",entRoleKey = "ent_info_id"
+    )
+    @RequestMapping("/queryMyProject")
+    public R queryMyProject(@RequestParam Map<String, Object> params){
+        return entPersonCooperationInfoService.queryMyPersonProject(params);
+    }
+
+    /**
+     * 我发布的合作项目
+     * @return
+     */
+    @HasAdminRole(
+            targetType = java.util.Map.class,
+            index = 0, roleIds = {"9","10"}, perRoleId = "11",
+            perRoleKey = "user_per_id", teacherRoleId = "12",
+            teacherRoleKey = "user_teacher_id", entRoleId = "7",entRoleKey = "ent_info_id"
+    )
+    @RequestMapping("/queryProject")
+    public R queryProject(@RequestParam Map<String, Object> params){
+        return entPersonCooperationInfoService.queryPersonProject(params);
+    }
+
 
 
     /**

@@ -93,6 +93,8 @@ public class AdminAspect {
                         }
                     }
                 }
+            }else{
+                throw new RRException("当前没有权限，或者已过有效期");
             }
         }
         //执行方法

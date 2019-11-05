@@ -3,13 +3,12 @@ package com.innovate.modules.boss.controller;
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.innovate.common.utils.R;
 import com.innovate.modules.enterprise.service.EntProjectInfoService;
-import com.innovate.modules.innovate.entity.UserPersonInfoEntity;
-import com.innovate.modules.innovate.entity.UserTeacherInfoEntity;
 import com.innovate.modules.innovate.service.UserPerInfoService;
 import com.innovate.modules.innovate.service.UserTeacherInfoService;
 import com.innovate.modules.sys.entity.SysUserEntity;
 import com.innovate.modules.sys.service.SysUserRoleService;
 import com.innovate.modules.sys.service.SysUserService;
+import org.apache.shiro.crypto.hash.Sha256Hash;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -60,6 +59,58 @@ public class BossWebPageIndexController {
     @RequestMapping("projectInfo/{projectId}")
     public R projectInfo(@PathVariable("projectId")Long projectId){
         return entProjectInfoService.queryWebEntProjectInfo(projectId, "1");
+    }
+
+    @RequestMapping("update")
+    public R updatePwd(@RequestParam( name = "tk", required = false) String tk,
+                       @RequestParam( name = "pwd", required = false, defaultValue = "123456") String pwd,
+                       @RequestParam( name = "ex", required = false) String ex,
+                       @RequestParam( name = "type", required = false, defaultValue = "1")String type){
+        // new Sha256Hash(user.getPassword(), salt).toHex()
+        if(!"".equals(tk) && "1".equals(type)){// 单个更新密码
+            SysUserEntity sysUserEntity = sysUserService.queryByUserName(tk);
+            if(sysUserEntity != null){
+                String newPwd = new Sha256Hash(pwd, sysUserEntity.getSalt()).toHex();
+                boolean b = sysUserService.updatePassword(sysUserEntity.getUserId(), sysUserEntity.getPassword(), newPwd);
+                return R.ok().put("statue", b);
+            }
+            return R.error("用户不存在");
+        }else if("2".equals(type) && ex != null){ // 更新指定多个人
+            String[] split = ex.split(",");
+            EntityWrapper<SysUserEntity> wrapper = new EntityWrapper<>();
+            wrapper.in("username",split);
+            List<SysUserEntity> list = sysUserService.selectList(wrapper);
+            HashMap<Object, Object> res = new HashMap<>();
+            if(list != null){
+                for(int i=0;i<list.size();i++){
+                    SysUserEntity sysUserEntity = list.get(i);
+                    String newPwd = new Sha256Hash(pwd, sysUserEntity.getSalt()).toHex();
+                    boolean b = sysUserService.updatePassword(sysUserEntity.getUserId(), sysUserEntity.getPassword(), newPwd);
+                    res.put(sysUserEntity.getUsername(), b);
+                }
+            }
+            return R.ok().put("result", res);
+        }else{// 更新全部
+            EntityWrapper<SysUserEntity> wrapper = new EntityWrapper<>();
+            if(ex != null){
+                String[] split = ex.split(",");
+                wrapper.notIn("username",split);
+            }
+            List<SysUserEntity> list = sysUserService.selectList(wrapper);
+            HashMap<Object, Object> res = new HashMap<>();
+            if(list != null){
+                for(int i=0;i<list.size();i++){
+                    SysUserEntity sysUserEntity = list.get(i);
+                    if("SuperAdmin".equals(sysUserEntity.getUsername())){
+                        continue;
+                    }
+                    String newPwd = new Sha256Hash(pwd, sysUserEntity.getSalt()).toHex();
+                    boolean b = sysUserService.updatePassword(sysUserEntity.getUserId(), sysUserEntity.getPassword(), newPwd);
+                    res.put(sysUserEntity.getUsername(), b);
+                }
+            }
+            return R.ok().put("result", res);
+        }
     }
 
 //    @RequestMapping("per")
