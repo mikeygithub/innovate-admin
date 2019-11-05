@@ -22,9 +22,9 @@ CREATE SCHEMA innovate_admin DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;
 1. 构建docker镜像：mvn clean package docker:build
 2. 部署：docker run --name innovate-admin --privileged=true -d -p 8080:8080 -v /root/mikey/MIKEY:/home/mikey/MIKEY 90fbb84d9eb1
 3. mvn clean 在 mvn install
-4. docker打包： docker build -t mikeyboom/innovate-admin:v1.2.7 .
+4. docker打包： docker build -t mikeyboom/innovate-admin:v1.3.1 .
 5. docker login 登入后推到仓库： docker push mikeyboom/innovate-admin
-6. 服务器拉取镜像： docker pull mikeyboom/innovate-admin:v1.2.7
+6. 服务器拉取镜像： docker pull mikeyboom/innovate-admin:v1.3.1
 #### 参与贡献
 
 1. Fork 本项目

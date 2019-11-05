@@ -50,8 +50,8 @@ public class FinishInfoModelServiceImpl implements FinishInfoModelService {
         Integer currPage  = 1;
         Integer pageSize  = 10;
         try {
-            currPage  = Integer.parseInt(params.get("currPage").toString());
-            pageSize  = Integer.parseInt(params.get("pageSize").toString());
+            if (params.get("currPage")!=null&&params.get("currPage")!="")currPage  = Integer.parseInt(params.get("currPage").toString());
+            if (params.get("pageSize")!=null&&params.get("pageSize")!="")pageSize  = Integer.parseInt(params.get("pageSize").toString());
         } catch (Exception e) {
             e.printStackTrace();
         }

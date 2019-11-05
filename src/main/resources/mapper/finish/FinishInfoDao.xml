@@ -34,8 +34,13 @@
         </if>
 
         <!--该值为当前用户的所属部门-->
-        <if test="isEr != null and isEr != ''">
+        <if test="isEr != null and isEr != '' and erInstituteId != null and erInstituteId != ''">
             and b.institute_id = #{erInstituteId}
+        </if>
+
+        <!--二级学院-->
+        <if test="instituteId != null and instituteId != ''">
+            and b.institute_id = #{instituteId}
         </if>
 
         <if test="isStudent != null and isStudent != ''">
@@ -122,8 +127,12 @@
         </if>
 
         <!--该值为当前用户的所属部门-->
-        <if test="isEr != null and isEr != ''">
+        <if test="isEr != null and isEr != '' and erInstituteId != null and erInstituteId != ''">
             and b.institute_id = #{erInstituteId}
+        </if>
+        <!--二级学院-->
+        <if test="instituteId != null and instituteId != ''">
+            and b.institute_id = #{instituteId}
         </if>
 
         <if test="isStudent != null and isStudent != ''">
