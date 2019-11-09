@@ -40,9 +40,5 @@ public class EntProjectMemberEntity implements Serializable {
 	 * 项目合作成员：企业
 	 */
 	private Long entInfoId;
-	/**
-	 * 审核状态，0待审核 1已审核
-	 */
-	private String inApply;
 
 }
