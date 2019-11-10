@@ -1,10 +1,7 @@
 package com.innovate.modules.sys.controller;
 
 import com.innovate.common.annotation.SysLog;
-import com.innovate.common.utils.Constant;
-import com.innovate.common.utils.PageUtils;
-import com.innovate.common.utils.R;
-import com.innovate.common.utils.RegularCheckUtils;
+import com.innovate.common.utils.*;
 import com.innovate.common.validator.Assert;
 import com.innovate.common.validator.ValidatorUtils;
 import com.innovate.common.validator.group.AddGroup;
@@ -15,6 +12,7 @@ import com.innovate.modules.sys.entity.SysUserModel;
 import com.innovate.modules.sys.form.PasswordForm;
 import com.innovate.modules.sys.service.SysUserRoleService;
 import com.innovate.modules.sys.service.SysUserService;
+import org.apache.commons.beanutils.ConvertUtils;
 import org.apache.commons.lang.ArrayUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.apache.shiro.crypto.hash.Sha256Hash;
@@ -155,11 +153,12 @@ public class SysUserController extends AbstractController {
 
 		List<SysUserEntityModel> errorDate = new ArrayList<>();
 		SysUserEntity user;
+		Long roleIds[];
 		for (SysUserEntityModel sysUserEntityModel : sysUserModel.getBatchSaveList()) {
+			// 校验手机号、邮箱和用户类型
 			if (	(!RegularCheckUtils.isPhone(sysUserEntityModel.get__EMPTY_2())) ||
 					(!RegularCheckUtils.isEmail(sysUserEntityModel.get__EMPTY_3())) ||
-					(sysUserEntityModel.get__EMPTY_4() != 2 && sysUserEntityModel.get__EMPTY_4() != 3)	) {
-				// 校验手机号、邮箱和用户类型
+					(!RoleUtils.checkRole(sysUserEntityModel.get__EMPTY_4()))) {
 				errorDate.add(sysUserEntityModel);
 				continue;
 			}
@@ -172,7 +171,9 @@ public class SysUserController extends AbstractController {
 			user.setStatus(1);
 			user.setInstituteId(sysUserModel.getErInstituteId());
 			user.setCreateUserId((long) 1);
-			user.setRoleIdList(Arrays.asList(sysUserEntityModel.get__EMPTY_4()));
+			//转换Long类型的数组
+			roleIds = (Long[]) ConvertUtils.convert(sysUserEntityModel.get__EMPTY_4().split(","), Long.class);
+			user.setRoleIdList(Arrays.asList(roleIds));
 			try {
 				sysUserService.save(user);
 			} catch (Exception e) {

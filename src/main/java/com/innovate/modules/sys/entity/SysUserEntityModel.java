@@ -37,6 +37,6 @@ public class SysUserEntityModel implements Serializable {
     /**
      * 用户类型
      */
-    private Long __EMPTY_4;
+    private String __EMPTY_4;
 
 }
