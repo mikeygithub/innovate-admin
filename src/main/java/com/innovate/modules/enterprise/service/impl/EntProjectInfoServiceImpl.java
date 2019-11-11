@@ -1,6 +1,7 @@
 package com.innovate.modules.enterprise.service.impl;
 
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
+import com.baomidou.mybatisplus.mapper.Wrapper;
 import com.baomidou.mybatisplus.plugins.Page;
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
 import com.innovate.common.utils.PageUtils;
@@ -9,15 +10,9 @@ import com.innovate.common.utils.R;
 import com.innovate.modules.enterprise.annotation.DefaultArrayValue;
 import com.innovate.modules.enterprise.annotation.DefaultValue;
 import com.innovate.modules.enterprise.dao.EntProjectInfoDao;
-import com.innovate.modules.enterprise.entity.EntEnterpriseInfoEntity;
-import com.innovate.modules.enterprise.entity.EntPersonCooperationInfoEntity;
-import com.innovate.modules.enterprise.entity.EntProjectCooperationInfoEntity;
-import com.innovate.modules.enterprise.entity.EntProjectInfoEntity;
+import com.innovate.modules.enterprise.entity.*;
 import com.innovate.common.enums.DefValueEnum;
-import com.innovate.modules.enterprise.service.EntEnterpriseInfoService;
-import com.innovate.modules.enterprise.service.EntPersonCooperationInfoService;
-import com.innovate.modules.enterprise.service.EntProjectCooperationInfoService;
-import com.innovate.modules.enterprise.service.EntProjectInfoService;
+import com.innovate.modules.enterprise.service.*;
 import com.innovate.modules.innovate.entity.UserPersonInfoEntity;
 import com.innovate.modules.innovate.entity.UserTeacherInfoEntity;
 import com.innovate.modules.innovate.service.UserPerInfoService;
@@ -41,24 +36,27 @@ public class EntProjectInfoServiceImpl extends ServiceImpl<EntProjectInfoDao, En
 
     @Autowired
     private SysUserService sysUserService;
-
     @Autowired
     private EntProjectCooperationInfoService entProjectCooperationInfoService;
-
     @Autowired
     private UserTeacherInfoService userTeacherInfoService;
-
     @Autowired
     private UserPerInfoService userPerInfoService;
-
     @Autowired
     private EntEnterpriseInfoService entEnterpriseInfoService;
-
     @Autowired
     private EntPersonCooperationInfoService entPersonCooperationInfoService;
-
     @Autowired
     private SysUserRoleService sysUserRoleService;
+    @Autowired
+    private EntStudentAttachmentService studentAttachmentService;
+    @Autowired
+    private EntTeacherAttachmentService teacherAttachmentService;
+    @Autowired
+    private EntEnterpriseAttachmentService enterpriseAttachmentService;
+    @Autowired
+    private EntPersonCooperationInfoService personCooperationInfoService;
+
 
     @DefaultValue(targetType = java.util.Map.class, index = 0, key = "inType", defValue = "userPerId", defValueEnum = DefValueEnum.STRING)
     @DefaultArrayValue(targetType = java.util.Map.class, index = 0, key = {"inApply"}, defValue = {"0"}, defValueEnum = {DefValueEnum.STRING})
@@ -371,6 +369,83 @@ public class EntProjectInfoServiceImpl extends ServiceImpl<EntProjectInfoDao, En
             }
         }
         return R.ok().put("data", project);
+    }
+
+    // 当前不能使用默认值，可能会出现数据不一致的问题，暂时去掉
+    //@DefaultValue(targetType = java.lang.String.class, index = 1, key = "inType",defValue = "userPerId", defValueEnum = DefValueEnum.STRING)
+    @Override
+    public R queryProjectInfoByIdAndType(Long proInfoId, String inType) {
+        EntProjectInfoEntity project = selectById(proInfoId);
+        if(project != null){
+            // 项目发布者 + 专利信息（项目要求相关文件）
+            if("entInfoId".equals(inType)){// 企业
+                EntEnterpriseInfoEntity entEnterpriseInfoEntity = entEnterpriseInfoService.selectById(project.getEntInfoId());
+                SysUserEntity sysUserEntity = sysUserService.selectById(entEnterpriseInfoEntity.getUserId());
+                entEnterpriseInfoEntity.setSysUser(sysUserEntity);
+                project.setEntEnterpriseInfo(entEnterpriseInfoEntity);
+                EntityWrapper<EntEnterpriseAttachmentEntity> wrapper = new EntityWrapper<EntEnterpriseAttachmentEntity>();
+                wrapper.eq("pro_info_id", project.getProInfoId()).eq("ent_info_id", entEnterpriseInfoEntity.getEntInfoId());
+                List<EntEnterpriseAttachmentEntity> attachments = enterpriseAttachmentService.selectList(wrapper);
+                project.setEnterpriseAttachments(attachments);
+            }else if("userPerId".equals(inType)){ // 学生
+                UserPersonInfoEntity userPersonInfoEntity = userPerInfoService.selectById(project.getUserPerId());
+                SysUserEntity sysUserEntity = sysUserService.selectById(userPersonInfoEntity.getUserId());
+                userPersonInfoEntity.setSysUserEntity(sysUserEntity);
+                project.setUserPersonInfo(userPersonInfoEntity);
+                EntityWrapper<EntStudentAttachmentEntity> wrapper = new EntityWrapper<EntStudentAttachmentEntity>();
+                wrapper.eq("pro_info_id", project.getProInfoId()).eq("user_per_id", userPersonInfoEntity.getUserPerId());
+                List<EntStudentAttachmentEntity> attachments = studentAttachmentService.selectList(wrapper);
+                project.setStudentAttachments(attachments);
+            }else if("userTeacherId".equals(inType)){ // 教师
+                UserTeacherInfoEntity userTeacherInfoEntity = userTeacherInfoService.selectById(project.getUserTeacherId());
+                SysUserEntity sysUserEntity = sysUserService.selectById(userTeacherInfoEntity.getUserId());
+                userTeacherInfoEntity.setSysUserEntity(sysUserEntity);
+                project.setUserTeacherInfo(userTeacherInfoEntity);
+                EntityWrapper<EntTeacherAttachmentEntity> wrapper = new EntityWrapper<EntTeacherAttachmentEntity>();
+                List<EntTeacherAttachmentEntity> attachments = teacherAttachmentService.selectList(wrapper);
+                project.setTeacherAttachments(attachments);
+            }
+            // 合作项目信息
+            EntityWrapper<EntProjectCooperationInfoEntity> wrapper = new EntityWrapper<EntProjectCooperationInfoEntity>();
+            wrapper.eq("",project.getProInfoId());
+            EntProjectCooperationInfoEntity projectCooperationInfo = (EntProjectCooperationInfoEntity)entProjectCooperationInfoService.selectObj(wrapper);
+            project.setProjectCooperationInfo(projectCooperationInfo);
+            // 项目合作者信息
+            if(projectCooperationInfo != null) {
+                EntityWrapper<EntPersonCooperationInfoEntity> personWrapper = new EntityWrapper<>();
+                List<EntPersonCooperationInfoEntity> persons = personCooperationInfoService.selectList(personWrapper);
+
+                // 因为有三个不同的用户类型，所以这里需要给三个ArrayList
+                ArrayList<EntPersonCooperationInfoEntity> ents = new ArrayList<EntPersonCooperationInfoEntity>();
+                ArrayList<EntPersonCooperationInfoEntity> teachers = new ArrayList<EntPersonCooperationInfoEntity>();
+                ArrayList<EntPersonCooperationInfoEntity> students = new ArrayList<EntPersonCooperationInfoEntity>();
+                projectCooperationInfo.setPersonCooperationEnt(ents);
+                projectCooperationInfo.setPersonCooperationTeacher(teachers);
+                projectCooperationInfo.setPersonCooperationPer(students);
+                if(persons != null && !persons.isEmpty()){
+                    for (int i=0; i<persons.size(); i++) {
+                        EntPersonCooperationInfoEntity person = persons.get(i);
+                        // 合作者用户类型
+                        if(person.getEntInfoId() != null){ // 企业
+                            EntEnterpriseInfoEntity ent = entEnterpriseInfoService.selectById(person.getEntInfoId());
+                            person.setEntEnterpriseInfo(ent);
+                            ents.add(person);
+                        }else if(person.getUserTeacherId() != null){ // 教师
+                            UserTeacherInfoEntity teacher = userTeacherInfoService.selectById(person.getUserTeacherId());
+                            person.setUserTeacherInfo(teacher);
+                            teachers.add(person);
+                        }else if(person.getUserPerId() != null){ // 学生
+                            UserPersonInfoEntity student = userPerInfoService.selectById(person.getUserPerId());
+                            person.setUserPersonInfo(student);
+                            students.add(person);
+                        }
+                    }
+                }
+            }
+            return R.ok().put("data", project);
+        }else{
+            return R.error();
+        }
     }
 
     /**

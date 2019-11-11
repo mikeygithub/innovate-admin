@@ -55,6 +55,15 @@ public class EntProjectInfoController extends AbstractController {
         return R.ok().put("page", page);
     }
 
+    /**
+     * 该方法用于查询项目信息+附件信息+合作信息+负责人信息+成员信息+专利
+     * @return
+     */
+    @RequestMapping("/info/{inType}/{proInfoId}")
+    public R projectInfo(@PathVariable("proInfoId") Long proInfoId, @PathVariable("inType") String inType){
+        return entProjectInfoService.queryProjectInfoByIdAndType(proInfoId, inType);
+    }
+
 
     /**
      * 信息
