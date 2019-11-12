@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.innovate.modules.enterprise.dao.EntProjectAttachDao">
+
+	<!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="com.innovate.modules.enterprise.entity.EntProjectAttachEntity" id="entProjectAttachMap">
+        <result property="projectAttachId" column="project_attach_id"/>
+        <result property="proInfoId" column="pro_info_id"/>
+        <result property="attachName" column="attach_name"/>
+        <result property="url" column="url"/>
+    </resultMap>
+
+
+</mapper>

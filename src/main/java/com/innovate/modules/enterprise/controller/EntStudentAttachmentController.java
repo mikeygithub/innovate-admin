@@ -98,7 +98,6 @@ public class EntStudentAttachmentController {
             entStudentAttachmentEntity.setStuAttachmentName(fileName);
             entStudentAttachmentEntity.setStuAttachmentUrl(UPLOAD_FILES_PATH);
             entStudentAttachmentEntity.setUserPerId(userPersonInfoEntity.getUserPerId());
-
         }
         return R.ok("文件上传成功").put("entStudentAttachmentEntity", entStudentAttachmentEntity);
 
