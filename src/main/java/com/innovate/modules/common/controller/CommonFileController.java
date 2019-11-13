@@ -74,6 +74,9 @@ public class CommonFileController extends AbstractController {
     public Object upload(@RequestParam("file") MultipartFile file, final HttpServletRequest request) {
         try {
             String projectName = request.getParameter("projectName");
+            if (projectName == null || "".equals(projectName)){
+                projectName = "innovate";
+            }
             String tempPath = "/" + RandomUtils.getRandomNums() + "/";
             String UPLOAD_FILES_PATH = ConfigApi.UPLOAD_URL + projectName + tempPath;
             if (Objects.isNull(file) || file.isEmpty()) {
@@ -84,10 +87,9 @@ public class CommonFileController extends AbstractController {
             if (!result.equals("true")) {
                 return R.error(result);
             }
-            tempPath += fileName;
-            logger.info("文件路径：{}", tempPath);
-            System.out.println(fileName);
-            return R.ok("文件上传成功").put("data", tempPath);
+            logger.info("文件路径：{}", tempPath + fileName);
+            logger.info(fileName);
+            return R.ok("文件上传成功").put("data", UPLOAD_FILES_PATH + fileName);
         } catch (IOException e) {
             e.printStackTrace();
         }
