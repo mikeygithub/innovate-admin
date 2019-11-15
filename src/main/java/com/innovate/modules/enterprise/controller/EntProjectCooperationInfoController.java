@@ -1,17 +1,25 @@
 package com.innovate.modules.enterprise.controller;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.innovate.common.utils.PageUtils;
 import com.innovate.common.utils.R;
+import com.innovate.modules.common.entity.CommonAttachments;
+import com.innovate.modules.common.entity.CommonFile;
 import com.innovate.modules.enterprise.annotation.HasAdminRole;
+import com.innovate.modules.enterprise.entity.EntCoopeationAttachEntity;
+import com.innovate.modules.enterprise.entity.EntProjectAttachEntity;
 import com.innovate.modules.enterprise.entity.EntProjectCooperationInfoEntity;
+import com.innovate.modules.enterprise.entity.EntProjectInfoEntity;
+import com.innovate.modules.enterprise.service.EntCoopeationAttachService;
 import com.innovate.modules.enterprise.service.EntProjectCooperationInfoService;
 import com.innovate.modules.sys.controller.AbstractController;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 
 /**
@@ -26,6 +34,8 @@ import java.util.Map;
 public class EntProjectCooperationInfoController extends AbstractController {
     @Autowired
     private EntProjectCooperationInfoService entProjectCooperationInfoService;
+    @Autowired
+    private EntCoopeationAttachService entCoopeationAttachService;
 
     /**
      * 列表
@@ -73,10 +83,35 @@ public class EntProjectCooperationInfoController extends AbstractController {
      */
     @RequestMapping("/save")
     //@RequiresPermissions("enterprise:project:cooperation:save")
-    public R save(@RequestBody EntProjectCooperationInfoEntity entProjectCooperationInfo){
-		entProjectCooperationInfoService.insertProjectCooperation(entProjectCooperationInfo);
+    public R save(@RequestBody Map<String, Object> params){
+        Gson gson = new Gson();
+        Object project = params.get("Cooperation");
+        Object attach = params.get("attachments");
 
-        return R.ok();
+        // 解析项目数据，使用fastJson转换防止String类型的数据转换失败
+        String json = gson.toJson(project);
+        //EntProjectCooperationInfoEntity entProjectCooperationInfoEntity = gson.fromJson(json, EntProjectCooperationInfoEntity.class);
+        JSONObject userJson = JSONObject.parseObject(json);
+        EntProjectCooperationInfoEntity entProjectCooperationInfoEntity = JSON.toJavaObject(userJson,EntProjectCooperationInfoEntity.class);
+
+        // 解析附件数据
+        String jsonAttach = gson.toJson(attach);
+        List<CommonAttachments> attachments = gson.fromJson(jsonAttach, new TypeToken<List<CommonAttachments>>(){}.getType());
+		entProjectCooperationInfoService.insertProjectCooperation(entProjectCooperationInfoEntity);
+
+        if(attachments != null){
+            List<EntCoopeationAttachEntity> insertBatch = new ArrayList<>();
+            for(int i=0; i<attachments.size(); i++){
+                CommonFile cfile = attachments.get(i).getResponse();
+                EntCoopeationAttachEntity entCoopeationAttachEntity = new EntCoopeationAttachEntity();
+                entCoopeationAttachEntity.setProCooperationInfoId(entProjectCooperationInfoEntity.getProCooperationInfoId());
+                entCoopeationAttachEntity.setAttachName(attachments.get(i).getName());
+                entCoopeationAttachEntity.setUrl(cfile.getData());
+                insertBatch.add(entCoopeationAttachEntity);
+            }
+            entCoopeationAttachService.insertBatch(insertBatch);
+        }
+        return R.ok().put("params", params);
     }
 
     /**

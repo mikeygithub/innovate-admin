@@ -55,7 +55,6 @@ public class EntProjectAttachController {
         return R.ok().put("page", page);
     }
 
-
     /**
      * 信息
      */
@@ -71,14 +70,10 @@ public class EntProjectAttachController {
      * 保存
      */
     @RequestMapping("/save")
-    @RequiresPermissions("enterprise:project:attachment:save")
+    //@RequiresPermissions("enterprise:project:attachment:save")
     public R save(@RequestParam("file") List<MultipartFile> files, HttpServletRequest request) {
 
-        String proInfoId = request.getParameter("proInfoId");
-
-        EntProjectInfoEntity entProjectInfoEntity = entProjectInfoService.selectById(Long.parseLong(proInfoId));
-
-        String UPLOAD_FILES_PATH = ConfigApi.UPLOAD_URL + entProjectInfoEntity.getProName() + "/"+ RandomUtils.getRandomNums()+"/";
+        String UPLOAD_FILES_PATH = ConfigApi.UPLOAD_URL + "/"+ RandomUtils.getRandomNums()+"/";
 
         if (Objects.isNull(files) || files.isEmpty()) {
             return R.error("文件为空，请重新上传");
@@ -88,7 +83,6 @@ public class EntProjectAttachController {
 
         for(MultipartFile file : files){
             String fileName = file.getOriginalFilename();
-
 
             String result = null;
             try {
@@ -103,7 +97,6 @@ public class EntProjectAttachController {
             entProjectAttachEntity = new EntProjectAttachEntity();
             entProjectAttachEntity.setAttachName(fileName);
             entProjectAttachEntity.setUrl(UPLOAD_FILES_PATH);
-            entProjectAttachEntity.setProInfoId(entProjectInfoEntity.getProInfoId());
         }
         return R.ok("文件上传成功").put("entProjectAttachEntity", entProjectAttachEntity);
     }

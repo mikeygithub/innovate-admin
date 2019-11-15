@@ -13,7 +13,7 @@ import lombok.Data;
  * @date 2019-10-11 20:55:46
  */
 @Data
-@TableName("ent_student_attachment")
+@TableName("ent_student_attach")
 public class EntStudentAttachmentEntity implements Serializable {
 	private static final long serialVersionUID = 1L;
 

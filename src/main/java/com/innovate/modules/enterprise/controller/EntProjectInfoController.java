@@ -1,11 +1,15 @@
 package com.innovate.modules.enterprise.controller;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.innovate.common.utils.PageUtils;
 import com.innovate.common.utils.R;
+import com.innovate.modules.common.entity.CommonAttachments;
+import com.innovate.modules.common.entity.CommonFile;
 import com.innovate.modules.enterprise.annotation.HasAdminRole;
-import com.innovate.modules.enterprise.entity.EntProjectCooperationInfoEntity;
-import com.innovate.modules.enterprise.entity.EntProjectInfoEntity;
+import com.innovate.modules.enterprise.entity.*;
 import com.innovate.modules.enterprise.service.EntPersonCooperationInfoService;
+import com.innovate.modules.enterprise.service.EntProjectAttachService;
 import com.innovate.modules.enterprise.service.EntProjectCooperationInfoService;
 import com.innovate.modules.enterprise.service.EntProjectInfoService;
 import com.innovate.modules.sys.controller.AbstractController;
@@ -14,6 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -37,6 +42,9 @@ public class EntProjectInfoController extends AbstractController {
 
     @Autowired
     private EntPersonCooperationInfoService entPersonCooperationInfoService;
+
+    @Autowired
+    private EntProjectAttachService entProjectAttachService;
 
     /**
      * 列表
@@ -105,8 +113,32 @@ public class EntProjectInfoController extends AbstractController {
      */
     @RequestMapping("/save")
     // @RequiresPermissions("enterprise:project:info:save")
-    public R save(@RequestBody EntProjectInfoEntity entProjectInfo){
-        return entProjectInfoService.insertEntProject(entProjectInfo);
+    public R save(@RequestBody Map<String, Object> params, EntProjectInfoEntity entProjectInfo){
+        Gson gson = new Gson();
+        Object project = params.get("project");
+        Object attach = params.get("attachments");
+
+        // 解析项目数据
+        String json = gson.toJson(project);
+        EntProjectInfoEntity entProjectInfoEntity = gson.fromJson(json, EntProjectInfoEntity.class);
+        // 解析附件数据
+        String jsonAttach = gson.toJson(attach);
+        List<CommonAttachments> attachments = gson.fromJson(jsonAttach, new TypeToken<List<CommonAttachments>>(){}.getType());
+
+        entProjectInfoService.insertEntProject(entProjectInfoEntity);
+        if(attachments != null){
+            List<EntProjectAttachEntity> insertBatch = new ArrayList<>();
+            for(int i=0; i<attachments.size(); i++){
+                CommonFile cfile = attachments.get(i).getResponse();
+                EntProjectAttachEntity entProjectAttachEntity = new EntProjectAttachEntity();
+                entProjectAttachEntity.setProInfoId(entProjectInfoEntity.getProInfoId());
+                entProjectAttachEntity.setAttachName(attachments.get(i).getName());
+                entProjectAttachEntity.setUrl(cfile.getData());
+                insertBatch.add(entProjectAttachEntity);
+            }
+            entProjectAttachService.insertBatch(insertBatch);
+        }
+        return R.ok().put("params", params);
     }
 
     /**

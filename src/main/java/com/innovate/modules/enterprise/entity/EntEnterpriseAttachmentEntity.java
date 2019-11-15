@@ -15,7 +15,7 @@ import java.io.Serializable;
  * @date 2019-09-10 22:18:36
  */
 @Data
-@TableName("ent_enterprise_attachment")
+@TableName("ent_enterprise_attach")
 public class  EntEnterpriseAttachmentEntity implements Serializable {
 	private static final long serialVersionUID = 1L;
 
