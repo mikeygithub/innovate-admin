@@ -407,8 +407,9 @@ public class EntProjectInfoServiceImpl extends ServiceImpl<EntProjectInfoDao, En
             }
             // 合作项目信息
             EntityWrapper<EntProjectCooperationInfoEntity> wrapper = new EntityWrapper<EntProjectCooperationInfoEntity>();
-            wrapper.eq("",project.getProInfoId());
-            EntProjectCooperationInfoEntity projectCooperationInfo = (EntProjectCooperationInfoEntity)entProjectCooperationInfoService.selectObj(wrapper);
+            wrapper.eq("pro_info_id",project.getProInfoId());
+            List<EntProjectCooperationInfoEntity> list = entProjectCooperationInfoService.selectList(wrapper);
+            EntProjectCooperationInfoEntity projectCooperationInfo = list != null && list.size() > 0 ? list.get(0) : null;
             project.setProjectCooperationInfo(projectCooperationInfo);
             // 项目合作者信息
             if(projectCooperationInfo != null) {
