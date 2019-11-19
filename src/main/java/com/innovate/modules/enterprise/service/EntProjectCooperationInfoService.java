@@ -73,5 +73,13 @@ public interface EntProjectCooperationInfoService extends IService<EntProjectCoo
      */
     boolean deleteByProInfoId(Long proInfoId);
 
+    /**
+     * 我发布的合作
+     * @param params
+     * @param userId
+     * @return
+     */
+    R queryProjectPage(Map<String, Object> params, Long userId);
+
 }
 

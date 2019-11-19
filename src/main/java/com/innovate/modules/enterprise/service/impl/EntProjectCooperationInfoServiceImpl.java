@@ -1,21 +1,23 @@
 package com.innovate.modules.enterprise.service.impl;
 
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
+import com.baomidou.mybatisplus.plugins.Page;
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
 import com.innovate.common.annotation.LimitPage;
 import com.innovate.common.utils.PageUtils;
+import com.innovate.common.utils.Query;
 import com.innovate.common.utils.R;
 import com.innovate.modules.enterprise.annotation.DefaultArrayValue;
 import com.innovate.modules.enterprise.annotation.DefaultValue;
 import com.innovate.modules.enterprise.dao.EntProjectCooperationInfoDao;
-import com.innovate.modules.enterprise.entity.EntCoopeationAttachEntity;
-import com.innovate.modules.enterprise.entity.EntProjectAttachEntity;
-import com.innovate.modules.enterprise.entity.EntProjectCooperationInfoEntity;
+import com.innovate.modules.enterprise.entity.*;
 import com.innovate.common.enums.DefValueEnum;
 import com.innovate.modules.enterprise.service.EntCoopeationAttachService;
 import com.innovate.modules.enterprise.service.EntEnterpriseInfoService;
 import com.innovate.modules.enterprise.service.EntProjectAttachService;
 import com.innovate.modules.enterprise.service.EntProjectCooperationInfoService;
+import com.innovate.modules.innovate.entity.UserPersonInfoEntity;
+import com.innovate.modules.innovate.entity.UserTeacherInfoEntity;
 import com.innovate.modules.innovate.service.UserPerInfoService;
 import com.innovate.modules.innovate.service.UserTeacherInfoService;
 import com.innovate.modules.sys.entity.SysUserEntity;
@@ -192,6 +194,26 @@ public class EntProjectCooperationInfoServiceImpl extends ServiceImpl<EntProject
     @Override
     public boolean deleteByProInfoId(Long proInfoId) {
         return baseMapper.deleteByProInfoId(proInfoId);
+    }
+
+    @DefaultArrayValue(targetType = java.util.Map.class, index = 0, key = {"inApply", "inType"}, defValue = {"0", "userPerId"}, defValueEnum = {DefValueEnum.STRING, DefValueEnum.STRING})
+    @Override
+    public R queryProjectPage(Map<String, Object> params, Long userId) {
+        String type = (String) params.get("inType");
+        EntityWrapper<EntProjectCooperationInfoEntity> wrapper = new EntityWrapper<>();
+        wrapper.eq("in_apply", params.get("inApply"));
+        if("userPerId".equals(type)){
+            UserPersonInfoEntity userPersonInfoEntity = userPerInfoService.selectOne(new EntityWrapper<UserPersonInfoEntity>().eq("user_id", userId));
+            wrapper.eq("user_per_id", userPersonInfoEntity.getUserPerId());
+        }else if("userTeacherId".equals(type)){
+            UserTeacherInfoEntity teacherInfoEntity = userTeacherInfoService.selectOne(new EntityWrapper<UserTeacherInfoEntity>().eq("user_id", userId));
+            wrapper.eq("user_teacher_id", teacherInfoEntity.getUserTeacherId());
+        }else if("entInfoId".equals(type)){
+            EntEnterpriseInfoEntity entEnterpriseInfoEntity = entEnterpriseInfoService.selectOne(new EntityWrapper<EntEnterpriseInfoEntity>().eq("user_id", userId));
+            wrapper.eq("ent_info_id", entEnterpriseInfoEntity.getEntInfoId());
+        }
+        Page<EntProjectCooperationInfoEntity> page = this.selectPage(new Query<EntProjectCooperationInfoEntity>(params).getPage(), wrapper);
+        return R.ok().put("page", new PageUtils(page));
     }
 
     // ================ 放弃列表方法，请勿删除 ====================

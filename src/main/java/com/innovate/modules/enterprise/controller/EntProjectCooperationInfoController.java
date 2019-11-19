@@ -141,6 +141,7 @@ public class EntProjectCooperationInfoController extends AbstractController {
      */
     @RequestMapping("/queryProject")
     public R queryProject(@RequestParam Map<String, Object> params){
-        return entProjectCooperationInfoService.queryProjectCooperationInfo(params);
+        //return entProjectCooperationInfoService.queryProjectCooperationInfo(params);
+        return entProjectCooperationInfoService.queryProjectPage(params, getUserId());
     }
 }
