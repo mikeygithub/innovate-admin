@@ -199,7 +199,7 @@
             e_p_i.pro_info_id AS i_pro_info_id, e_p_i.pro_name , e_p_i.pro_register , e_p_i.pro_origin , e_p_i.pro_outlay , e_p_i.pro_type,
             e_p_i.pro_introduce, e_p_i.ent_info_id AS p_ent_info_id, e_p_i.user_per_id AS p_user_per_id, e_p_i.user_teacher_id AS p_user_teacher_id,
             e_p_i.in_apply AS i_in_apply,
-            ie_e_i.ent_info_id, e_e_i.user_id , e_e_i.ent_name , e_e_i.ent_corporate , e_e_i.ent_business , e_e_i.ent_code,
+            e_e_i.ent_info_id, e_e_i.user_id , e_e_i.ent_name , e_e_i.ent_corporate , e_e_i.ent_business , e_e_i.ent_code,
             e_e_i.ent_register, e_e_i.ent_founding_time, e_e_i.ent_type, e_e_i.ent_status ,e_e_i.ent_register_address ,
             e_e_i.ent_address ,e_e_i.ent_introduce, e_e_i.new_high_zones, e_e_i.ent_logo, e_e_i.ent_in_time, e_e_i.in_apply AS e_in_apply
         FROM
