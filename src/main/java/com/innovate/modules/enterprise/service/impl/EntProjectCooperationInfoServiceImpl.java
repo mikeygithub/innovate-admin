@@ -1,5 +1,6 @@
 package com.innovate.modules.enterprise.service.impl;
 
+import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
 import com.innovate.common.annotation.LimitPage;
 import com.innovate.common.utils.PageUtils;
@@ -7,14 +8,19 @@ import com.innovate.common.utils.R;
 import com.innovate.modules.enterprise.annotation.DefaultArrayValue;
 import com.innovate.modules.enterprise.annotation.DefaultValue;
 import com.innovate.modules.enterprise.dao.EntProjectCooperationInfoDao;
+import com.innovate.modules.enterprise.entity.EntCoopeationAttachEntity;
+import com.innovate.modules.enterprise.entity.EntProjectAttachEntity;
 import com.innovate.modules.enterprise.entity.EntProjectCooperationInfoEntity;
 import com.innovate.common.enums.DefValueEnum;
+import com.innovate.modules.enterprise.service.EntCoopeationAttachService;
 import com.innovate.modules.enterprise.service.EntEnterpriseInfoService;
+import com.innovate.modules.enterprise.service.EntProjectAttachService;
 import com.innovate.modules.enterprise.service.EntProjectCooperationInfoService;
 import com.innovate.modules.innovate.service.UserPerInfoService;
 import com.innovate.modules.innovate.service.UserTeacherInfoService;
 import com.innovate.modules.sys.entity.SysUserEntity;
 import com.innovate.modules.sys.service.SysUserRoleService;
+import com.innovate.modules.sys.service.SysUserService;
 import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -39,6 +45,15 @@ public class EntProjectCooperationInfoServiceImpl extends ServiceImpl<EntProject
     @Autowired
     private EntEnterpriseInfoService entEnterpriseInfoService;
 
+    @Autowired
+    private SysUserService sysUserService;
+
+    @Autowired
+    private EntProjectAttachService entProjectAttachService;
+
+    @Autowired
+    private EntCoopeationAttachService entCoopeationAttachService;
+
     @LimitPage(targetType = java.util.Map.class, name = "项目合作分页", index = 0, pageSize = 10,  currPage = 1)
     @DefaultArrayValue(targetType = java.util.Map.class, index = 0, key = {"inApply", "inType"}, defValue = {"0", "userPerId"}, defValueEnum = {DefValueEnum.STRING, DefValueEnum.STRING})
     @Override
@@ -61,12 +76,48 @@ public class EntProjectCooperationInfoServiceImpl extends ServiceImpl<EntProject
         if("userPerId".equals(type)){ // 学生
             //userPerInfoService.queryUserPerIdByUserId(sysUserEntity.get)
             EntProjectCooperationInfoEntity entity = baseMapper.queryProjectCooperationInfoListForPer(params);
+            SysUserEntity userEntity = sysUserService.selectById(entity.getUserPersonInfo().getUserId());
+            entity.setSysUserEntity(userEntity);
+            //项目信息附件
+            EntityWrapper<EntProjectAttachEntity> wrapperAttach = new EntityWrapper<EntProjectAttachEntity>();
+            wrapperAttach.eq("pro_info_id", entity.getProInfoId());
+            List<EntProjectAttachEntity> attachments = entProjectAttachService.selectList(wrapperAttach);
+            entity.setEntProjectAttachEntities(attachments);
+            //项目合作附件
+            EntityWrapper<EntCoopeationAttachEntity> cooAttach = new EntityWrapper<EntCoopeationAttachEntity>();
+            wrapperAttach.eq("pro_info_id", entity.getProInfoId());
+            List<EntCoopeationAttachEntity> cooAttachments = entCoopeationAttachService.selectList(cooAttach);
+            entity.setEntCoopeationAttachEntities(cooAttachments);
             return R.ok().put("data", entity);
         }else if("userTeacherId".equals(type)){ // 教师
             EntProjectCooperationInfoEntity entity = baseMapper.queryProjectCooperationInfoListForTeacher(params);
+            SysUserEntity userEntity = sysUserService.selectById(entity.getUserPersonInfo().getUserId());
+            entity.setSysUserEntity(userEntity);
+            //项目附件
+            EntityWrapper<EntProjectAttachEntity> wrapperAttach = new EntityWrapper<EntProjectAttachEntity>();
+            wrapperAttach.eq("pro_info_id", entity.getProInfoId());
+            List<EntProjectAttachEntity> attachments = entProjectAttachService.selectList(wrapperAttach);
+            entity.setEntProjectAttachEntities(attachments);
+            //项目合作附件
+            EntityWrapper<EntCoopeationAttachEntity> cooAttach = new EntityWrapper<EntCoopeationAttachEntity>();
+            wrapperAttach.eq("pro_info_id", entity.getProInfoId());
+            List<EntCoopeationAttachEntity> cooAttachments = entCoopeationAttachService.selectList(cooAttach);
+            entity.setEntCoopeationAttachEntities(cooAttachments);
             return R.ok().put("data", entity);
         }else if ("entInfoId".equals(type)){ // 企业
             EntProjectCooperationInfoEntity entity = baseMapper.queryProjectCooperationInfoListForEnt(params);
+            SysUserEntity userEntity = sysUserService.selectById(entity.getUserPersonInfo().getUserId());
+            entity.setSysUserEntity(userEntity);
+            //项目附件
+            EntityWrapper<EntProjectAttachEntity> wrapperAttach = new EntityWrapper<EntProjectAttachEntity>();
+            wrapperAttach.eq("pro_info_id", entity.getProInfoId());
+            List<EntProjectAttachEntity> attachments = entProjectAttachService.selectList(wrapperAttach);
+            entity.setEntProjectAttachEntities(attachments);
+            //项目合作附件
+            EntityWrapper<EntCoopeationAttachEntity> cooAttach = new EntityWrapper<EntCoopeationAttachEntity>();
+            wrapperAttach.eq("pro_info_id", entity.getProInfoId());
+            List<EntCoopeationAttachEntity> cooAttachments = entCoopeationAttachService.selectList(cooAttach);
+            entity.setEntCoopeationAttachEntities(cooAttachments);
             return R.ok().put("data", entity);
         }
         return R.error();

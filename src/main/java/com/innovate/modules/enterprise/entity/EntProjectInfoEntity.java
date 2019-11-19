@@ -98,6 +98,12 @@ public class EntProjectInfoEntity implements Serializable {
 	private SysUserEntity sysUser;
 
 	/**
+	 * 项目附件信息
+	 */
+	@TableField(exist = false)
+	private List<EntProjectAttachEntity> entProjectAttachEntities;
+
+	/**
 	 * 项目合作信息
 	 */
 	@TableField(exist = false)

@@ -136,4 +136,11 @@ public class EntProjectCooperationInfoController extends AbstractController {
         return R.ok();
     }
 
+    /**
+     * 我发布的合作
+     */
+    @RequestMapping("/queryProject")
+    public R queryProject(@RequestParam Map<String, Object> params){
+        return entProjectCooperationInfoService.queryProjectCooperationInfo(params);
+    }
 }

@@ -33,6 +33,10 @@ public class EntProjectAttachEntity implements Serializable {
 	 */
 	private String attachName;
 	/**
+	 * 附件类型：1项目信息，2专利
+	 */
+	private String attachType;
+	/**
 	 * 文件路径
 	 */
 	private String url;

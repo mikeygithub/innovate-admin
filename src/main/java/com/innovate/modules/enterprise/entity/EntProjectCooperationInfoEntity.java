@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.annotations.TableId;
 import com.baomidou.mybatisplus.annotations.TableName;
 import com.innovate.modules.innovate.entity.UserPersonInfoEntity;
 import com.innovate.modules.innovate.entity.UserTeacherInfoEntity;
+import com.innovate.modules.sys.entity.SysUserEntity;
 import lombok.Data;
 
 import java.io.Serializable;
@@ -116,5 +117,29 @@ public class EntProjectCooperationInfoEntity implements Serializable {
 	 */
 	@TableField(exist = false)
 	private List<EntPersonCooperationInfoEntity> personCooperationEnt;
+
+	/**
+	 * 项目企业合作人
+	 */
+	@TableField(exist = false)
+	private SysUserEntity sysUserEntity;
+
+	/**
+	 * 企业项目附件信息
+	 */
+	@TableField(exist = false)
+	private List<EntEnterpriseAttachmentEntity> enterpriseAttachments;
+
+	/**
+	 * 项目附件信息
+	 */
+	@TableField(exist = false)
+	private List<EntProjectAttachEntity> entProjectAttachEntities;
+
+	/**
+	 * 合作附件信息
+	 */
+	@TableField(exist = false)
+	private List<EntCoopeationAttachEntity> entCoopeationAttachEntities;
 
 }

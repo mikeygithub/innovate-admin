@@ -83,6 +83,13 @@ public interface EntProjectInfoService extends IService<EntProjectInfoEntity> {
      * @return
      */
     R queryWebEntProjectInfo(Long projectId, String inApply);
+    /**
+     * 该方法用于查询项目信息+附件信息+合作信息+负责人信息+成员信息+专利
+     * @param proInfoId
+     * @param inType
+     * @return
+     */
+    R queryProjectInfoByTypeAndId(Long proInfoId, String inType);
 
     /**
      * 该方法用于查询项目信息+附件信息+合作信息+负责人信息+成员信息+专利

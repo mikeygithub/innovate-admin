@@ -10,15 +10,12 @@ import com.innovate.modules.enterprise.entity.EntStudentAttachmentEntity;
 import com.innovate.modules.enterprise.service.EntProjectInfoService;
 import com.innovate.modules.innovate.config.ConfigApi;
 import com.innovate.modules.innovate.entity.UserPersonInfoEntity;
+import com.innovate.modules.util.FileDownFiles;
 import com.innovate.modules.util.RandomUtils;
 import com.innovate.modules.util.UpLoadFileUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.innovate.modules.enterprise.entity.EntProjectAttachEntity;
 import com.innovate.modules.enterprise.service.EntProjectAttachService;
@@ -27,6 +24,7 @@ import com.innovate.common.utils.R;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 
 /**
@@ -121,6 +119,16 @@ public class EntProjectAttachController {
 		entProjectAttachService.deleteBatchIds(Arrays.asList(projectAttachIds));
 
         return R.ok();
+    }
+
+    /**
+     * 文件下载
+     */
+    @PostMapping(value = "/download")
+    @RequiresPermissions("innovate:check:list")
+    public void downloadFile(final HttpServletResponse response, final HttpServletRequest request) {
+        String filePath = request.getParameter("filePath");
+        FileDownFiles.download(response, filePath);
     }
 
 }
