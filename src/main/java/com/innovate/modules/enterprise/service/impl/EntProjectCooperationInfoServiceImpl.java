@@ -12,10 +12,7 @@ import com.innovate.modules.enterprise.annotation.DefaultValue;
 import com.innovate.modules.enterprise.dao.EntProjectCooperationInfoDao;
 import com.innovate.modules.enterprise.entity.*;
 import com.innovate.common.enums.DefValueEnum;
-import com.innovate.modules.enterprise.service.EntCoopeationAttachService;
-import com.innovate.modules.enterprise.service.EntEnterpriseInfoService;
-import com.innovate.modules.enterprise.service.EntProjectAttachService;
-import com.innovate.modules.enterprise.service.EntProjectCooperationInfoService;
+import com.innovate.modules.enterprise.service.*;
 import com.innovate.modules.innovate.entity.UserPersonInfoEntity;
 import com.innovate.modules.innovate.entity.UserTeacherInfoEntity;
 import com.innovate.modules.innovate.service.UserPerInfoService;
@@ -49,6 +46,9 @@ public class EntProjectCooperationInfoServiceImpl extends ServiceImpl<EntProject
 
     @Autowired
     private SysUserService sysUserService;
+
+    @Autowired
+    private EntProjectInfoService entProjectInfoService;
 
     @Autowired
     private EntProjectAttachService entProjectAttachService;
@@ -93,7 +93,7 @@ public class EntProjectCooperationInfoServiceImpl extends ServiceImpl<EntProject
             return R.ok().put("data", entity);
         }else if("userTeacherId".equals(type)){ // 教师
             EntProjectCooperationInfoEntity entity = baseMapper.queryProjectCooperationInfoListForTeacher(params);
-            SysUserEntity userEntity = sysUserService.selectById(entity.getUserPersonInfo().getUserId());
+            SysUserEntity userEntity = sysUserService.selectById(entity.getUserTeacherInfo().getUserId());
             entity.setSysUserEntity(userEntity);
             //项目附件
             EntityWrapper<EntProjectAttachEntity> wrapperAttach = new EntityWrapper<EntProjectAttachEntity>();
@@ -108,7 +108,7 @@ public class EntProjectCooperationInfoServiceImpl extends ServiceImpl<EntProject
             return R.ok().put("data", entity);
         }else if ("entInfoId".equals(type)){ // 企业
             EntProjectCooperationInfoEntity entity = baseMapper.queryProjectCooperationInfoListForEnt(params);
-            SysUserEntity userEntity = sysUserService.selectById(entity.getUserPersonInfo().getUserId());
+            SysUserEntity userEntity = sysUserService.selectById(entity.getEntEnterpriseInfo().getUserId());
             entity.setSysUserEntity(userEntity);
             //项目附件
             EntityWrapper<EntProjectAttachEntity> wrapperAttach = new EntityWrapper<EntProjectAttachEntity>();
@@ -213,6 +213,12 @@ public class EntProjectCooperationInfoServiceImpl extends ServiceImpl<EntProject
             wrapper.eq("ent_info_id", entEnterpriseInfoEntity.getEntInfoId());
         }
         Page<EntProjectCooperationInfoEntity> page = this.selectPage(new Query<EntProjectCooperationInfoEntity>(params).getPage(), wrapper);
+        if(page.getRecords().size() > 0){
+            for (int i = 0; i < page.getRecords().size(); i++) {
+                EntProjectInfoEntity entProjectInfoEntity = entProjectInfoService.selectById(page.getRecords().get(i).getProInfoId());
+                page.getRecords().get(i).setProjectInfo(entProjectInfoEntity);
+            }
+        }
         return R.ok().put("page", new PageUtils(page));
     }
 
