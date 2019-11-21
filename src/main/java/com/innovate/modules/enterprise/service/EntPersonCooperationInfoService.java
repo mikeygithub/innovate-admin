@@ -5,6 +5,8 @@ import com.baomidou.mybatisplus.service.IService;
 import com.innovate.common.utils.PageUtils;
 import com.innovate.common.utils.R;
 import com.innovate.modules.enterprise.entity.EntPersonCooperationInfoEntity;
+import com.innovate.modules.enterprise.entity.EntProjectCooperationInfoEntity;
+import org.springframework.web.bind.annotation.PathVariable;
 
 import java.util.List;
 import java.util.Map;
@@ -19,6 +21,13 @@ import java.util.Map;
 public interface EntPersonCooperationInfoService extends IService<EntPersonCooperationInfoEntity> {
 
     PageUtils queryPage(Map<String, Object> params);
+
+    /**
+     *  根据项目合作信息id,角色类型查询合作列表
+     * @param proCooperationInfoId
+     * @return
+     */
+    EntProjectCooperationInfoEntity queryPersonCooperationInfoList(Long proCooperationInfoId, String inType, String inApply);
 
     /**
      *  根据项目合作信息id查询合作关系人员信息

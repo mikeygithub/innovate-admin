@@ -59,8 +59,11 @@ public class EntPersonCooperationInfoServiceImpl extends ServiceImpl<EntPersonCo
     @Autowired
     private SysUserRoleService sysUserRoleService;
 
+    @Autowired
+    private EntPersonCooperationInfoService entPersonCooperationInfoService;
 
-    @DefaultArrayValue(targetType = java.util.Map.class, index = 0, key = {"inApply", "inType", "inFinish"}, defValue = {"0", "userPerId","1"}, defValueEnum = {DefValueEnum.STRING, DefValueEnum.STRING, DefValueEnum.STRING})
+
+    @DefaultArrayValue(targetType = java.util.Map.class, index = 0, key = {"inApply", "inType"}, defValue = {"0", "userPerId","1"}, defValueEnum = {DefValueEnum.STRING, DefValueEnum.STRING, DefValueEnum.STRING})
     @Override
     public PageUtils queryPage(Map<String, Object> params) {
 //        Page<EntPersonCooperationInfoEntity> page = this.selectPage(
@@ -75,6 +78,61 @@ public class EntPersonCooperationInfoServiceImpl extends ServiceImpl<EntPersonCo
         return new PageUtils(page);
     }
 
+    @Override
+    public EntProjectCooperationInfoEntity queryPersonCooperationInfoList(Long proCooperationInfoId, String inType, String inApply) {
+        EntProjectCooperationInfoEntity entProjectCooperationInfoEntity = new EntProjectCooperationInfoEntity();
+        EntityWrapper<EntPersonCooperationInfoEntity> wrapper = new EntityWrapper<EntPersonCooperationInfoEntity>();
+        wrapper.eq("pro_cooperation_info_id", proCooperationInfoId);
+        List<EntPersonCooperationInfoEntity> entPersonCooperationInfoEntities = entPersonCooperationInfoService.selectList(wrapper);
+
+        if(entPersonCooperationInfoEntities.size() > 0){ // 学生
+            if("userPerId".equals(inType)){
+                List<UserPersonInfoEntity> userPersonInfoEntities = new ArrayList<UserPersonInfoEntity>();
+                for (int i = 0; i < entPersonCooperationInfoEntities.size(); i++) {
+                    if(entPersonCooperationInfoEntities.get(i).getUserPerId() != null){
+                        Long userPerId = entPersonCooperationInfoEntities.get(i).getUserPerId();
+                        UserPersonInfoEntity userPersonInfoEntity = userPerInfoService.selectById(userPerId);
+                        Long userId = userPersonInfoEntity.getUserId();
+                        userPersonInfoEntity.setSysUserEntity(sysUserService.selectById(userId));
+                        userPersonInfoEntities.add(userPersonInfoEntity);
+                    }
+                }
+
+                entProjectCooperationInfoEntity.setUserPersonInfoEntities(userPersonInfoEntities);
+            }
+            if("userTeacherId".equals(inType)){ // 教师
+                List<UserTeacherInfoEntity> userTeacherInfoEntities = new ArrayList<UserTeacherInfoEntity>();
+                for (int i = 0; i < entPersonCooperationInfoEntities.size(); i++) {
+                    if(entPersonCooperationInfoEntities.get(i).getUserTeacherId() != null){
+                        Long userTeacherId = entPersonCooperationInfoEntities.get(i).getUserTeacherId();
+                        UserTeacherInfoEntity userTeacherInfoEntity = userTeacherInfoService.selectById(userTeacherId);
+                        Long userId = userTeacherInfoEntity.getUserId();
+                        userTeacherInfoEntity.setSysUserEntity(sysUserService.selectById(userId));
+                        userTeacherInfoEntities.add(userTeacherInfoEntity);
+                    }
+                }
+
+                entProjectCooperationInfoEntity.setUserTeacherInfoEntities(userTeacherInfoEntities);
+            }
+            if("entInfoId".equals(inType)){ // 企业
+                List<EntEnterpriseInfoEntity> entEnterpriseInfoEntities = new ArrayList<EntEnterpriseInfoEntity>();
+                for (int i = 0; i < entPersonCooperationInfoEntities.size(); i++) {
+                    if(entPersonCooperationInfoEntities.get(i).getEntInfoId() != null){
+                        Long entInfoId = entPersonCooperationInfoEntities.get(i).getEntInfoId();
+                        EntEnterpriseInfoEntity entEnterpriseInfoEntity = entEnterpriseInfoService.selectById(entInfoId);
+                        Long userId = entEnterpriseInfoEntity.getUserId();
+                        entEnterpriseInfoEntity.setSysUser(sysUserService.selectById(userId));
+                        entEnterpriseInfoEntities.add(entEnterpriseInfoEntity);
+                    }
+                }
+
+                entProjectCooperationInfoEntity.setEntEnterpriseInfoEntities(entEnterpriseInfoEntities);
+            }
+        }
+        return entProjectCooperationInfoEntity;
+    }
+
+
     private Page<EntProjectCooperationInfoEntity> invokePage(Map<String, Object> params){
         EntityWrapper<EntProjectCooperationInfoEntity> wrapper = new EntityWrapper<EntProjectCooperationInfoEntity>();
         String type = (String) params.get("inType");
@@ -85,7 +143,6 @@ public class EntPersonCooperationInfoServiceImpl extends ServiceImpl<EntPersonCo
         }else if ("entInfoId".equals(type)){ // 企业
             wrapper.isNotNull("ent_info_id");
         }
-        wrapper.eq("in_finish",params.get("inFinish"));
         if(params.get("releaseType") != null){
             wrapper.eq("release_type", params.get("releaseType"));
         }
@@ -99,8 +156,12 @@ public class EntPersonCooperationInfoServiceImpl extends ServiceImpl<EntPersonCo
         }
         if("0".equals(params.get("inApply"))){
             wrapper.eq("in_apply", "0");
-        }else {
+        }else if("1".equals(params.get("inApply"))){
             wrapper.eq("in_apply", "1");
+        }else if("2".equals(params.get("inApply"))){
+            wrapper.eq("in_apply", "2");
+        }else if("3".equals(params.get("inApply"))){
+            wrapper.eq("in_apply", "3");
         }
         if(params.get("key") != null){
             wrapper.like("pro_name", (String) params.get("key"));
@@ -191,7 +252,6 @@ public class EntPersonCooperationInfoServiceImpl extends ServiceImpl<EntPersonCo
             EntProjectCooperationInfoEntity cooperationInfo = entProjectCooperationInfoService.selectById(Long.valueOf(params.get("proCooperationInfoId").toString()));
             if(cooperationInfo != null){
                 cooperationInfo.setInApply("1");
-                cooperationInfo.setInFinish("1");
                 entProjectCooperationInfoService.insertOrUpdate(cooperationInfo);
             }
             baseMapper.updatePersonCooperation(Long.valueOf(params.get("proCooperationInfoId").toString()), "pro_cooperation_info_id", "1");
@@ -199,7 +259,7 @@ public class EntPersonCooperationInfoServiceImpl extends ServiceImpl<EntPersonCo
         return R.ok();
     }
 
-    @DefaultArrayValue(targetType = java.util.Map.class, index = 0, key = {"inApply", "inType", "inFinish"}, defValue = {"0", "userPerId","0"}, defValueEnum = {DefValueEnum.STRING, DefValueEnum.STRING, DefValueEnum.STRING})
+    @DefaultArrayValue(targetType = java.util.Map.class, index = 0, key = {"inApply", "inType"}, defValue = {"0", "userPerId"}, defValueEnum = {DefValueEnum.STRING, DefValueEnum.STRING, DefValueEnum.STRING})
     @Override
     public PageUtils queryPageList(Map<String, Object> params) {
         //Page<EntProjectCooperationInfoEntity> pages = pages(params, true);
@@ -271,7 +331,7 @@ public class EntPersonCooperationInfoServiceImpl extends ServiceImpl<EntPersonCo
         return R.ok().put("page", new PageUtils(page));
     }
 
-    @DefaultArrayValue(targetType = java.util.Map.class, index = 0, key = {"inApply", "inFinish"}, defValue = {"1", "1"}, defValueEnum = {DefValueEnum.STRING, DefValueEnum.STRING})
+    @DefaultArrayValue(targetType = java.util.Map.class, index = 0, key = {"inApply"}, defValue = {"1"}, defValueEnum = {DefValueEnum.STRING, DefValueEnum.STRING})
     @Override
     public R queryPersonProject(Map<String, Object> params) {
         EntityWrapper<EntProjectCooperationInfoEntity> wrapper = new EntityWrapper<>();
@@ -284,7 +344,6 @@ public class EntPersonCooperationInfoServiceImpl extends ServiceImpl<EntPersonCo
             wrapper.eq("ent_info_id",params.get("ent_info_id"));
         }
         wrapper.eq("in_apply", params.get("inApply"));
-        wrapper.eq("in_finish", params.get("inFinish"));
         Page<EntProjectCooperationInfoEntity> page = entProjectCooperationInfoService.selectPage(new Query<EntProjectCooperationInfoEntity>(params).getPage(), wrapper);
         List<EntProjectCooperationInfoEntity> records = page.getRecords();
         if(records != null && records.size() > 0){

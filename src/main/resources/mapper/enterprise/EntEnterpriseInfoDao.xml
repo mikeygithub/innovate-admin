@@ -63,7 +63,7 @@
             s_u.create_time
         FROM
             ent_enterprise_info e_e_i
-            LEFT JOIN ent_enterprise_attachment e_e_a ON e_e_a.ent_info_id = e_e_i.ent_info_id
+            LEFT JOIN ent_enterprise_attach e_e_a ON e_e_a.ent_info_id = e_e_i.ent_info_id
             LEFT JOIN sys_user s_u ON s_u.user_id = e_e_i.user_id
         WHERE
             e_e_i.ent_info_id = #{entInfoId}

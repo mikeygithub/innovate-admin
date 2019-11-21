@@ -59,13 +59,9 @@ public class EntProjectCooperationInfoEntity implements Serializable {
 	private Long entInfoId;
 
 	/**
-	 * 审核状态，0待审核 1已审核
+	 * 合作状态，0待审核 1已审核 2已结束
 	 */
 	private String inApply;
-	/**
-	 * 结束报名状态，0未结束 1已结束
-	 */
-	private String inFinish;
 	/**
 	 * 发布类型，1科研项目，2横向项目，3大创项目，4企业招聘，5实习项目对接
 	 */
@@ -141,5 +137,23 @@ public class EntProjectCooperationInfoEntity implements Serializable {
 	 */
 	@TableField(exist = false)
 	private List<EntCoopeationAttachEntity> entCoopeationAttachEntities;
+
+	/**
+	 * 项目学生合作人
+	 */
+	@TableField(exist = false)
+	private List<UserPersonInfoEntity> userPersonInfoEntities;
+
+	/**
+	 * 项目教师合作人
+	 */
+	@TableField(exist = false)
+	private List<UserTeacherInfoEntity> userTeacherInfoEntities;
+
+	/**
+	 * 项目企业合作人
+	 */
+	@TableField(exist = false)
+	private List<EntEnterpriseInfoEntity> entEnterpriseInfoEntities;
 
 }

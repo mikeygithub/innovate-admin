@@ -130,7 +130,9 @@ public class EntProjectCooperationInfoServiceImpl extends ServiceImpl<EntProject
     public R updateProjectExamine(Map<String, Object> params) {
         if(params.get("inApply") != null && "1".equals(params.get("inApply"))){
             baseMapper.updateProjectExamine( params);
-        }else if("0".equals(params.get("inApply"))){
+        } else if(params.get("inApply") != null && "2".equals(params.get("inApply"))){
+            baseMapper.updateProjectExamine( params);
+        } else if("0".equals(params.get("inApply"))){
             String id = String.valueOf(params.get("proCooperationInfoId"));
             baseMapper.deleteById(Long.valueOf(id));
         }

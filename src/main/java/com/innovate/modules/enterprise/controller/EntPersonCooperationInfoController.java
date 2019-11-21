@@ -4,6 +4,7 @@ import com.innovate.common.utils.PageUtils;
 import com.innovate.common.utils.R;
 import com.innovate.modules.enterprise.annotation.HasAdminRole;
 import com.innovate.modules.enterprise.entity.EntPersonCooperationInfoEntity;
+import com.innovate.modules.enterprise.entity.EntProjectCooperationInfoEntity;
 import com.innovate.modules.enterprise.service.EntPersonCooperationInfoService;
 import com.innovate.modules.enterprise.service.EntProjectCooperationInfoService;
 import com.innovate.modules.enterprise.service.EntProjectInfoService;
@@ -100,17 +101,16 @@ public class EntPersonCooperationInfoController extends AbstractController {
         return entPersonCooperationInfoService.queryPersonProject(params);
     }
 
-
-
     /**
      * 信息
      */
-    @RequestMapping("/info/{proInfoId}/{inType}/{inApply}")
+    @RequestMapping("/info/{proCooperationInfoId}/{inType}/{inApply}")
     // @RequiresPermissions("enterprise:person:cooperation:info")
-    public R info(@PathVariable("proInfoId") Long proInfoId, @PathVariable("inType") String inType, @PathVariable("inApply") String inApply){
+    public R info(@PathVariable("proCooperationInfoId") Long proCooperationInfoId, @PathVariable("inType") String inType, @PathVariable("inApply") String inApply){
 		// EntPersonCooperationInfoEntity entPersonCooperationInfo = entPersonCooperationInfoService.selectById(proCooperationId);
         //return R.ok().put("entPersonCooperationInfo", entPersonCooperationInfo);
-        return entProjectInfoService.queryProjectPersonCooperationInfo(proInfoId, inType, inApply);
+        EntProjectCooperationInfoEntity entProjectCooperationInfoEntity = entPersonCooperationInfoService.queryPersonCooperationInfoList(proCooperationInfoId, inType, inApply);
+        return R.ok().put("entProjectCooperationInfoEntity", entProjectCooperationInfoEntity);
     }
 
     /**
