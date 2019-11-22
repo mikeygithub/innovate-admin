@@ -56,6 +56,9 @@ public class EntProjectCooperationInfoServiceImpl extends ServiceImpl<EntProject
     @Autowired
     private EntCoopeationAttachService entCoopeationAttachService;
 
+    @Autowired
+    private EntPersonCooperationInfoService entPersonCooperationInfoService;
+
     @LimitPage(targetType = java.util.Map.class, name = "项目合作分页", index = 0, pageSize = 10,  currPage = 1)
     @DefaultArrayValue(targetType = java.util.Map.class, index = 0, key = {"inApply", "inType"}, defValue = {"0", "userPerId"}, defValueEnum = {DefValueEnum.STRING, DefValueEnum.STRING})
     @Override
@@ -128,11 +131,9 @@ public class EntProjectCooperationInfoServiceImpl extends ServiceImpl<EntProject
     @DefaultValue(targetType = java.util.Map.class, index = 0, key = "inApply", defValue = "1", defValueEnum = DefValueEnum.STRING)
     @Override
     public R updateProjectExamine(Map<String, Object> params) {
-        if(params.get("inApply") != null && "1".equals(params.get("inApply"))){
+        if(params.get("inApply") != null && !"0".equals(params.get("inApply"))){
             baseMapper.updateProjectExamine( params);
-        } else if(params.get("inApply") != null && "2".equals(params.get("inApply"))){
-            baseMapper.updateProjectExamine( params);
-        } else if("0".equals(params.get("inApply"))){
+        } else if((params.get("inApply") != null && "0".equals(params.get("inApply")))){
             String id = String.valueOf(params.get("proCooperationInfoId"));
             baseMapper.deleteById(Long.valueOf(id));
         }
@@ -223,6 +224,8 @@ public class EntProjectCooperationInfoServiceImpl extends ServiceImpl<EntProject
         }
         return R.ok().put("page", new PageUtils(page));
     }
+
+
 
     // ================ 放弃列表方法，请勿删除 ====================
 //    private void template(){

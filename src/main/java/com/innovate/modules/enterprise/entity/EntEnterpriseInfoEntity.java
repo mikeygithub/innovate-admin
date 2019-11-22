@@ -108,5 +108,11 @@ public class EntEnterpriseInfoEntity implements Serializable {
 	@TableField(exist = false)
 	private SysUserEntity sysUser;
 
+	/**
+	 * 合作关系实体
+	 */
+	@TableField(exist = false)
+	private EntPersonCooperationInfoEntity entPersonCooperationInfoEntity;
+
 
 }

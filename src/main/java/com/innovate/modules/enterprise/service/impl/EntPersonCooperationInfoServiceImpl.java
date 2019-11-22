@@ -85,13 +85,14 @@ public class EntPersonCooperationInfoServiceImpl extends ServiceImpl<EntPersonCo
         wrapper.eq("pro_cooperation_info_id", proCooperationInfoId);
         List<EntPersonCooperationInfoEntity> entPersonCooperationInfoEntities = entPersonCooperationInfoService.selectList(wrapper);
 
-        if(entPersonCooperationInfoEntities.size() > 0){ // 学生
-            if("userPerId".equals(inType)){
+        if(entPersonCooperationInfoEntities.size() > 0){
+            if("userPerId".equals(inType)){ // 学生
                 List<UserPersonInfoEntity> userPersonInfoEntities = new ArrayList<UserPersonInfoEntity>();
                 for (int i = 0; i < entPersonCooperationInfoEntities.size(); i++) {
-                    if(entPersonCooperationInfoEntities.get(i).getUserPerId() != null){
+                    if(entPersonCooperationInfoEntities.get(i).getUserPerId() != null && "0".equals(entPersonCooperationInfoEntities.get(i).getInApply())){
                         Long userPerId = entPersonCooperationInfoEntities.get(i).getUserPerId();
                         UserPersonInfoEntity userPersonInfoEntity = userPerInfoService.selectById(userPerId);
+                        userPersonInfoEntity.setEntPersonCooperationInfoEntity(entPersonCooperationInfoEntities.get(i));
                         Long userId = userPersonInfoEntity.getUserId();
                         userPersonInfoEntity.setSysUserEntity(sysUserService.selectById(userId));
                         userPersonInfoEntities.add(userPersonInfoEntity);
@@ -103,9 +104,10 @@ public class EntPersonCooperationInfoServiceImpl extends ServiceImpl<EntPersonCo
             if("userTeacherId".equals(inType)){ // 教师
                 List<UserTeacherInfoEntity> userTeacherInfoEntities = new ArrayList<UserTeacherInfoEntity>();
                 for (int i = 0; i < entPersonCooperationInfoEntities.size(); i++) {
-                    if(entPersonCooperationInfoEntities.get(i).getUserTeacherId() != null){
+                    if(entPersonCooperationInfoEntities.get(i).getUserTeacherId() != null  && "0".equals(entPersonCooperationInfoEntities.get(i).getInApply())){
                         Long userTeacherId = entPersonCooperationInfoEntities.get(i).getUserTeacherId();
                         UserTeacherInfoEntity userTeacherInfoEntity = userTeacherInfoService.selectById(userTeacherId);
+                        userTeacherInfoEntity.setEntPersonCooperationInfoEntity(entPersonCooperationInfoEntities.get(i));
                         Long userId = userTeacherInfoEntity.getUserId();
                         userTeacherInfoEntity.setSysUserEntity(sysUserService.selectById(userId));
                         userTeacherInfoEntities.add(userTeacherInfoEntity);
@@ -117,9 +119,10 @@ public class EntPersonCooperationInfoServiceImpl extends ServiceImpl<EntPersonCo
             if("entInfoId".equals(inType)){ // 企业
                 List<EntEnterpriseInfoEntity> entEnterpriseInfoEntities = new ArrayList<EntEnterpriseInfoEntity>();
                 for (int i = 0; i < entPersonCooperationInfoEntities.size(); i++) {
-                    if(entPersonCooperationInfoEntities.get(i).getEntInfoId() != null){
+                    if(entPersonCooperationInfoEntities.get(i).getEntInfoId() != null  && "0".equals(entPersonCooperationInfoEntities.get(i).getInApply())){
                         Long entInfoId = entPersonCooperationInfoEntities.get(i).getEntInfoId();
                         EntEnterpriseInfoEntity entEnterpriseInfoEntity = entEnterpriseInfoService.selectById(entInfoId);
+                        entEnterpriseInfoEntity.setEntPersonCooperationInfoEntity(entPersonCooperationInfoEntities.get(i));
                         Long userId = entEnterpriseInfoEntity.getUserId();
                         entEnterpriseInfoEntity.setSysUser(sysUserService.selectById(userId));
                         entEnterpriseInfoEntities.add(entEnterpriseInfoEntity);
@@ -128,6 +131,57 @@ public class EntPersonCooperationInfoServiceImpl extends ServiceImpl<EntPersonCo
 
                 entProjectCooperationInfoEntity.setEntEnterpriseInfoEntities(entEnterpriseInfoEntities);
             }
+        }
+        return entProjectCooperationInfoEntity;
+    }
+
+    @Override
+    public EntProjectCooperationInfoEntity queryPersonCooperationInfoListBySelect(Long proCooperationInfoId, String inType, String inApply) {
+        EntProjectCooperationInfoEntity entProjectCooperationInfoEntity = new EntProjectCooperationInfoEntity();
+        EntityWrapper<EntPersonCooperationInfoEntity> wrapper = new EntityWrapper<EntPersonCooperationInfoEntity>();
+        wrapper.eq("pro_cooperation_info_id", proCooperationInfoId);
+        List<EntPersonCooperationInfoEntity> entPersonCooperationInfoEntities = entPersonCooperationInfoService.selectList(wrapper);
+
+        if(entPersonCooperationInfoEntities.size() > 0){
+            // 学生
+            List<UserPersonInfoEntity> userPersonInfoEntities = new ArrayList<UserPersonInfoEntity>();
+            for (int i = 0; i < entPersonCooperationInfoEntities.size(); i++) {
+                if(entPersonCooperationInfoEntities.get(i).getUserPerId() != null){
+                    Long userPerId = entPersonCooperationInfoEntities.get(i).getUserPerId();
+                    UserPersonInfoEntity userPersonInfoEntity = userPerInfoService.selectById(userPerId);
+                    Long userId = userPersonInfoEntity.getUserId();
+                    userPersonInfoEntity.setSysUserEntity(sysUserService.selectById(userId));
+                    userPersonInfoEntities.add(userPersonInfoEntity);
+                }
+            }
+            entProjectCooperationInfoEntity.setUserPersonInfoEntities(userPersonInfoEntities);
+
+            // 教师
+            List<UserTeacherInfoEntity> userTeacherInfoEntities = new ArrayList<UserTeacherInfoEntity>();
+            for (int i = 0; i < entPersonCooperationInfoEntities.size(); i++) {
+                if(entPersonCooperationInfoEntities.get(i).getUserTeacherId() != null){
+                    Long userTeacherId = entPersonCooperationInfoEntities.get(i).getUserTeacherId();
+                    UserTeacherInfoEntity userTeacherInfoEntity = userTeacherInfoService.selectById(userTeacherId);
+                    Long userId = userTeacherInfoEntity.getUserId();
+                    userTeacherInfoEntity.setSysUserEntity(sysUserService.selectById(userId));
+                    userTeacherInfoEntities.add(userTeacherInfoEntity);
+                }
+            }
+
+            //企业
+            entProjectCooperationInfoEntity.setUserTeacherInfoEntities(userTeacherInfoEntities);
+            List<EntEnterpriseInfoEntity> entEnterpriseInfoEntities = new ArrayList<EntEnterpriseInfoEntity>();
+            for (int i = 0; i < entPersonCooperationInfoEntities.size(); i++) {
+                if(entPersonCooperationInfoEntities.get(i).getEntInfoId() != null){
+                    Long entInfoId = entPersonCooperationInfoEntities.get(i).getEntInfoId();
+                    EntEnterpriseInfoEntity entEnterpriseInfoEntity = entEnterpriseInfoService.selectById(entInfoId);
+                    Long userId = entEnterpriseInfoEntity.getUserId();
+                    entEnterpriseInfoEntity.setSysUser(sysUserService.selectById(userId));
+                    entEnterpriseInfoEntities.add(entEnterpriseInfoEntity);
+                }
+            }
+
+            entProjectCooperationInfoEntity.setEntEnterpriseInfoEntities(entEnterpriseInfoEntities);
         }
         return entProjectCooperationInfoEntity;
     }
@@ -247,7 +301,11 @@ public class EntPersonCooperationInfoServiceImpl extends ServiceImpl<EntPersonCo
     @Override
     public R updatePersonCooperation(Map<String, Object> params) {
         if(params.get("proCooperationId") != null){
-            baseMapper.updatePersonCooperation(Long.valueOf(params.get("proCooperationId").toString()), "pro_cooperation_id", "1");
+            if("1".equals(params.get("inApply"))){
+                baseMapper.updatePersonCooperation(Long.valueOf(params.get("proCooperationId").toString()), "pro_cooperation_id", "1");
+            }else if("2".equals(params.get("inApply"))){
+                baseMapper.updatePersonCooperation(Long.valueOf(params.get("proCooperationId").toString()), "pro_cooperation_id", "2");
+            }
         }else if(params.get("proCooperationInfoId") != null){
             EntProjectCooperationInfoEntity cooperationInfo = entProjectCooperationInfoService.selectById(Long.valueOf(params.get("proCooperationInfoId").toString()));
             if(cooperationInfo != null){
@@ -369,6 +427,41 @@ public class EntPersonCooperationInfoServiceImpl extends ServiceImpl<EntPersonCo
             }
         }
         return R.ok().put("page", page);
+    }
+
+    @DefaultArrayValue(targetType = java.util.Map.class, index = 0, key = {"inApply", "inType"}, defValue = {"0", "userPerId"}, defValueEnum = {DefValueEnum.STRING, DefValueEnum.STRING})
+    @Override
+    public R queryMyApplyPage(Map<String, Object> params, Long userId) {
+        String type = (String) params.get("inType");
+        EntityWrapper<EntPersonCooperationInfoEntity> wrapper = new EntityWrapper<>();
+        if("userPerId".equals(type)){
+            UserPersonInfoEntity userPersonInfoEntity = userPerInfoService.selectOne(new EntityWrapper<UserPersonInfoEntity>().eq("user_id", userId));
+            wrapper.eq("user_per_id", userPersonInfoEntity.getUserPerId());
+        }else if("userTeacherId".equals(type)){
+            UserTeacherInfoEntity teacherInfoEntity = userTeacherInfoService.selectOne(new EntityWrapper<UserTeacherInfoEntity>().eq("user_id", userId));
+            wrapper.eq("user_teacher_id", teacherInfoEntity.getUserTeacherId());
+        }else if("entInfoId".equals(type)){
+            EntEnterpriseInfoEntity entEnterpriseInfoEntity = entEnterpriseInfoService.selectOne(new EntityWrapper<EntEnterpriseInfoEntity>().eq("user_id", userId));
+            wrapper.eq("ent_info_id", entEnterpriseInfoEntity.getEntInfoId());
+        }
+        Page<EntPersonCooperationInfoEntity> page = this.selectPage(new Query<EntPersonCooperationInfoEntity>(params).getPage(), wrapper);
+        if(page.getRecords().size() > 0){
+            for (int i = 0; i < page.getRecords().size(); i++) {
+                EntPersonCooperationInfoEntity entPersonCooperationInfoEntity = entPersonCooperationInfoService.selectById(page.getRecords().get(i).getProCooperationId());
+                EntProjectCooperationInfoEntity entProjectCooperationInfoEntity = entProjectCooperationInfoService.selectById(entPersonCooperationInfoEntity.getProCooperationInfoId());
+                EntProjectInfoEntity entProjectInfoEntity = entProjectInfoService.selectById(entProjectCooperationInfoEntity.getProInfoId());
+                entPersonCooperationInfoEntity.setEntProjectCooperationInfo(entProjectCooperationInfoEntity);
+                entPersonCooperationInfoEntity.setEntProjectInfo(entProjectInfoEntity);
+                page.getRecords().set(i, entPersonCooperationInfoEntity);
+            }
+            for (int i = 0; i < page.getRecords().size(); i++) {
+                if(!page.getRecords().get(i).getEntProjectCooperationInfo().getInApply().equals(params.get("inApply"))){
+                    page.getRecords().remove(i);
+                    --i;
+                }
+            }
+        }
+        return R.ok().put("page", new PageUtils(page));
     }
 
 

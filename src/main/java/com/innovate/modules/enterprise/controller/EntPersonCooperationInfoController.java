@@ -101,14 +101,24 @@ public class EntPersonCooperationInfoController extends AbstractController {
         return entPersonCooperationInfoService.queryPersonProject(params);
     }
 
+//    /**
+//     * 信息
+//     */
+//    @RequestMapping("/info/{proCooperationInfoId}/{inType}/{inApply}")
+//    // @RequiresPermissions("enterprise:person:cooperation:info")
+//    public R info(@PathVariable("proCooperationInfoId") Long proCooperationInfoId, @PathVariable("inType") String inType, @PathVariable("inApply") String inApply){
+//		// EntPersonCooperationInfoEntity entPersonCooperationInfo = entPersonCooperationInfoService.selectById(proCooperationId);
+//        //return R.ok().put("entPersonCooperationInfo", entPersonCooperationInfo);
+//        EntProjectCooperationInfoEntity entProjectCooperationInfoEntity = entPersonCooperationInfoService.queryPersonCooperationInfoList(proCooperationInfoId, inType, inApply);
+//        return R.ok().put("entProjectCooperationInfoEntity", entProjectCooperationInfoEntity);
+//    }
+
     /**
-     * 信息
+     * 选择合作者
      */
     @RequestMapping("/info/{proCooperationInfoId}/{inType}/{inApply}")
     // @RequiresPermissions("enterprise:person:cooperation:info")
-    public R info(@PathVariable("proCooperationInfoId") Long proCooperationInfoId, @PathVariable("inType") String inType, @PathVariable("inApply") String inApply){
-		// EntPersonCooperationInfoEntity entPersonCooperationInfo = entPersonCooperationInfoService.selectById(proCooperationId);
-        //return R.ok().put("entPersonCooperationInfo", entPersonCooperationInfo);
+    public R queryPersonCooperationInfoListBySelect(@PathVariable("proCooperationInfoId") Long proCooperationInfoId, @PathVariable("inType") String inType, @PathVariable("inApply") String inApply){
         EntProjectCooperationInfoEntity entProjectCooperationInfoEntity = entPersonCooperationInfoService.queryPersonCooperationInfoList(proCooperationInfoId, inType, inApply);
         return R.ok().put("entProjectCooperationInfoEntity", entProjectCooperationInfoEntity);
     }
@@ -158,4 +168,12 @@ public class EntPersonCooperationInfoController extends AbstractController {
         return R.ok();
     }
 
+    /**
+     * 我的合作申请
+     */
+    @RequestMapping("/queryMyApply")
+    public R queryMyApply(@RequestParam Map<String, Object> params){
+        //return entProjectCooperationInfoService.queryProjectCooperationInfo(params);
+        return entPersonCooperationInfoService.queryMyApplyPage(params, getUserId());
+    }
 }

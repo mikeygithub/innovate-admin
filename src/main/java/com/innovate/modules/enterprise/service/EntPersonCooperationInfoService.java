@@ -2,8 +2,10 @@ package com.innovate.modules.enterprise.service;
 
 
 import com.baomidou.mybatisplus.service.IService;
+import com.innovate.common.enums.DefValueEnum;
 import com.innovate.common.utils.PageUtils;
 import com.innovate.common.utils.R;
+import com.innovate.modules.enterprise.annotation.DefaultArrayValue;
 import com.innovate.modules.enterprise.entity.EntPersonCooperationInfoEntity;
 import com.innovate.modules.enterprise.entity.EntProjectCooperationInfoEntity;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -28,6 +30,13 @@ public interface EntPersonCooperationInfoService extends IService<EntPersonCoope
      * @return
      */
     EntProjectCooperationInfoEntity queryPersonCooperationInfoList(Long proCooperationInfoId, String inType, String inApply);
+
+    /**
+     *  根据项目合作信息id,角色类型查询合作列表选择合作
+     * @param proCooperationInfoId
+     * @return
+     */
+    EntProjectCooperationInfoEntity queryPersonCooperationInfoListBySelect(Long proCooperationInfoId, String inType, String inApply);
 
     /**
      *  根据项目合作信息id查询合作关系人员信息
@@ -91,5 +100,12 @@ public interface EntPersonCooperationInfoService extends IService<EntPersonCoope
      */
     R queryPersonProject(Map<String, Object> params);
 
+    /**
+     * 我的合作申请
+     * @param params
+     * @param userId
+     * @return
+     */
+    R queryMyApplyPage(Map<String, Object> params, Long userId);
 }
 
