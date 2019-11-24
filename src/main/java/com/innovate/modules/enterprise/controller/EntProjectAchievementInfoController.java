@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Arrays;
 import java.util.Map;
 
+import static com.innovate.common.utils.ShiroUtils.getUserId;
+
 
 /**
  * 项目成果信息表
@@ -29,7 +31,7 @@ public class EntProjectAchievementInfoController {
      * 列表
      */
     @RequestMapping("/list")
-    @RequiresPermissions("enterprise:project:achievement:list")
+    //@RequiresPermissions("enterprise:project:achievement:list")
     public R list(@RequestParam Map<String, Object> params){
         PageUtils page = entProjectAchievementInfoService.queryPage(params);
 

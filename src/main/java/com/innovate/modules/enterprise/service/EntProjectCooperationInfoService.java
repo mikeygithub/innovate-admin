@@ -2,6 +2,7 @@ package com.innovate.modules.enterprise.service;
 
 
 import com.baomidou.mybatisplus.service.IService;
+import com.innovate.common.annotation.LimitPage;
 import com.innovate.common.enums.DefValueEnum;
 import com.innovate.common.utils.PageUtils;
 import com.innovate.common.utils.R;
@@ -20,7 +21,11 @@ import java.util.Map;
  * @date 2019-09-10 22:19:50
  */
 public interface EntProjectCooperationInfoService extends IService<EntProjectCooperationInfoEntity> {
-
+    /**
+     * 项目合作信息 详情
+     * @param params
+     * @return
+     */
     PageUtils queryPage(Map<String, Object> params);
 
     /**
@@ -29,6 +34,13 @@ public interface EntProjectCooperationInfoService extends IService<EntProjectCoo
      * @return
      */
     R queryProjectCooperationInfo(Map<String, Object> params);
+
+    /**
+     * 项目合作信息 详情 没有传入类型
+     * @param params
+     * @return
+     */
+    R queryProjectCooperationInfoNoType(Map<String, Object> params);
 
     /**
      * 项目合作审核
@@ -83,5 +95,12 @@ public interface EntProjectCooperationInfoService extends IService<EntProjectCoo
      */
     R queryProjectPage(Map<String, Object> params, Long userId);
 
+    /**
+     * 合作已审核
+     * @param params
+     * @param userId
+     * @return
+     */
+    R queryCooperationByApplyPage(Map<String, Object> params, Long userId);
 }
 

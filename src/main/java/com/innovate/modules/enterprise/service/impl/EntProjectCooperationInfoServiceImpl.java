@@ -59,6 +59,9 @@ public class EntProjectCooperationInfoServiceImpl extends ServiceImpl<EntProject
     @Autowired
     private EntPersonCooperationInfoService entPersonCooperationInfoService;
 
+    @Autowired
+    private EntProjectCooperationInfoService entProjectCooperationInfoService;
+
     @LimitPage(targetType = java.util.Map.class, name = "项目合作分页", index = 0, pageSize = 10,  currPage = 1)
     @DefaultArrayValue(targetType = java.util.Map.class, index = 0, key = {"inApply", "inType"}, defValue = {"0", "userPerId"}, defValueEnum = {DefValueEnum.STRING, DefValueEnum.STRING})
     @Override
@@ -110,6 +113,62 @@ public class EntProjectCooperationInfoServiceImpl extends ServiceImpl<EntProject
             entity.setEntCoopeationAttachEntities(cooAttachments);
             return R.ok().put("data", entity);
         }else if ("entInfoId".equals(type)){ // 企业
+            EntProjectCooperationInfoEntity entity = baseMapper.queryProjectCooperationInfoListForEnt(params);
+            SysUserEntity userEntity = sysUserService.selectById(entity.getEntEnterpriseInfo().getUserId());
+            entity.setSysUserEntity(userEntity);
+            //项目附件
+            EntityWrapper<EntProjectAttachEntity> wrapperAttach = new EntityWrapper<EntProjectAttachEntity>();
+            wrapperAttach.eq("pro_info_id", entity.getProInfoId());
+            List<EntProjectAttachEntity> attachments = entProjectAttachService.selectList(wrapperAttach);
+            entity.setEntProjectAttachEntities(attachments);
+            //项目合作附件
+            EntityWrapper<EntCoopeationAttachEntity> cooAttach = new EntityWrapper<EntCoopeationAttachEntity>();
+            wrapperAttach.eq("pro_info_id", entity.getProInfoId());
+            List<EntCoopeationAttachEntity> cooAttachments = entCoopeationAttachService.selectList(cooAttach);
+            entity.setEntCoopeationAttachEntities(cooAttachments);
+            return R.ok().put("data", entity);
+        }
+        return R.error();
+    }
+
+    @DefaultArrayValue(targetType = java.util.Map.class, index = 0, key = {"inApply", "inType"}, defValue = {"0", "userPerId"}, defValueEnum = {DefValueEnum.STRING, DefValueEnum.STRING})
+    @Override
+    public R queryProjectCooperationInfoNoType(Map<String, Object> params) {
+        String id = String.valueOf(params.get("proCooperationInfoId"));
+        EntProjectCooperationInfoEntity entProjectCooperationInfoEntity = entProjectCooperationInfoService.selectById(id);
+        if(entProjectCooperationInfoEntity.getUserPerId() != null && !"".equals(entProjectCooperationInfoEntity.getUserPerId())){
+            EntProjectCooperationInfoEntity entity = baseMapper.queryProjectCooperationInfoListForPer(params);
+            SysUserEntity userEntity = sysUserService.selectById(entity.getUserPersonInfo().getUserId());
+            entity.setSysUserEntity(userEntity);
+            //项目信息附件
+            EntityWrapper<EntProjectAttachEntity> wrapperAttach = new EntityWrapper<EntProjectAttachEntity>();
+            wrapperAttach.eq("pro_info_id", entity.getProInfoId());
+            List<EntProjectAttachEntity> attachments = entProjectAttachService.selectList(wrapperAttach);
+            entity.setEntProjectAttachEntities(attachments);
+            //项目合作附件
+            EntityWrapper<EntCoopeationAttachEntity> cooAttach = new EntityWrapper<EntCoopeationAttachEntity>();
+            wrapperAttach.eq("pro_info_id", entity.getProInfoId());
+            List<EntCoopeationAttachEntity> cooAttachments = entCoopeationAttachService.selectList(cooAttach);
+            entity.setEntCoopeationAttachEntities(cooAttachments);
+            return R.ok().put("data", entity);
+        }
+        if(entProjectCooperationInfoEntity.getUserTeacherId() != null && !"".equals(entProjectCooperationInfoEntity.getUserTeacherId())){
+            EntProjectCooperationInfoEntity entity = baseMapper.queryProjectCooperationInfoListForTeacher(params);
+            SysUserEntity userEntity = sysUserService.selectById(entity.getUserTeacherInfo().getUserId());
+            entity.setSysUserEntity(userEntity);
+            //项目附件
+            EntityWrapper<EntProjectAttachEntity> wrapperAttach = new EntityWrapper<EntProjectAttachEntity>();
+            wrapperAttach.eq("pro_info_id", entity.getProInfoId());
+            List<EntProjectAttachEntity> attachments = entProjectAttachService.selectList(wrapperAttach);
+            entity.setEntProjectAttachEntities(attachments);
+            //项目合作附件
+            EntityWrapper<EntCoopeationAttachEntity> cooAttach = new EntityWrapper<EntCoopeationAttachEntity>();
+            wrapperAttach.eq("pro_info_id", entity.getProInfoId());
+            List<EntCoopeationAttachEntity> cooAttachments = entCoopeationAttachService.selectList(cooAttach);
+            entity.setEntCoopeationAttachEntities(cooAttachments);
+            return R.ok().put("data", entity);
+        }
+        if(entProjectCooperationInfoEntity.getEntInfoId() != null && !"".equals(entProjectCooperationInfoEntity.getEntInfoId())){
             EntProjectCooperationInfoEntity entity = baseMapper.queryProjectCooperationInfoListForEnt(params);
             SysUserEntity userEntity = sysUserService.selectById(entity.getEntEnterpriseInfo().getUserId());
             entity.setSysUserEntity(userEntity);
@@ -217,6 +276,47 @@ public class EntProjectCooperationInfoServiceImpl extends ServiceImpl<EntProject
         }
         Page<EntProjectCooperationInfoEntity> page = this.selectPage(new Query<EntProjectCooperationInfoEntity>(params).getPage(), wrapper);
         if(page.getRecords().size() > 0){
+            for (int i = 0; i < page.getRecords().size(); i++) {
+                EntProjectInfoEntity entProjectInfoEntity = entProjectInfoService.selectById(page.getRecords().get(i).getProInfoId());
+                page.getRecords().get(i).setProjectInfo(entProjectInfoEntity);
+            }
+        }
+        return R.ok().put("page", new PageUtils(page));
+    }
+
+    @DefaultArrayValue(targetType = java.util.Map.class, index = 0, key = {"inApply", "inType"}, defValue = {"0", "userPerId"}, defValueEnum = {DefValueEnum.STRING, DefValueEnum.STRING})
+    @Override
+    public R queryCooperationByApplyPage(Map<String, Object> params, Long userId) {
+        String type = (String) params.get("inType");
+        EntityWrapper<EntProjectCooperationInfoEntity> wrapper = new EntityWrapper<>();
+        if("userPerId".equals(type)){
+            UserPersonInfoEntity userPersonInfoEntity = userPerInfoService.selectOne(new EntityWrapper<UserPersonInfoEntity>().eq("user_id", userId));
+            wrapper.eq("user_per_id", userPersonInfoEntity.getUserPerId());
+        }else if("userTeacherId".equals(type)){
+            UserTeacherInfoEntity teacherInfoEntity = userTeacherInfoService.selectOne(new EntityWrapper<UserTeacherInfoEntity>().eq("user_id", userId));
+            wrapper.eq("user_teacher_id", teacherInfoEntity.getUserTeacherId());
+        }else if("entInfoId".equals(type)){
+            EntEnterpriseInfoEntity entEnterpriseInfoEntity = entEnterpriseInfoService.selectOne(new EntityWrapper<EntEnterpriseInfoEntity>().eq("user_id", userId));
+            wrapper.eq("ent_info_id", entEnterpriseInfoEntity.getEntInfoId());
+        }
+        Page<EntProjectCooperationInfoEntity> page = this.selectPage(new Query<EntProjectCooperationInfoEntity>(params).getPage(), wrapper);
+        if(page.getRecords().size() > 0){
+            // 查询已审核之后的合作状态，包含1,2,3
+            for (int i = 0; i < page.getRecords().size(); i++) {
+                if(params.get("inApply").equals("0")){
+                    if(!page.getRecords().get(i).getInApply().equals("0")){
+                        page.getRecords().remove(i);
+                        --i;
+                    }
+                }
+                if(!params.get("inApply").equals("0")){
+                    if(page.getRecords().get(i).getInApply().equals("0")){
+                        page.getRecords().remove(i);
+                        --i;
+                    }
+                }
+
+            }
             for (int i = 0; i < page.getRecords().size(); i++) {
                 EntProjectInfoEntity entProjectInfoEntity = entProjectInfoService.selectById(page.getRecords().get(i).getProInfoId());
                 page.getRecords().get(i).setProjectInfo(entProjectInfoEntity);

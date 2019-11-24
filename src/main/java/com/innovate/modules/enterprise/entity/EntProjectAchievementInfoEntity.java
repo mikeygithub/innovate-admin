@@ -1,5 +1,6 @@
 package com.innovate.modules.enterprise.entity;
 
+import com.baomidou.mybatisplus.annotations.TableField;
 import com.baomidou.mybatisplus.annotations.TableId;
 import com.baomidou.mybatisplus.annotations.TableName;
 import lombok.Data;
@@ -35,4 +36,14 @@ public class EntProjectAchievementInfoEntity implements Serializable {
 	 * 审核状态：0待审核，1已审核
 	 */
 	private String inApply;
+	/**
+	 * 合作项目
+	 */
+	@TableField(exist = false)
+	private EntProjectCooperationInfoEntity entProjectCooperationInfo;
+	/**
+	 * 项目信息
+	 */
+	@TableField(exist = false)
+	private EntProjectInfoEntity entProjectInfo;
 }

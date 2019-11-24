@@ -10,5 +10,59 @@
         <result property="proAchievementContent" column="pro_achievement_content"/>
     </resultMap>
 
+    <!-- 根据项目id和项目类型 查询项目成果信息 -->
+    <resultMap id="mapProjectAchievementById" type="com.innovate.modules.enterprise.entity.EntProjectAchievementInfoEntity" extends="entProjectAchievementInfoMap">
+        <association property="EntProjectInfoEntity" javaType="com.innovate.modules.enterprise.entity.EntProjectInfoEntity">
+            <id column="i_pro_info_id" property="proInfoId"></id>
+            <result property="proName" column="pro_name"/>
+            <result property="proRegister" column="pro_register"/>
+            <result property="proOrigin" column="pro_origin"/>
+            <result property="proOutlay" column="pro_outlay"/>
+            <result property="proType" column="pro_type"/>
+            <result property="proIntroduce" column="pro_introduce"/>
+            <result property="entInfoId" column="ent_info_id"/>
+            <result property="userPerId" column="user_per_id"/>
+            <result property="userTeacherId" column="user_teacher_id"/>
+        </association>
+    </resultMap>
+
+    <!-- 学生用户项目成果 -->
+    <select id="queryProjectAchievementByUserPerId" parameterType="java.util.Map" resultMap="mapProjectAchievementById">
+        SELECT
+            i_e_p_a_i.pro_info_id AS i_pro_info_id, i_e_p_a_i.pro_achievement_id, i_e_p_a_i.pro_achievement_content, i_e_p_a_i.in_apply,
+            e_p_i.pro_info_id, e_p_i.pro_name , e_p_i.pro_register , e_p_i.pro_origin , e_p_i.pro_outlay , e_p_i.pro_type,
+            e_p_i.pro_introduce, e_p_i.ent_info_id, e_p_i.user_per_id, e_p_i.user_teacher_id
+        FROM
+            ent_project_achievement_info i_e_p_a_i
+            LEFT JOIN ent_project_info e_p_i ON i_e_p_a_i.pro_info_id = e_p_i.pro_info_id
+        WHERE
+            e_p_i.user_per_id = #{userPerId}
+    </select>
+
+    <!-- 教师用户项目成果 -->
+    <select id="queryProjectAchievementByUserTeacherId" parameterType="java.util.Map" resultMap="mapProjectAchievementById">
+        SELECT
+            i_e_p_a_i.pro_info_id AS i_pro_info_id, i_e_p_a_i.pro_achievement_id, i_e_p_a_i.pro_achievement_content, i_e_p_a_i.in_apply,
+            e_p_i.pro_info_id, e_p_i.pro_name , e_p_i.pro_register , e_p_i.pro_origin , e_p_i.pro_outlay , e_p_i.pro_type,
+            e_p_i.pro_introduce, e_p_i.ent_info_id, e_p_i.user_per_id, e_p_i.user_teacher_id
+        FROM
+            ent_project_achievement_info i_e_p_a_i
+            LEFT JOIN ent_project_info e_p_i ON i_e_p_a_i.pro_info_id = e_p_i.pro_info_id
+        WHERE
+            e_p_i.user_teacher_id = #{userTeacherId}
+    </select>
+
+    <!-- 企业用户项目成果 -->
+    <select id="queryProjectAchievementByEntInfoId" parameterType="java.util.Map" resultMap="mapProjectAchievementById">
+        SELECT
+            i_e_p_a_i.pro_info_id AS i_pro_info_id, i_e_p_a_i.pro_achievement_id, i_e_p_a_i.pro_achievement_content, i_e_p_a_i.in_apply,
+            e_p_i.pro_info_id, e_p_i.pro_name , e_p_i.pro_register , e_p_i.pro_origin , e_p_i.pro_outlay , e_p_i.pro_type,
+            e_p_i.pro_introduce, e_p_i.ent_info_id, e_p_i.user_per_id, e_p_i.user_teacher_id
+        FROM
+            ent_project_achievement_info i_e_p_a_i
+            LEFT JOIN ent_project_info e_p_i ON i_e_p_a_i.pro_info_id = e_p_i.pro_info_id
+        WHERE
+            e_p_i.ent_info_id = #{entInfoId}
+    </select>
 
 </mapper>

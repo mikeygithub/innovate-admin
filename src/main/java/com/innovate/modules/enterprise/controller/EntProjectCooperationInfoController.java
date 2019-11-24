@@ -79,6 +79,18 @@ public class EntProjectCooperationInfoController extends AbstractController {
     }
 
     /**
+     * 合作信息，没有传入类型
+     */
+    @RequestMapping("/infoNoType/{proCooperationInfoId}")
+    //@RequiresPermissions("enterprise:project:cooperation:info")
+    public R infoNoType(@PathVariable("proCooperationInfoId") Long proCooperationInfoId){
+        //EntProjectCooperationInfoEntity entProjectCooperationInfo = entProjectCooperationInfoService.selectById(proCooperationInfoId);
+        Map<String, Object> params = new HashMap<String,Object>();
+        params.put("proCooperationInfoId",proCooperationInfoId);
+        return entProjectCooperationInfoService.queryProjectCooperationInfoNoType(params);
+    }
+
+    /**
      * 保存
      */
     @RequestMapping("/save")
@@ -143,6 +155,15 @@ public class EntProjectCooperationInfoController extends AbstractController {
     public R queryProject(@RequestParam Map<String, Object> params){
         //return entProjectCooperationInfoService.queryProjectCooperationInfo(params);
         return entProjectCooperationInfoService.queryProjectPage(params, getUserId());
+    }
+
+    /**
+     * 已审核的合作信息，包含状态1，2，3
+     */
+    @RequestMapping("/queryCooperationPage")
+    public R queryCooperationPage(@RequestParam Map<String, Object> params){
+        //return entProjectCooperationInfoService.queryProjectCooperationInfo(params);
+        return entProjectCooperationInfoService.queryCooperationByApplyPage(params, getUserId());
     }
 
 

@@ -163,7 +163,6 @@
         WHERE e_p_i.pro_info_id = #{id}
     </select>
 
-
     <!-- 学生用户项目 -->
     <select id="queryProjectsByUserPerId" parameterType="java.lang.Long" resultType="com.innovate.modules.enterprise.entity.EntProjectInfoEntity">
         SELECT

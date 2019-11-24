@@ -107,5 +107,13 @@ public interface EntPersonCooperationInfoService extends IService<EntPersonCoope
      * @return
      */
     R queryMyApplyPage(Map<String, Object> params, Long userId);
+
+    /**
+     * 我参与的项目
+     * @param params
+     * @param userId
+     * @return
+     */
+    R queryMyCooperationPage(Map<String, Object> params, Long userId);
 }
 

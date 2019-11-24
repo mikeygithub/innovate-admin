@@ -176,4 +176,13 @@ public class EntPersonCooperationInfoController extends AbstractController {
         //return entProjectCooperationInfoService.queryProjectCooperationInfo(params);
         return entPersonCooperationInfoService.queryMyApplyPage(params, getUserId());
     }
+
+    /**
+     * 我参与的项目
+     */
+    @RequestMapping("/queryMyCooperation")
+    public R queryMyCooperation(@RequestParam Map<String, Object> params){
+        //return entProjectCooperationInfoService.queryProjectCooperationInfo(params);
+        return entPersonCooperationInfoService.queryMyCooperationPage(params, getUserId());
+    }
 }
