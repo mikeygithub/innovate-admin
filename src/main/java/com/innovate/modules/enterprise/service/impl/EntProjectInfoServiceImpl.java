@@ -58,6 +58,8 @@ public class EntProjectInfoServiceImpl extends ServiceImpl<EntProjectInfoDao, En
     private EntPersonCooperationInfoService personCooperationInfoService;
     @Autowired
     private EntProjectAttachService entProjectAttachService;
+    @Autowired
+    private EntProjectAchievementInfoService entProjectAchievementInfoService;
 
 
     @DefaultValue(targetType = java.util.Map.class, index = 0, key = "inType", defValue = "userPerId", defValueEnum = DefValueEnum.STRING)
@@ -364,6 +366,43 @@ public class EntProjectInfoServiceImpl extends ServiceImpl<EntProjectInfoDao, En
     }
 
     @Override
+    public R queryPeojectsByAchieve() {
+        HashMap<Long, Long> roleMap = new HashMap<>();
+        roleMap.put(11L, 11L);
+        roleMap.put(12L, 12L);
+        roleMap.put(7L, 7L);
+        SysUserEntity user = (SysUserEntity) SecurityUtils.getSubject().getPrincipal();
+        if(user == null){
+            return  R.error("未登录系统或已过期，请重新登录。");
+        }
+        List<Long> roles = sysUserRoleService.queryRoleIdList(user.getUserId());
+        List<EntProjectInfoEntity> result = null;
+        if(roles != null && roles.size() > 0){
+            for(int i = 0; i < roles.size(); i++){
+                Long aLong = roles.get(i);
+                Long aLong1 = roleMap.get(aLong);
+                if(aLong1 != null && aLong1 == 11L){ // 学生
+                    Long userPerId = userPerInfoService.queryUserPerIdByUserId(user.getUserId());
+                    result = baseMapper.queryProjectsByUserPerId(userPerId);
+                    invokeProjectAchieve(result);
+                    break;
+                }else if (aLong1 != null && aLong1 == 12L){ // 教师
+                    Long userTeacherId = userTeacherInfoService.queryUserTeacherIdByUserId(user.getUserId());
+                    result = baseMapper.queryProjectsByUserTeacherId(userTeacherId);
+                    invokeProjectAchieve(result);
+                    break;
+                }else if (aLong1 != null && aLong1 == 7L){ // 企业
+                    Long entInfoId = entEnterpriseInfoService.queryEntInfoIdByUserId(user.getUserId());
+                    result = baseMapper.queryProjectsByEnterId(entInfoId);
+                    invokeProjectAchieve(result);
+                    break;
+                }
+            }
+        }
+        return R.ok().put("data", result);
+    }
+
+    @Override
     public R queryWebEntProjectInfo(Long projectId, String inApply) {
         EntProjectInfoEntity project = baseMapper.queryProjectByProjectIdAndInApply(projectId, inApply);
         if(project != null ){
@@ -551,6 +590,21 @@ public class EntProjectInfoServiceImpl extends ServiceImpl<EntProjectInfoDao, En
                         result.remove(k);
                     }
                 }
+            }
+        }
+    }
+
+    /**
+     * 提出已存在项目成果的项目
+     * @param result
+     */
+    private void invokeProjectAchieve(List<EntProjectInfoEntity> result) {
+        for (int j = 0; j < result.size(); j++) {
+            Long proInfoId = result.get(j).getProInfoId();
+            EntProjectAchievementInfoEntity entProjectAchievementInfoEntity = entProjectAchievementInfoService.selectOne(new EntityWrapper<EntProjectAchievementInfoEntity>().eq("pro_info_id", proInfoId));
+            if(entProjectAchievementInfoEntity != null){
+                result.remove(j);
+                --j;
             }
         }
     }

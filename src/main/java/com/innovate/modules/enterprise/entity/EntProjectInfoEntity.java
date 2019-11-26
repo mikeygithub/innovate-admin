@@ -101,6 +101,13 @@ public class EntProjectInfoEntity implements Serializable {
 	 * 项目附件信息
 	 */
 	@TableField(exist = false)
+	private EntProjectAttachEntity entProjectAttachEntitie;
+
+
+	/**
+	 * 项目附件信息
+	 */
+	@TableField(exist = false)
 	private List<EntProjectAttachEntity> entProjectAttachEntities;
 
 	/**
@@ -125,6 +132,24 @@ public class EntProjectInfoEntity implements Serializable {
 	 * 企业项目附件信息
 	 */
 	@TableField(exist = false)
+	private EntEnterpriseAttachmentEntity enterpriseAttachment;
+
+	/**
+	 * 企业项目附件信息
+	 */
+	@TableField(exist = false)
 	private List<EntEnterpriseAttachmentEntity> enterpriseAttachments;
+
+	/**
+	 * 项目成果信息集合
+	 */
+	@TableField(exist = false)
+	private EntProjectAchievementInfoEntity entProjectAchievementInfo;
+
+	/**
+	 * 项目成果信息集合
+	 */
+	@TableField(exist = false)
+	private List<EntProjectAchievementInfoEntity> entProjectAchievementInfoEntities;
 
 }

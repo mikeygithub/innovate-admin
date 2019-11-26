@@ -77,6 +77,8 @@ public interface EntProjectInfoService extends IService<EntProjectInfoEntity> {
      */
     R queryPeojects();
 
+    R queryPeojectsByAchieve();
+
     /**
      * 前端项目详情
      * @param projectId

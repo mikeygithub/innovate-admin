@@ -41,4 +41,11 @@ public interface EntProjectAchievementInfoDao extends BaseMapper<EntProjectAchie
      * @return
      */
     List<EntProjectAchievementInfoEntity> queryProjectAchievementByEntInfoId(@Param("entInfoId") Long entInfoId, @Param("inApply") String inApply);
+
+    /**
+     * 更新项目合作审核状态
+     * @param params
+     * @return
+     */
+    boolean updateProjectExamine(Map<String, Object> params);
 }

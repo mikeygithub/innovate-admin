@@ -99,6 +99,15 @@ public class EntProjectInfoController extends AbstractController {
     }
 
     /**
+     * 查询用户对应的项目信息
+     * @return
+     */
+    @RequestMapping("/queryPeojectsByAchieve")
+    public R queryPeojectsByAchieve(){
+        return entProjectInfoService.queryPeojectsByAchieve();
+    }
+
+    /**
      * 处理项目信息审核
      * @return
      */
