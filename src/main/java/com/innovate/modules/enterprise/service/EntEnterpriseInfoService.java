@@ -49,5 +49,11 @@ public interface EntEnterpriseInfoService extends IService<EntEnterpriseInfoEnti
      */
     List<Long> queryUserIdByEntInfoId(Long[] ids);
 
+    /**
+     * 根据userId，查询企业信息
+     * @param
+     * @return
+     */
+    PageUtils queryListById(Map<String, Object> params);
 }
 

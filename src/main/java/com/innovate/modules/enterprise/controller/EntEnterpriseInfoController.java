@@ -57,6 +57,16 @@ public class EntEnterpriseInfoController extends AbstractController {
     }
 
     /**
+     * 列表
+     */
+    @RequestMapping("/listById")
+    // @RequiresPermissions("enterprise:info:list")
+    public R ListById(@RequestParam Map<String, Object> params){
+        PageUtils page = entEnterpriseInfoService.queryListById(params);
+        return R.ok().put("page", page);
+    }
+
+    /**
      * 信息---企业入驻审核信息查询
      */
     @RequestMapping("/info/{entInfoId}/{inApply}")

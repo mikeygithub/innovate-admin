@@ -20,6 +20,8 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.Map;
 
+import static com.innovate.common.utils.ShiroUtils.getUserId;
+
 
 @Service("entEnterpriseInfoService")
 public class EntEnterpriseInfoServiceImpl extends ServiceImpl<EntEnterpriseInfoDao, EntEnterpriseInfoEntity> implements EntEnterpriseInfoService {
@@ -47,6 +49,15 @@ public class EntEnterpriseInfoServiceImpl extends ServiceImpl<EntEnterpriseInfoD
                 entity.setSysUser(userEntity);
             }
         }
+        return new PageUtils(page);
+    }
+
+    @Override
+    public PageUtils queryListById(Map<String, Object> params) {
+        Page<EntEnterpriseInfoEntity> page = this.selectPage(
+                new Query<EntEnterpriseInfoEntity>(params).getPage(),
+                new EntityWrapper<EntEnterpriseInfoEntity>().eq("user_id", getUserId())
+        );
         return new PageUtils(page);
     }
 
