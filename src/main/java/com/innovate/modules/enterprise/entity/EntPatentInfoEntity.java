@@ -32,7 +32,11 @@ public class EntPatentInfoEntity implements Serializable {
 	/**
 	 * 教师基本信息表外键
 	 */
-	private Long teaInfoId;
+	private Long userTeacherId;
+	/**
+	 * 学生基本信息表外键
+	 */
+	private Long userPerId;
 	/**
 	 * 专利号
 	 */

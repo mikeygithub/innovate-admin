@@ -64,6 +64,23 @@ public class EntProjectInfoController extends AbstractController {
     }
 
     /**
+     * 根据用户ID查询项目列表
+     */
+    @HasAdminRole(
+            targetType = java.util.Map.class,
+            index = 0, roleIds = {"9","10"}, perRoleId = "11",
+            perRoleKey = "user_per_id", teacherRoleId = "12",
+            teacherRoleKey = "user_teacher_id", entRoleId = "7",entRoleKey = "ent_info_id"
+    )
+    @RequestMapping("/queryListByUserId")
+    // @RequiresPermissions("enterprise:project:info:list")
+    public R queryListByUserId(@RequestParam Map<String, Object> params){
+        PageUtils page = entProjectInfoService.queryListByUserId(params);
+
+        return R.ok().put("page", page);
+    }
+
+    /**
      * 该方法用于查询项目信息+附件信息+合作信息+负责人信息+成员信息+专利
      * @return
      */
@@ -135,7 +152,7 @@ public class EntProjectInfoController extends AbstractController {
         List<CommonAttachments> attachments = gson.fromJson(jsonAttach, new TypeToken<List<CommonAttachments>>(){}.getType());
 
         entProjectInfoService.insertEntProject(entProjectInfoEntity);
-        if(attachments != null){
+        if(attachments.size()>0){
             List<EntProjectAttachEntity> insertBatch = new ArrayList<>();
             for(int i=0; i<attachments.size(); i++){
                 CommonFile cfile = attachments.get(i).getResponse();
@@ -166,7 +183,7 @@ public class EntProjectInfoController extends AbstractController {
      */
     @Transactional
     @RequestMapping("/delete")
-    //@RequiresPermissions("enterprise:project:info:delete")
+    @RequiresPermissions("enterprise:project:info:delete")
     public R delete(@RequestBody Long[] proInfoIds){
         List<Long> projectIds = Arrays.asList(proInfoIds);
         entProjectInfoService.deleteBatchIds(projectIds);

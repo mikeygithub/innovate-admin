@@ -101,5 +101,9 @@ public interface EntProjectInfoService extends IService<EntProjectInfoEntity> {
      */
     R queryProjectInfoByIdAndType(Long proInfoId, String inType);
 
+    /**
+     * 根据用户ID查询项目列表
+     */
+    PageUtils queryListByUserId(Map<String, Object> params);
 }
 

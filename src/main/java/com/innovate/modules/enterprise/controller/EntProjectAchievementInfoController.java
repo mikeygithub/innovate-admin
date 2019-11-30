@@ -96,7 +96,7 @@ public class EntProjectAchievementInfoController {
         List<CommonAttachments> attachments = gson.fromJson(jsonAttach, new TypeToken<List<CommonAttachments>>(){}.getType());
         entProjectAchievementInfoService.insert(entProjectAchievementInfoEntity);
 
-        if(attachments != null){
+        if(attachments.size() > 0){
             List<EntProjectAttachEntity> insertBatch = new ArrayList<>();
             for(int i=0; i<attachments.size(); i++){
                 CommonFile cfile = attachments.get(i).getResponse();

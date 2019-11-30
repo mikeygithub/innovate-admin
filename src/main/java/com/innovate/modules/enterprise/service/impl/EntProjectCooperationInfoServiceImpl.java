@@ -210,6 +210,8 @@ public class EntProjectCooperationInfoServiceImpl extends ServiceImpl<EntProject
         roleMap.put(11L, 11L);
         roleMap.put(12L, 12L);
         roleMap.put(7L, 7L);
+        roleMap.put(2L, 2L);
+        roleMap.put(3L, 3L);
         SysUserEntity user = (SysUserEntity) SecurityUtils.getSubject().getPrincipal();
         if(user == null){
             return  R.error("未登录系统或已过期，请重新登录。");
@@ -219,11 +221,11 @@ public class EntProjectCooperationInfoServiceImpl extends ServiceImpl<EntProject
             for(int i = 0; i < roles.size(); i++){
                 Long aLong = roles.get(i);
                 Long aLong1 = roleMap.get(aLong);
-                if(aLong1 != null && aLong1 == 11L){ // 学生
+                if(aLong1 != null && aLong1 == 11L || aLong1 == 2L){ // 学生
                     Long userPerId = userPerInfoService.queryUserPerIdByUserId(user.getUserId());
                     entProjectCooperationInfo.setUserPerId(userPerId);
                     break;
-                }else if (aLong1 != null && aLong1 == 12L){ // 教师
+                }else if (aLong1 != null && aLong1 == 12L  || aLong1 == 3L){ // 教师
                     Long userTeacherId = userTeacherInfoService.queryUserTeacherIdByUserId(user.getUserId());
                     entProjectCooperationInfo.setUserTeacherId(userTeacherId);
                     break;
@@ -289,6 +291,11 @@ public class EntProjectCooperationInfoServiceImpl extends ServiceImpl<EntProject
     public R queryCooperationByApplyPage(Map<String, Object> params, Long userId) {
         String type = (String) params.get("inType");
         EntityWrapper<EntProjectCooperationInfoEntity> wrapper = new EntityWrapper<>();
+        //查询条件
+        if(params.get("key") != null && !"".equals(params.get("key"))){
+            EntProjectInfoEntity entProjectInfoEntity = entProjectInfoService.selectOne(new EntityWrapper<EntProjectInfoEntity>().eq("pro_name", params.get("key")));
+            wrapper.eq("pro_info_id", entProjectInfoEntity.getProInfoId());
+        }
         if("userPerId".equals(type)){
             UserPersonInfoEntity userPersonInfoEntity = userPerInfoService.selectOne(new EntityWrapper<UserPersonInfoEntity>().eq("user_id", userId));
             wrapper.eq("user_per_id", userPersonInfoEntity.getUserPerId());

@@ -111,7 +111,7 @@ public class EntProjectCooperationInfoController extends AbstractController {
         List<CommonAttachments> attachments = gson.fromJson(jsonAttach, new TypeToken<List<CommonAttachments>>(){}.getType());
 		entProjectCooperationInfoService.insertProjectCooperation(entProjectCooperationInfoEntity);
 
-        if(attachments != null){
+        if(attachments.size()>0){
             List<EntCoopeationAttachEntity> insertBatch = new ArrayList<>();
             for(int i=0; i<attachments.size(); i++){
                 CommonFile cfile = attachments.get(i).getResponse();

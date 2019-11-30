@@ -30,6 +30,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static com.innovate.common.utils.ShiroUtils.getUserId;
+
 
 @Service("entProjectInfoService")
 public class EntProjectInfoServiceImpl extends ServiceImpl<EntProjectInfoDao, EntProjectInfoEntity> implements EntProjectInfoService {
@@ -88,7 +90,7 @@ public class EntProjectInfoServiceImpl extends ServiceImpl<EntProjectInfoDao, En
         }else {
             wrapper.eq("in_apply", "1");
         }
-        if(params.get("key") != null){
+        if(params.get("key") != null && !"".equals(params.get("key"))){
             wrapper.like("pro_name", (String) params.get("key"));
         }
         Page<EntProjectInfoEntity> page = this.selectPage( new Query<EntProjectInfoEntity>(params).getPage(),wrapper);
@@ -107,6 +109,49 @@ public class EntProjectInfoServiceImpl extends ServiceImpl<EntProjectInfoDao, En
                 entity.setSysUser(user);
             }
         }
+        return new PageUtils(page);
+    }
+
+    @DefaultValue(targetType = java.util.Map.class, index = 0, key = "inType", defValue = "userPerId", defValueEnum = DefValueEnum.STRING)
+    @DefaultArrayValue(targetType = java.util.Map.class, index = 0, key = {"inApply"}, defValue = {"0"}, defValueEnum = {DefValueEnum.STRING})
+    @Override
+    public PageUtils queryListByUserId(Map<String, Object> params) {
+        EntityWrapper<EntProjectInfoEntity> wrapper = new EntityWrapper<>();
+        // 角色条件
+        if(params.get("inType").equals("userPerId")){ // 学生
+            Long userPerId = userPerInfoService.queryUserPerIdByUserId(getUserId());
+            wrapper.eq("user_per_id",userPerId);
+        }else if(params.get("inType").equals("userTeacherId")){// 教师
+            Long userTeacherId = userTeacherInfoService.queryUserTeacherIdByUserId(getUserId());
+            wrapper.eq("user_teacher_id",userTeacherId);
+        }else if(params.get("inType").equals("entInfoId")){// 企业
+            Long entInfoId = entEnterpriseInfoService.queryEntInfoIdByUserId(getUserId());
+            wrapper.eq("ent_info_id",entInfoId);
+        }
+        if("0".equals(params.get("inApply"))){
+            wrapper.eq("in_apply", "0");
+        }else {
+            wrapper.eq("in_apply", "1");
+        }
+        if(!params.get("key").equals("")){
+            wrapper.like("pro_name", (String) params.get("key"));
+        }
+        Page<EntProjectInfoEntity> page = this.selectPage( new Query<EntProjectInfoEntity>(params).getPage(),wrapper);
+        List<EntProjectInfoEntity> records = page.getRecords();
+//        if(records != null && records.size() > 0){
+//            for(int i=0;i<records.size();i++){
+//                EntProjectInfoEntity entity = records.get(i);
+//                SysUserEntity user = null;
+//                if("userPerId".equals(type)){ // 学生
+//                    user = sysUserService.selectById(entity.getUserPerId());
+//                }else if("userTeacherId".equals(type)){ // 教师
+//                    user = sysUserService.selectById(entity.getUserTeacherId());
+//                }else if ("entInfoId".equals(type)){ // 企业
+//                    user =  sysUserService.selectById(entity.getEntInfoId());
+//                }
+//                entity.setSysUser(user);
+//            }
+//        }
         return new PageUtils(page);
     }
 
@@ -297,6 +342,8 @@ public class EntProjectInfoServiceImpl extends ServiceImpl<EntProjectInfoDao, En
         roleMap.put(11L, 11L);
         roleMap.put(12L, 12L);
         roleMap.put(7L, 7L);
+        roleMap.put(2L, 2L);
+        roleMap.put(3L, 3L);
         SysUserEntity user = (SysUserEntity) SecurityUtils.getSubject().getPrincipal();
         if(user == null){
             return  R.error("未登录系统或已过期，请重新登录。");
@@ -306,11 +353,11 @@ public class EntProjectInfoServiceImpl extends ServiceImpl<EntProjectInfoDao, En
             for(int i = 0; i < roles.size(); i++){
                 Long aLong = roles.get(i);
                 Long aLong1 = roleMap.get(aLong);
-                if(aLong1 != null && aLong1 == 11L){ // 学生
+                if(aLong1 != null && aLong1 == 11L || aLong1 == 2L){ // 学生
                     Long userPerId = userPerInfoService.queryUserPerIdByUserId(user.getUserId());
                     entProjectInfo.setUserPerId(userPerId);
                     break;
-                }else if (aLong1 != null && aLong1 == 12L){ // 教师
+                }else if (aLong1 != null && aLong1 == 12L  || aLong1 == 3L){ // 教师
                     Long userTeacherId = userTeacherInfoService.queryUserTeacherIdByUserId(user.getUserId());
                     entProjectInfo.setUserTeacherId(userTeacherId);
                     break;
@@ -331,6 +378,8 @@ public class EntProjectInfoServiceImpl extends ServiceImpl<EntProjectInfoDao, En
         roleMap.put(11L, 11L);
         roleMap.put(12L, 12L);
         roleMap.put(7L, 7L);
+        roleMap.put(2L, 2L);
+        roleMap.put(3L, 3L);
         SysUserEntity user = (SysUserEntity) SecurityUtils.getSubject().getPrincipal();
         if(user == null){
             return  R.error("未登录系统或已过期，请重新登录。");
@@ -341,13 +390,13 @@ public class EntProjectInfoServiceImpl extends ServiceImpl<EntProjectInfoDao, En
             for(int i = 0; i < roles.size(); i++){
                 Long aLong = roles.get(i);
                 Long aLong1 = roleMap.get(aLong);
-                if(aLong1 != null && aLong1 == 11L){ // 学生
+                if(aLong1 != null && aLong1 == 11L || aLong1 == 2L){ // 学生
                     Long userPerId = userPerInfoService.queryUserPerIdByUserId(user.getUserId());
                     result = baseMapper.queryProjectsByUserPerId(userPerId);
                     List<Long> pcids = entProjectCooperationInfoService.queryProjectInfoIdByType("user_per_id", userPerId);
                     invokeProject(result, pcids);
                     break;
-                }else if (aLong1 != null && aLong1 == 12L){ // 教师
+                }else if (aLong1 != null && aLong1 == 12L || aLong1 == 3L){ // 教师
                     Long userTeacherId = userTeacherInfoService.queryUserTeacherIdByUserId(user.getUserId());
                     result = baseMapper.queryProjectsByUserTeacherId(userTeacherId);
                     List<Long> pcids = entProjectCooperationInfoService.queryProjectInfoIdByType("user_teacher_id", userTeacherId);
@@ -371,6 +420,8 @@ public class EntProjectInfoServiceImpl extends ServiceImpl<EntProjectInfoDao, En
         roleMap.put(11L, 11L);
         roleMap.put(12L, 12L);
         roleMap.put(7L, 7L);
+        roleMap.put(2L, 2L);
+        roleMap.put(3L, 3L);
         SysUserEntity user = (SysUserEntity) SecurityUtils.getSubject().getPrincipal();
         if(user == null){
             return  R.error("未登录系统或已过期，请重新登录。");
@@ -381,12 +432,12 @@ public class EntProjectInfoServiceImpl extends ServiceImpl<EntProjectInfoDao, En
             for(int i = 0; i < roles.size(); i++){
                 Long aLong = roles.get(i);
                 Long aLong1 = roleMap.get(aLong);
-                if(aLong1 != null && aLong1 == 11L){ // 学生
+                if(aLong1 != null && aLong1 == 11L || aLong1 == 2L){ // 学生
                     Long userPerId = userPerInfoService.queryUserPerIdByUserId(user.getUserId());
                     result = baseMapper.queryProjectsByUserPerId(userPerId);
                     invokeProjectAchieve(result);
                     break;
-                }else if (aLong1 != null && aLong1 == 12L){ // 教师
+                }else if (aLong1 != null && aLong1 == 12L || aLong1 == 3L){ // 教师
                     Long userTeacherId = userTeacherInfoService.queryUserTeacherIdByUserId(user.getUserId());
                     result = baseMapper.queryProjectsByUserTeacherId(userTeacherId);
                     invokeProjectAchieve(result);
