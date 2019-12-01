@@ -272,16 +272,18 @@ public class EntPersonCooperationInfoServiceImpl extends ServiceImpl<EntPersonCo
         roleMap.put(11L, 11L);
         roleMap.put(12L, 12L);
         roleMap.put(7L, 7L);
+        roleMap.put(2L, 2L);
+        roleMap.put(3L, 3L);
         List<Long> roles = sysUserRoleService.queryRoleIdList(userId);
         if(roles != null && roles.size() > 0){
             for(int i = 0; i < roles.size(); i++){
                 Long aLong = roles.get(i);
                 Long aLong1 = roleMap.get(aLong);
-                if(aLong1 != null && aLong1 == 11L){ // 学生
+                if(aLong1 != null && aLong1 == 11L || aLong1 == 2L){ // 学生
                     Long userPerId = userPerInfoService.queryUserPerIdByUserId(userId);
                     person.setUserPerId(userPerId);
                     break;
-                }else if (aLong1 != null && aLong1 == 12L){ // 教师
+                }else if (aLong1 != null && aLong1 == 12L  || aLong1 == 3L){ // 教师
                     Long userTeacherId = userTeacherInfoService.queryUserTeacherIdByUserId(userId);
                     person.setUserTeacherId(userTeacherId);
                     break;
