@@ -51,6 +51,11 @@ public class BossWebPageIndexController {
         return  entProjectInfoService.queryWebEntProjectInfos(params);
     }
 
+    @RequestMapping("newProjectInfos")
+    public R newProjectInfos(@RequestParam Map<String,Object> params){
+        return  entProjectInfoService.queryNewWebEntProjectInfos(params);
+    }
+
     /**
      * 项目详情
      * @param projectId

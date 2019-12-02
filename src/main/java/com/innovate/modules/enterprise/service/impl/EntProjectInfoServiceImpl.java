@@ -25,10 +25,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import static com.innovate.common.utils.ShiroUtils.getUserId;
 
@@ -154,6 +151,7 @@ public class EntProjectInfoServiceImpl extends ServiceImpl<EntProjectInfoDao, En
 //        }
         return new PageUtils(page);
     }
+
 
     @Override
     public R queryEntProjectInfoByIdPerId(Long id) {
@@ -295,8 +293,8 @@ public class EntProjectInfoServiceImpl extends ServiceImpl<EntProjectInfoDao, En
     }
 
     @DefaultArrayValue(targetType = java.util.Map.class, index = 0,
-            key = { "inApply", "pageSize", "currPage", "proType" }, defValue = { "1", "12", "1", "0" },
-            defValueEnum = { DefValueEnum.STRING, DefValueEnum.INTEGER, DefValueEnum.INTEGER , DefValueEnum.INTEGER})
+            key = { "inApply", "page", "limit", "proType" }, defValue = { "1", "1", "12", "0" },
+            defValueEnum = { DefValueEnum.STRING, DefValueEnum.STRING, DefValueEnum.STRING , DefValueEnum.INTEGER})
     @Override
     public R queryWebEntProjectInfos(Map<String, Object> params) {
         EntityWrapper<EntProjectInfoEntity> wrapper = new EntityWrapper<>();
@@ -333,6 +331,26 @@ public class EntProjectInfoServiceImpl extends ServiceImpl<EntProjectInfoDao, En
                 }
             }
         }
+        return R.ok().put("data", page);
+    }
+
+
+    @Override
+    public R queryNewWebEntProjectInfos(Map<String, Object> params) {
+        EntityWrapper<EntProjectInfoEntity> wrapper = new EntityWrapper<>();
+        List<Long> proInfoIds = entProjectCooperationInfoService.queryProInfoIdsByInApply("1");
+        if(proInfoIds == null){
+            return R.ok().put("data", null);
+        }
+        Collections.sort(proInfoIds,Collections.reverseOrder());
+        wrapper.in("pro_info_id", proInfoIds);
+        wrapper.eq("in_apply", params.get("inApply"));
+        if(params.get("proType") != null && Integer.valueOf(params.get("proType").toString()) != 0){
+            wrapper.eq("pro_type", params.get("proType"));
+        }
+        Page<EntProjectInfoEntity> page = this.selectPage( new Query<EntProjectInfoEntity>(params).getPage(),wrapper);
+        List<EntProjectInfoEntity> records = page.getRecords();
+
         return R.ok().put("data", page);
     }
 

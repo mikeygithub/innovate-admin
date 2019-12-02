@@ -105,5 +105,12 @@ public interface EntProjectInfoService extends IService<EntProjectInfoEntity> {
      * 根据用户ID查询项目列表
      */
     PageUtils queryListByUserId(Map<String, Object> params);
+
+    /**
+     * 前端最新数据
+     * @param params
+     * @return
+     */
+    R queryNewWebEntProjectInfos(Map<String, Object> params);
 }
 
