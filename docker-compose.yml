@@ -9,5 +9,3 @@ services:
       - /root/mikey/MIKEY:/home/mikey/MIKEY
     environment:
       - spring.profiles.active=prod
-      - spring.datasource.first.password: 123456789
-      - spring.datasource.second.password: 123456789
