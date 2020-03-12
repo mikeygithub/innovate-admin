@@ -4,17 +4,19 @@
 学校创新创业信息管理系统
 
 #### 软件架构
-软件架构说明
-技术要求：spring boot，spring mvc，mybatis，mybatis plus
+软件架构说明  
+技术要求：
+>spring boot，spring mvc，mybatis，mybatis plus
 
 
 #### 安装教程
 
-1. idea自带数据库管理工具导入方式
-创建innovate_admin数据库命令：
+1. idea自带数据库管理工具导入方式 创建innovate_admin数据库命令：
+```sql
 CREATE SCHEMA innovate_admin DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;
+```
 2. maven引入jar包
-选择maven 中的install
+选择maven插件中的install 或 `mvn install`
 3. 运行InnovateApplication
 
 #### 使用说明
