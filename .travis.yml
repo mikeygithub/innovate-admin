@@ -1,30 +1,20 @@
-#环境语言
 language: java
-#所选服务
 services:
   - docker
-#权限
 sudo: required
-#分支
 branches:
   only:
     - master
-#执行脚本
 script:
   - mvn install -DskipTests=true -Dmaven.javadoc.skip=true -B -V
   - docker build . -t "mikeyboom/innovate-admin:latest"
-#安装之前执行脚本
 before_install:
-  - openssl aes-256-cbc -K $encrypted_1687bb340939_key -iv $encrypted_1687bb340939_iv
-  -in id_rsa.enc -out ~/.ssh/id_rsa -d
-- chmod 600 ~/.ssh/id_rsa
-- echo -e "Host $SERVER_IP\n\tStrictHostKeyChecking no\n" >> ~/.ssh/config
-#成功之后执行的脚本
+  - openssl aes-256-cbc -K $encrypted_1687bb340939_key -iv $encrypted_1687bb340939_iv -in id_rsa.enc -out ~/.ssh/id_rsa -d
+  - chmod 600 ~/.ssh/id_rsa
+  - echo -e "Host $SERVER_IP\n\tStrictHostKeyChecking no\n" >> ~/.ssh/config
 after_success:
   - docker login -u=$DOCKER_NAME -p="$DOKCER_PWD"
   - docker push mikeyboom/innovate-admin:latest
   - chmod 600 id_rsa
   - rsync -az --delete ./docker-compose.yml root@$SERVER_IP:/innovate-admin/
-  - ssh -o "StrictHostKeyChecking no" -i id_rsa root@$SERVER_IP "cd /home/innovate-admin/;sudo
-    docker-compose -f docker-compose.yml pull;sudo docker-compose -f docker-compose.yml
-    up -d;exit"
+  - ssh -o "StrictHostKeyChecking no" -i id_rsa root@$SERVER_IP "cd /home/innovate-admin/;sudo docker-compose -f docker-compose.yml pull;sudo docker-compose -f docker-compose.yml up -d;exit"
