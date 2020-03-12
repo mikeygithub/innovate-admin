@@ -2,8 +2,9 @@ version: '2'
 services:
   innovate-admin:
     image: mikeyboom/innovate-admin
+    privileged: true
     ports:
-      - "8080:8080"
+      - 8080:8080
     volumes:
       - /root/mikey/MIKEY:/home/mikey/MIKEY
     environment:
