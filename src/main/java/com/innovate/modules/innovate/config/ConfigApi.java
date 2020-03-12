@@ -19,7 +19,7 @@ public class ConfigApi {
 //    ["项目负责人","指导老师","二级学院","管理员","评委","管理员","超级管理员"]
     public static Long[] finishListName = {2L, 3L, 4L, 5L, 6L, 5L, 1L};
 //    文件存储路径
-    public static String UPLOAD_URL = "F:/home/mikey/MIKEY/";
+    public static String UPLOAD_URL = "/home/mikey/MIKEY/";
 //    教师附件路径
     public static String TEACHER_FILE_UPLOAD_URL = "/home/mikey/MIKEY/teacher/";
 //    学生附件路径

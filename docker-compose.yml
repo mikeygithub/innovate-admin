@@ -1,8 +1,12 @@
 version: '2'
 services:
-  renren-fast:
-    image: innovate/admin
+  innovate-admin:
+    image: mikeyboom/innovate-admin
     ports:
       - "8080:8080"
+    volumes:
+      - /root/mikey/MIKEY:/home/mikey/MIKEY
     environment:
-      - spring.profiles.active=dev
+      - spring.profiles.active=prod
+      - spring.datasource.first.password: 123456789
+      - spring.datasource.second.password: 123456789
