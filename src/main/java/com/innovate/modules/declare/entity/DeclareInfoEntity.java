@@ -21,6 +21,8 @@ public class DeclareInfoEntity implements Serializable {
     private Long declareId;
     private Long instituteId;
     private Long subjectId;
+    private Long declareGrade;
+    private Long declareYear;
     private Long projectUserId;
     private Long groupId;
     private String declareNum;
