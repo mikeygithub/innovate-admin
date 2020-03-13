@@ -7,14 +7,17 @@ branches:
     - master
 script:
   - mvn install -DskipTests=true -Dmaven.javadoc.skip=true -B -V
-  - docker build . -t "mikeyboom/innovate-admin:latest"
+#  - docker build . -t "mikeyboom/innovate-admin:latest"
+  - docker build . -t "registry.cn-shenzhen.aliyuncs.com/mikey/innovate-admin:latest"
 before_install:
   - openssl aes-256-cbc -K $encrypted_1687bb340939_key -iv $encrypted_1687bb340939_iv -in id_rsa.enc -out ~/.ssh/id_rsa -d
   - chmod 600 ~/.ssh/id_rsa
   - echo -e "Host $SERVER_IP\n\tStrictHostKeyChecking no\n" >> ~/.ssh/config
 after_success:
-  - docker login -u=$DOCKER_NAME -p="$DOKCER_PWD"
-  - docker push mikeyboom/innovate-admin:latest
+#  - docker login -u=$DOCKER_NAME -p="$DOKCER_PWD"
+#  - docker push mikeyboom/innovate-admin:latest
+  - docker login -u=$ALIYUN_DOCKER_NAME registry.cn-shenzhen.aliyuncs.com -p=$DOCKER_PWD
+  - docker push registry.cn-shenzhen.aliyuncs.com/mikey/innovate-admin:latest
   - chmod 600 id_rsa
   - rsync -az --delete ./docker-compose.yml root@$SERVER_IP:innovate-admin/
   - ssh -o "StrictHostKeyChecking no" -i id_rsa root@$SERVER_IP "cd innovate-admin/;docker-compose -f docker-compose.yml pull;docker-compose -f docker-compose.yml up -d;exit"
