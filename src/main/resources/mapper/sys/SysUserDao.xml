@@ -21,6 +21,10 @@
 		select * from sys_user where username = #{username}
 	</select>
 
+	<select id="queryByUserMobile" resultType="com.innovate.modules.sys.entity.SysUserEntity">
+		select * from sys_user where mobile = #{mobile}
+	</select>
+
 	<select id="queryByUser" resultType="com.innovate.modules.sys.entity.SysUserEntity">
 		select * from sys_user a, sys_user_role b
 		where a.user_id = b.user_id

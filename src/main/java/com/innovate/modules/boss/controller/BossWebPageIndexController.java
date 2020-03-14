@@ -9,11 +9,9 @@ import com.innovate.modules.sys.entity.SysUserEntity;
 import com.innovate.modules.sys.service.SysUserRoleService;
 import com.innovate.modules.sys.service.SysUserService;
 import org.apache.shiro.crypto.hash.Sha256Hash;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -64,6 +62,17 @@ public class BossWebPageIndexController {
     @RequestMapping("projectInfo/{projectId}")
     public R projectInfo(@PathVariable("projectId")Long projectId){
         return entProjectInfoService.queryWebEntProjectInfo(projectId, "1");
+    }
+
+    /**
+     * 通过手机号码获取用户信息
+     */
+    @PostMapping("/mobile")
+    public R mobile(@RequestBody String mobile) throws Exception{
+        JSONObject object = new JSONObject(mobile);
+        String phone = object.getString("mobile");
+        List<SysUserEntity> user = sysUserService.queryByUserMobile(phone);
+        return R.ok().put("user", user);
     }
 
     @RequestMapping("update")
