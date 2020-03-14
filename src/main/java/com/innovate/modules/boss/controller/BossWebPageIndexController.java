@@ -74,7 +74,7 @@ public class BossWebPageIndexController {
      * 短信发送
      */
     @PostMapping("/message")
-    public R save(@RequestBody String mobile) throws Exception{
+    public R message(@RequestBody String mobile) throws Exception{
         SmsUtil sms = new SmsUtil();
         VerificationCode = sms.getFourRandom();
         JSONObject object = new JSONObject(mobile);
