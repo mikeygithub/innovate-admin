@@ -76,6 +76,11 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserDao, SysUserEntity> i
 	}
 
 	@Override
+	public List<SysUserEntity> queryByUserMobile(String mobile) {
+		return baseMapper.queryByUserMobile(mobile);
+	}
+
+	@Override
 	public List<SysUserEntity> queryByUser() {
 		return baseMapper.queryByUser();
 	}

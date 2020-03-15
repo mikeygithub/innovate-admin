@@ -1,19 +1,21 @@
 package com.innovate.modules.boss.controller;
 
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
+import com.innovate.common.annotation.SysLog;
 import com.innovate.common.utils.R;
+import com.innovate.common.validator.Assert;
 import com.innovate.modules.enterprise.service.EntProjectInfoService;
 import com.innovate.modules.innovate.service.UserPerInfoService;
 import com.innovate.modules.innovate.service.UserTeacherInfoService;
+import com.innovate.modules.innovate.utils.SmsUtil;
 import com.innovate.modules.sys.entity.SysUserEntity;
+import com.innovate.modules.sys.form.PasswordForm;
 import com.innovate.modules.sys.service.SysUserRoleService;
 import com.innovate.modules.sys.service.SysUserService;
 import org.apache.shiro.crypto.hash.Sha256Hash;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -46,6 +48,8 @@ public class BossWebPageIndexController {
     @Autowired
     private SysUserRoleService sysUserRoleService;
 
+    private String VerificationCode;//短信验证码
+
     @RequestMapping("projectInfos")
     public R projectInfos(@RequestParam Map<String,Object> params){
         return  entProjectInfoService.queryWebEntProjectInfos(params);
@@ -64,6 +68,40 @@ public class BossWebPageIndexController {
     @RequestMapping("projectInfo/{projectId}")
     public R projectInfo(@PathVariable("projectId")Long projectId){
         return entProjectInfoService.queryWebEntProjectInfo(projectId, "1");
+    }
+
+    /**
+     * 短信发送
+     */
+    @PostMapping("/message")
+    public R message(@RequestBody String mobile) throws Exception{
+        SmsUtil sms = new SmsUtil();
+        VerificationCode = sms.getFourRandom();
+        JSONObject object = new JSONObject(mobile);
+        String phone = object.getString("mobile");
+        System.out.println(VerificationCode);
+        sms.sendSms(phone,VerificationCode);
+        return R.ok();
+    }
+
+    /**
+     * 通过手机号码获取用户信息
+     */
+    @PostMapping("/mobile")
+    public R mobile(@RequestBody String mobile) throws Exception{
+        JSONObject object = new JSONObject(mobile);
+        String phone = object.getString("mobile");
+        List<SysUserEntity> users = sysUserService.queryByUserMobile(phone);
+        String user = "";
+        if(users.size()>0){
+            for (int i = 0; i < users.size(); i++) {
+                String user1 = users.get(i).getUsername();
+                String user2 = user1 + " , ";
+                user += user2;
+            }
+            user = user.substring(0, user.length()-2);
+        }
+        return R.ok().put("user", user);
     }
 
     @RequestMapping("update")
@@ -116,6 +154,33 @@ public class BossWebPageIndexController {
             }
             return R.ok().put("result", res);
         }
+    }
+
+    /**
+     * 账号/密码找回
+     */
+    @SysLog("修改密码")
+    @PostMapping("/password")
+    public R password(@RequestBody Map<String, Object> params){
+        Assert.isBlank(params.get("newPassword").toString(), "新密码不为能空");
+
+        String captcha = params.get("captcha").toString();
+        List<SysUserEntity> users = sysUserService.queryByUserMobile(params.get("mobile").toString());
+
+        if (captcha.equals(VerificationCode)) {
+            for (int i = 0; i < users.size(); i++) {
+                //sha256加密
+                String password = new Sha256Hash(params.get("password").toString(), users.get(i).getSalt()).toHex();
+                //sha256加密
+                String newPassword = new Sha256Hash(params.get("newPassword").toString(), users.get(i).getSalt()).toHex();
+                //更新密码
+                sysUserService.updatePassword(users.get(i).getUserId(), users.get(i).getPassword(), newPassword);
+            }
+        } else {
+            return R.ok().put("come","0");
+        }
+
+        return R.ok().put("come","1");
     }
 
 //    @RequestMapping("per")
