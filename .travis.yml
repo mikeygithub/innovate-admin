@@ -15,6 +15,6 @@ before_install:
 after_success:
   - docker login -u=$DOCKER_NAME -p="$DOKCER_PWD"
   - docker push mikeyboom/innovate-admin:latest
-  - chmod 600 id_rsa
+  - chmod 600 ~/.ssh/id_rsa
   - rsync -az --delete ./docker-compose.yml root@$SERVER_IP:innovate-admin/
   - ssh -o "StrictHostKeyChecking no" -i id_rsa root@$SERVER_IP "cd innovate-admin/;docker-compose -f docker-compose.yml pull;docker-compose -f docker-compose.yml up -d;exit"

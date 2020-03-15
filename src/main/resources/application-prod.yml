@@ -5,12 +5,12 @@ spring:
         druid:
             first:
                 url: jdbc:mysql://47.112.103.217:3306/innovate_admin?allowMultiQueries=true&useUnicode=true&characterEncoding=UTF-8
-                username: root
-                password: 123456789
+                username: ENC(T3PFeEs/mQPT9NFDWGUXLw==)
+                password: ENC(Nve3rwvAuhO04Wmvht932gtGPdfhNhr5)
             second:
                 url: jdbc:mysql://47.112.103.217:3306/innovate_admin?allowMultiQueries=true&useUnicode=true&characterEncoding=UTF-8
-                username: root
-                password: 123456789
+                username: ENC(T3PFeEs/mQPT9NFDWGUXLw==)
+                password: ENC(Nve3rwvAuhO04Wmvht932gtGPdfhNhr5)
             initial-size: 10
             max-active: 100
             min-idle: 10

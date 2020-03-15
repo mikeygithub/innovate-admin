@@ -86,3 +86,7 @@ renren:
     expire: 604800
     header: token
 debug: false
+#加密密钥
+jasypt:
+  encryptor:
+    password: panda

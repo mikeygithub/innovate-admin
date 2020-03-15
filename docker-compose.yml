@@ -1,7 +1,7 @@
 version: '2'
 services:
   innovate-admin:
-    image: mikeyboom/innovate-admin
+    image: mikeyboom/innovate-admin:latest
     privileged: true
     ports:
       - 8080:8080
