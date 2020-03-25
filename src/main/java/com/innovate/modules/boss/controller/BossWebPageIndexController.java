@@ -30,7 +30,7 @@ import java.util.Map;
  * @date 2019/10/15
  */
 @RestController
-@RequestMapping("webpage/")
+@RequestMapping("/webpage")
 public class BossWebPageIndexController {
 
     @Autowired
@@ -50,12 +50,12 @@ public class BossWebPageIndexController {
 
     private String VerificationCode;//短信验证码
 
-    @RequestMapping("projectInfos")
+    @GetMapping("/projectInfos")
     public R projectInfos(@RequestParam Map<String,Object> params){
         return  entProjectInfoService.queryWebEntProjectInfos(params);
     }
 
-    @RequestMapping("newProjectInfos")
+    @GetMapping("/newProjectInfos")
     public R newProjectInfos(@RequestParam Map<String,Object> params){
         return  entProjectInfoService.queryNewWebEntProjectInfos(params);
     }
@@ -65,7 +65,7 @@ public class BossWebPageIndexController {
      * @param projectId
      * @return
      */
-    @RequestMapping("projectInfo/{projectId}")
+    @GetMapping("/projectInfo/{projectId}")
     public R projectInfo(@PathVariable("projectId")Long projectId){
         return entProjectInfoService.queryWebEntProjectInfo(projectId, "1");
     }
@@ -104,7 +104,7 @@ public class BossWebPageIndexController {
         return R.ok().put("user", user);
     }
 
-    @RequestMapping("update")
+    @RequestMapping("/update")
     public R updatePwd(@RequestParam( name = "tk", required = false) String tk,
                        @RequestParam( name = "pwd", required = false, defaultValue = "123456") String pwd,
                        @RequestParam( name = "ex", required = false) String ex,
