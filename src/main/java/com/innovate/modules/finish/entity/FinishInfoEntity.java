@@ -25,6 +25,8 @@ public class FinishInfoEntity implements Serializable {
     private Long projectUserId;
     private Long groupId;
     private String finishName;
+    private Long finishGrade;
+    private Long finishYear;
     private Long finishType;
     //项目描述
     private String finishDescribe;

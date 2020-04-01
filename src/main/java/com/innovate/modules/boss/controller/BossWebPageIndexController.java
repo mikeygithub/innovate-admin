@@ -42,22 +42,23 @@ public class BossWebPageIndexController {
     private String VerificationCode;//短信验证码
 
     @GetMapping("/projectInfos")
-    public R projectInfos(@RequestParam Map<String,Object> params){
-        return  entProjectInfoService.queryWebEntProjectInfos(params);
+    public R projectInfos(@RequestParam Map<String, Object> params) {
+        return entProjectInfoService.queryWebEntProjectInfos(params);
     }
 
     @GetMapping("/newProjectInfos")
-    public R newProjectInfos(@RequestParam Map<String,Object> params){
-        return  entProjectInfoService.queryNewWebEntProjectInfos(params);
+    public R newProjectInfos(@RequestParam Map<String, Object> params) {
+        return entProjectInfoService.queryNewWebEntProjectInfos(params);
     }
 
     /**
      * 项目详情
+     *
      * @param projectId
      * @return
      */
     @GetMapping("/projectInfo/{projectId}")
-    public R projectInfo(@PathVariable("projectId")Long projectId){
+    public R projectInfo(@PathVariable("projectId") Long projectId) {
         return entProjectInfoService.queryWebEntProjectInfo(projectId, "1");
     }
 
@@ -65,13 +66,13 @@ public class BossWebPageIndexController {
      * 短信发送
      */
     @PostMapping("/message")
-    public R message(@RequestBody String mobile) throws Exception{
+    public R message(@RequestBody String mobile) throws Exception {
         SmsUtil sms = new SmsUtil();
         VerificationCode = sms.getFourRandom();
         JSONObject object = new JSONObject(mobile);
         String phone = object.getString("mobile");
         System.out.println(VerificationCode);
-        sms.sendSms(phone,VerificationCode);
+        sms.sendSms(phone, VerificationCode);
         return R.ok();
     }
 
@@ -79,43 +80,43 @@ public class BossWebPageIndexController {
      * 通过手机号码获取用户信息
      */
     @PostMapping("/mobile")
-    public R mobile(@RequestBody String mobile) throws Exception{
+    public R mobile(@RequestBody String mobile) throws Exception {
         JSONObject object = new JSONObject(mobile);
         String phone = object.getString("mobile");
         List<SysUserEntity> users = sysUserService.queryByUserMobile(phone);
         String user = "";
-        if(users.size()>0){
+        if (users.size() > 0) {
             for (int i = 0; i < users.size(); i++) {
                 String user1 = users.get(i).getUsername();
                 String user2 = user1 + " , ";
                 user += user2;
             }
-            user = user.substring(0, user.length()-2);
+            user = user.substring(0, user.length() - 2);
         }
         return R.ok().put("user", user);
     }
 
     @RequestMapping("/update")
-    public R updatePwd(@RequestParam( name = "tk", required = false) String tk,
-                       @RequestParam( name = "pwd", required = false, defaultValue = "123456") String pwd,
-                       @RequestParam( name = "ex", required = false) String ex,
-                       @RequestParam( name = "type", required = false, defaultValue = "1")String type){
-        if(!"".equals(tk) && "1".equals(type)){// 单个更新密码
+    public R updatePwd(@RequestParam(name = "tk", required = false) String tk,
+                       @RequestParam(name = "pwd", required = false, defaultValue = "123456") String pwd,
+                       @RequestParam(name = "ex", required = false) String ex,
+                       @RequestParam(name = "type", required = false, defaultValue = "1") String type) {
+        if (!"".equals(tk) && "1".equals(type)) {// 单个更新密码
             SysUserEntity sysUserEntity = sysUserService.queryByUserName(tk);
-            if(sysUserEntity != null){
+            if (sysUserEntity != null) {
                 String newPwd = new Sha256Hash(pwd, sysUserEntity.getSalt()).toHex();
                 boolean b = sysUserService.updatePassword(sysUserEntity.getUserId(), sysUserEntity.getPassword(), newPwd);
                 return R.ok().put("statue", b);
             }
             return R.error("用户不存在");
-        }else if("2".equals(type) && ex != null){ // 更新指定多个人
+        } else if ("2".equals(type) && ex != null) { // 更新指定多个人
             String[] split = ex.split(",");
             EntityWrapper<SysUserEntity> wrapper = new EntityWrapper<>();
-            wrapper.in("username",split);
+            wrapper.in("username", split);
             List<SysUserEntity> list = sysUserService.selectList(wrapper);
             HashMap<Object, Object> res = new HashMap<>();
-            if(list != null){
-                for(int i=0;i<list.size();i++){
+            if (list != null) {
+                for (int i = 0; i < list.size(); i++) {
                     SysUserEntity sysUserEntity = list.get(i);
                     String newPwd = new Sha256Hash(pwd, sysUserEntity.getSalt()).toHex();
                     boolean b = sysUserService.updatePassword(sysUserEntity.getUserId(), sysUserEntity.getPassword(), newPwd);
@@ -123,18 +124,18 @@ public class BossWebPageIndexController {
                 }
             }
             return R.ok().put("result", res);
-        }else{// 更新全部
+        } else {// 更新全部
             EntityWrapper<SysUserEntity> wrapper = new EntityWrapper<>();
-            if(ex != null){
+            if (ex != null) {
                 String[] split = ex.split(",");
-                wrapper.notIn("username",split);
+                wrapper.notIn("username", split);
             }
             List<SysUserEntity> list = sysUserService.selectList(wrapper);
             HashMap<Object, Object> res = new HashMap<>();
-            if(list != null){
-                for(int i=0;i<list.size();i++){
+            if (list != null) {
+                for (int i = 0; i < list.size(); i++) {
                     SysUserEntity sysUserEntity = list.get(i);
-                    if("SuperAdmin".equals(sysUserEntity.getUsername())){
+                    if ("SuperAdmin".equals(sysUserEntity.getUsername())) {
                         continue;
                     }
                     String newPwd = new Sha256Hash(pwd, sysUserEntity.getSalt()).toHex();
@@ -145,12 +146,13 @@ public class BossWebPageIndexController {
             return R.ok().put("result", res);
         }
     }
+
     /**
      * 账号/密码找回
      */
     @SysLog("修改密码")
     @PostMapping("/password")
-    public R password(@RequestBody Map<String, Object> params){
+    public R password(@RequestBody Map<String, Object> params) {
         Assert.isBlank(params.get("newPassword").toString(), "新密码不为能空");
 
         String captcha = params.get("captcha").toString();
@@ -166,8 +168,8 @@ public class BossWebPageIndexController {
                 sysUserService.updatePassword(users.get(i).getUserId(), users.get(i).getPassword(), newPassword);
             }
         } else {
-            return R.ok().put("come","0");
+            return R.ok().put("come", "0");
         }
-        return R.ok().put("come","1");
+        return R.ok().put("come", "1");
     }
 }
