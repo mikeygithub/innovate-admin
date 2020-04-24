@@ -85,6 +85,7 @@ public class FinishReviewServiceImpl extends ServiceImpl<FinishReviewDao, Finish
             }
         }
         if (reApply.equals("false")) {
+            //更新状态
             finishApplyService.apply(params);
         }
     }

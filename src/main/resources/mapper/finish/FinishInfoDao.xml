@@ -95,6 +95,15 @@
             and c.score is not null
         </if>
 
+        <!--年度-->
+        <if test="finishTime != null and finishTime != ''">
+            and a.finish_time like CONCAT('%',#{finishTime},'%')
+        </if>
+        <!--项目名称-->
+        <if test="projectName != null and projectName != ''">
+            and a.finish_name like CONCAT('%',#{projectName},'%')
+        </if>
+
         <if test="startPage != null and endPage != null">
             limit #{startPage}, #{endPage}
         </if>
@@ -190,6 +199,11 @@
         <if test="finishTime != null and finishTime != ''">
             and a.finish_time like CONCAT('%',#{finishTime},'%')
         </if>
+
+        <if test="projectName != null and projectName != ''">
+            and a.finish_name like CONCAT('%',#{projectName},'%')
+        </if>
+
 
         <if test="startPage != null and endPage != null">
             limit #{startPage}, #{endPage}

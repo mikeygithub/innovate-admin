@@ -57,8 +57,7 @@ public class FinishInfoController extends AbstractController {
         params.put("erInstituteId",erInstituteId);
         PageUtils page = finishInfoModelService.queryPage(params);
 
-        return R.ok()
-                .put("page", page);
+        return R.ok().put("page", page);
     }
 
     /**
