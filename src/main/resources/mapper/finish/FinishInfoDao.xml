@@ -26,6 +26,15 @@
             and a.is_del = c.is_del
         </if>
 
+        <if test="hasApply == 10">
+            inner join innovate_finish_review b
+            on a.finish_id = b.finish_id
+            and a.is_del = 0
+            and b.is_del = 0
+            inner join sys_user c
+            on b.user_id = c.user_id
+        </if>
+
         where 1 = 1
 
         <if test="isTeacher != null and isTeacher != ''">
@@ -94,7 +103,10 @@
             and a.${apply} > #{applyStatus}
             and c.score is not null
         </if>
-
+        <!--未评分-->
+        <if test="hasApply != null and hasApply == 10">
+            and b.score is null
+        </if>
         <!--年度-->
         <if test="finishTime != null and finishTime != ''">
             and a.finish_time like CONCAT('%',#{finishTime},'%')
@@ -127,7 +139,15 @@
             inner join innovate_finish_review c on a.finish_id = c.finish_id
             and a.is_del = c.is_del
         </if>
-
+        <!--未评分-->
+        <if test="hasApply == 10">
+            inner join innovate_finish_review b
+            on a.finish_id = b.finish_id
+            and a.is_del = 0
+            and b.is_del = 0
+            inner join sys_user c
+            on b.user_id = c.user_id
+        </if>
         where 1 = 1
 
         <if test="isTeacher != null and isTeacher != ''">
@@ -194,6 +214,10 @@
         <if test="apply != null and apply != '' and applyStatus != null and hasReview == 3">
             and a.${apply} > #{applyStatus}
             and c.score is not null
+        </if>
+        <!--未评分-->
+        <if test="hasApply != null and hasApply == 10">
+            and b.score is null
         </if>
 
         <if test="finishTime != null and finishTime != ''">

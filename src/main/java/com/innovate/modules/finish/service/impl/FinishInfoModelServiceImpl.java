@@ -10,10 +10,7 @@ import com.innovate.modules.innovate.service.UserTeacherInfoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * @author: 尧志欣
@@ -130,7 +127,10 @@ public class FinishInfoModelServiceImpl implements FinishInfoModelService {
 
         Long finishId = finishInfoModel.getFinishInfoEntity().getFinishId();
 
+        //指导老师
         for (FinishTeacherEntity finishTeacherEntity : finishInfoModel.getFinishTeacherEntities()) {
+            //根据最新时间确定第一第二指导老师
+            finishTeacherEntity.setCreateTime(new Date());
             finishTeacherEntity.setFinishId(finishId);
             finishTeacherService.insertOrUpdate(finishTeacherEntity);
         }

@@ -5,10 +5,9 @@ import com.baomidou.mybatisplus.annotations.TableName;
 import lombok.Data;
 
 import java.io.Serializable;
+import java.util.Date;
 
 /**
- * @author:tz
- * @create:2018-11-08
  * @description:项目指导老师
  **/
 @Data
@@ -18,5 +17,6 @@ public class FinishTeacherEntity implements Serializable {
     private Long finishTeacherId;
     private Long finishId;
     private Long userId;
+    private Date createTime;
     private Long isDel;
 }
