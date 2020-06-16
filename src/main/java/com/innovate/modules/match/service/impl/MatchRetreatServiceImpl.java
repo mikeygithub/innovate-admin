@@ -44,7 +44,7 @@ public class MatchRetreatServiceImpl extends ServiceImpl<MatchRetreatDao, MatchR
         MatchInfoEntity matchInfo = innovateMatchInfoService.selectById(matchId);
 
         switch (apply) {
-            case "project_audit_apply_status":
+            case "project_match_apply_status":
                 matchInfo.setMatchNoPass(1L);
                 break;
         }
