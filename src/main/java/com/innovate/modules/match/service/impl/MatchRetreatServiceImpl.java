@@ -40,7 +40,7 @@ public class MatchRetreatServiceImpl extends ServiceImpl<MatchRetreatDao, MatchR
         matchRetreatEntity.setUserId(userId);
         matchRetreatEntity.setApplyStatus(applyStatus);
         matchRetreatService.insert(matchRetreatEntity);
-
+        //
         MatchInfoEntity matchInfo = innovateMatchInfoService.selectById(matchId);
 
         switch (apply) {

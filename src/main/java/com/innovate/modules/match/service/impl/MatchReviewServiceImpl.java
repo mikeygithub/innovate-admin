@@ -1,6 +1,7 @@
 package com.innovate.modules.match.service.impl;
 
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
+import com.innovate.modules.declare.entity.DeclareReviewEntity;
 import com.innovate.modules.innovate.entity.InnovateReviewGroupUserEntity;
 import com.innovate.modules.innovate.service.InnovateReviewGroupUserService;
 import com.innovate.modules.match.dao.MatchReviewDao;
@@ -11,9 +12,7 @@ import com.innovate.modules.match.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * @author Mikey
@@ -66,9 +65,14 @@ public class MatchReviewServiceImpl extends ServiceImpl<MatchReviewDao, MatchRev
         MatchInfoEntity matchInfoEntity = matchInfoService.selectById(matchId);
         matchInfoEntity.setGroupId(groupId);
         matchInfoService.updateById(matchInfoEntity);
+
+        //查询老师
         List<MatchTeacherEntity> matchTeacherEntities = matchTeacherService.queryAll(params);
+        //评委组
         List<InnovateReviewGroupUserEntity> innovateReviewGroupUserEntities = innovateReviewGroupUserService.queryAllGroupUser(groupId);
+        //移除全部评委
         matchReviewService.remove(params);
+        Set<MatchReviewEntity> tempSet = new HashSet<>();
         MatchReviewEntity matchReviewEntity = null;
         for (int index = 0; index < innovateReviewGroupUserEntities.size(); index++) {
             for (int indexJ = 0; indexJ < matchTeacherEntities.size(); indexJ++) {
@@ -77,10 +81,11 @@ public class MatchReviewServiceImpl extends ServiceImpl<MatchReviewDao, MatchRev
                     matchReviewEntity.setApply(apply);
                     matchReviewEntity.setMatchId(matchId);
                     matchReviewEntity.setUserId(innovateReviewGroupUserEntities.get(index).getUserId());
-                    matchReviewService.insert(matchReviewEntity);
+                    tempSet.add(matchReviewEntity);
                 }
             }
         }
+        matchReviewService.insertBatch(new ArrayList<>(tempSet));
         if (reApply.equals("false")) {
             matchApplyService.apply(params);
         }
