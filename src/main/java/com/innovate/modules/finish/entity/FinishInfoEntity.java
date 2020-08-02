@@ -37,6 +37,7 @@ public class FinishInfoEntity implements Serializable {
     @JsonSerialize(using=ToStringSerializer.class)
     private Double finishScoreAvg;
     private Date finishTime;
+    private Long declareId;
     private Long isDel;
 
 }

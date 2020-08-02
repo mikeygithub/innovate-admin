@@ -1,5 +1,6 @@
 package com.innovate.modules.match.controller;
 
+import com.innovate.common.utils.PageUtils;
 import com.innovate.common.utils.R;
 import com.innovate.modules.match.entity.MatchReviewEntity;
 import com.innovate.modules.match.service.MatchReviewService;
@@ -51,7 +52,15 @@ public class MatchReviewController extends AbstractController {
         MatchReviewEntity matchReviewEntity = matchReviewService.queryScore(params);
         return R.ok().put("matchReviewEntity",matchReviewEntity);
     }
-
+    /**
+     * 查询未评分
+     */
+    @GetMapping("/unReview")
+    @RequiresPermissions("innovate:declare:list")
+    public R unReview(@RequestParam Map<String,Object> params){
+        PageUtils page = matchReviewService.unReview(params);
+        return R.ok().put("page",page);
+    }
     /**
      * 修改
      */

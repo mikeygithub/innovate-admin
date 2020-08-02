@@ -39,6 +39,7 @@ public class DeclareInfoEntity implements Serializable {
     private String declareResult;
     private String declareDescribe;
     private Date declareTime;
+    private Long finishStatus;
     private Long isDel;
 
 }

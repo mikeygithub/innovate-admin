@@ -1,5 +1,6 @@
 package com.innovate.modules.finish.controller;
 
+import com.innovate.common.utils.PageUtils;
 import com.innovate.common.utils.R;
 import com.innovate.modules.finish.entity.FinishReviewEntity;
 import com.innovate.modules.finish.service.FinishReviewService;
@@ -51,7 +52,15 @@ public class FinishReviewController extends AbstractController {
         FinishReviewEntity finishReviewEntity = finishReviewService.queryScore(params);
         return R.ok().put("finishReviewEntity",finishReviewEntity);
     }
-
+    /**
+     * 查询未评分
+     */
+    @GetMapping("/unReview")
+    @RequiresPermissions("innovate:finish:list")
+    public R unReview(@RequestParam Map<String,Object> params){
+        PageUtils page = finishReviewService.unReview(params);
+        return R.ok().put("page",page);
+    }
     /**
      * 修改
      */

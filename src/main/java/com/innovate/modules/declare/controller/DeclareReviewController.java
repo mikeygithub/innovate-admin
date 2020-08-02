@@ -1,5 +1,6 @@
 package com.innovate.modules.declare.controller;
 
+import com.innovate.common.utils.PageUtils;
 import com.innovate.common.utils.R;
 import com.innovate.modules.declare.entity.DeclareReviewEntity;
 import com.innovate.modules.declare.service.DeclareReviewService;
@@ -51,7 +52,15 @@ public class DeclareReviewController extends AbstractController {
         DeclareReviewEntity declareReviewEntity = declareReviewService.queryScore(params);
         return R.ok().put("declareReviewEntity",declareReviewEntity);
     }
-
+    /**
+     * 查询未评分
+     */
+    @GetMapping("/unReview")
+    @RequiresPermissions("innovate:declare:list")
+    public R unReview(@RequestParam Map<String,Object> params){
+        PageUtils page = declareReviewService.unReview(params);
+        return R.ok().put("page",page);
+    }
     /**
      * 修改
      */

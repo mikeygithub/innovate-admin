@@ -1,6 +1,10 @@
 package com.innovate.modules.finish.service.impl;
 
+import com.baomidou.mybatisplus.mapper.EntityWrapper;
+import com.baomidou.mybatisplus.plugins.Page;
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
+import com.innovate.common.utils.PageUtils;
+import com.innovate.common.utils.Query;
 import com.innovate.modules.finish.entity.FinishInfoEntity;
 import com.innovate.modules.finish.entity.FinishReviewEntity;
 import com.innovate.modules.finish.entity.FinishTeacherEntity;
@@ -11,6 +15,7 @@ import com.innovate.modules.finish.service.FinishInfoService;
 import com.innovate.modules.finish.service.FinishReviewService;
 import com.innovate.modules.innovate.entity.InnovateReviewGroupUserEntity;
 import com.innovate.modules.innovate.service.InnovateReviewGroupUserService;
+import com.innovate.modules.sys.service.SysUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -36,6 +41,8 @@ public class FinishReviewServiceImpl extends ServiceImpl<FinishReviewDao, Finish
     private FinishTeacherService finishTeacherService;
     @Autowired
     private InnovateReviewGroupUserService innovateReviewGroupUserService;
+    @Autowired
+    private SysUserService sysUserService;
 
     @Override
     public List<FinishReviewEntity> queryAll(Map<String, Object> params) {
@@ -55,6 +62,36 @@ public class FinishReviewServiceImpl extends ServiceImpl<FinishReviewDao, Finish
     @Override
     public Double queryScoreAvg(Map<String, Object> params) {
         return baseMapper.queryScoreAvg(params);
+    }
+
+    /**
+     * 查询未评分
+     * @param params
+     * @return
+     */
+    @Override
+    public PageUtils unReview(Map<String, Object> params) {
+
+        EntityWrapper<FinishReviewEntity> ew = new EntityWrapper<>();
+
+        ew.isNull("score").eq("is_del",0);//未评分
+
+        if (params.get("finishTime")!=null)ew.like("finish_year",params.get("finishTime").toString());
+
+        Page<FinishReviewEntity> page = this.selectPage(
+                new Query<FinishReviewEntity>(params).getPage(),ew
+        );
+
+        List<FinishReviewEntity> records = page.getRecords();
+
+        records.forEach(v->{
+            v.setSysUserEntity(sysUserService.selectById(v.getUserId()));
+            v.setFinishInfoEntity(finishInfoService.selectById(v.getFinishId()));
+        });
+
+        page.setRecords(records);
+
+        return new PageUtils(page);
     }
 
     @Override
@@ -78,6 +115,7 @@ public class FinishReviewServiceImpl extends ServiceImpl<FinishReviewDao, Finish
                     finishReviewEntity = new FinishReviewEntity();
                     finishReviewEntity.setApply(apply);
                     finishReviewEntity.setFinishId(finishId);
+                    finishReviewEntity.setFinishYear(finishInfoEntity.getFinishYear());//年度
                     finishReviewEntity.setUserId(innovateReviewGroupUserEntities.get(index).getUserId());
                     //评委重复问题
 //                    finishReviewService.insert(finishReviewEntity);
@@ -99,8 +137,8 @@ public class FinishReviewServiceImpl extends ServiceImpl<FinishReviewDao, Finish
         String apply = finishReviewEntity.getApply();
         Map<String, Object> params = new HashMap<>();
         params.put("finishId", finishId);
-        params.put("apply", apply);
         params.put("roleId", 6);
+        params.put("apply", apply);
         Long count = finishReviewService.queryCount(params);
         if (count == 0L){
             finishApplyService.apply(params);

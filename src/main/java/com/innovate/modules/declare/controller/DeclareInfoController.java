@@ -66,6 +66,17 @@ public class DeclareInfoController extends AbstractController {
                 .put("grade", grade);
     }
     /**
+     * 可以结题的项目
+     */
+    @GetMapping("/canfinish")
+    @RequiresPermissions("innovate:declare:list")
+    public R canFinish(@RequestParam Map<String, Object> params){
+
+        List<DeclareInfoEntity> declareInfoEntities = declareInfoModelService.queryCanFinish(params);
+        //学院
+        return R.ok().put("declareInfoEntities", declareInfoEntities);
+    }
+    /**
      * 未通过的项目
      */
     @GetMapping("/nopass")
@@ -75,6 +86,8 @@ public class DeclareInfoController extends AbstractController {
         return R.ok()
                 .put("declareInfoEntities", declareInfoEntities);
     }
+
+
 
     /**
      * 等级排序

@@ -1,6 +1,10 @@
 package com.innovate.modules.match.service.impl;
 
+import com.baomidou.mybatisplus.mapper.EntityWrapper;
+import com.baomidou.mybatisplus.plugins.Page;
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
+import com.innovate.common.utils.PageUtils;
+import com.innovate.common.utils.Query;
 import com.innovate.modules.declare.entity.DeclareReviewEntity;
 import com.innovate.modules.innovate.entity.InnovateReviewGroupUserEntity;
 import com.innovate.modules.innovate.service.InnovateReviewGroupUserService;
@@ -9,6 +13,7 @@ import com.innovate.modules.match.entity.MatchInfoEntity;
 import com.innovate.modules.match.entity.MatchReviewEntity;
 import com.innovate.modules.match.entity.MatchTeacherEntity;
 import com.innovate.modules.match.service.*;
+import com.innovate.modules.sys.service.SysUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -34,6 +39,9 @@ public class MatchReviewServiceImpl extends ServiceImpl<MatchReviewDao, MatchRev
     private MatchTeacherService matchTeacherService;
     @Autowired
     private InnovateReviewGroupUserService innovateReviewGroupUserService;
+    @Autowired
+    private SysUserService sysUserService;
+
 
     @Override
     public List<MatchReviewEntity> queryAll(Map<String, Object> params) {
@@ -53,6 +61,33 @@ public class MatchReviewServiceImpl extends ServiceImpl<MatchReviewDao, MatchRev
     @Override
     public Double queryScoreAvg(Map<String, Object> params) {
         return baseMapper.queryScoreAvg(params);
+    }
+
+    @Override
+    public PageUtils unReview(Map<String, Object> params) {
+
+
+        EntityWrapper<MatchReviewEntity> ew = new EntityWrapper<>();
+
+        ew.isNull("score").eq("is_del",0);//未评分
+
+        if (params.get("matchTime")!=null)ew.like("match_year",params.get("matchTime").toString());
+
+        Page<MatchReviewEntity> page = this.selectPage(
+                new Query<MatchReviewEntity>(params).getPage(),ew
+        );
+
+        List<MatchReviewEntity> records = page.getRecords();
+
+        records.forEach(v->{
+            v.setSysUserEntity(sysUserService.selectById(v.getUserId()));
+            v.setMatchInfoEntity(matchInfoService.selectById(v.getMatchId()));
+        });
+
+        page.setRecords(records);
+
+        return new PageUtils(page);
+
     }
 
     @Override
@@ -80,6 +115,7 @@ public class MatchReviewServiceImpl extends ServiceImpl<MatchReviewDao, MatchRev
                     matchReviewEntity = new MatchReviewEntity();
                     matchReviewEntity.setApply(apply);
                     matchReviewEntity.setMatchId(matchId);
+                    matchReviewEntity.setMatchYear(Long.parseLong(matchInfoEntity.getMatchTime().toString().substring(0,3)));
                     matchReviewEntity.setUserId(innovateReviewGroupUserEntities.get(index).getUserId());
                     tempSet.add(matchReviewEntity);
                 }
@@ -97,8 +133,8 @@ public class MatchReviewServiceImpl extends ServiceImpl<MatchReviewDao, MatchRev
         matchReviewService.updateById(matchReviewEntity);
         String apply = matchReviewEntity.getApply();
         Map<String, Object> params = new HashMap<>();
-        params.put("matchId", matchId);
         params.put("apply", apply);
+        params.put("matchId", matchId);
         params.put("roleId", 6);
         Long count = matchReviewService.queryCount(params);
         if (count == 0L){

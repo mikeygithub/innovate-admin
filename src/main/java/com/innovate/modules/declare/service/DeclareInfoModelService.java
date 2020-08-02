@@ -1,6 +1,7 @@
 package com.innovate.modules.declare.service;
 
 import com.innovate.common.utils.PageUtils;
+import com.innovate.modules.declare.entity.DeclareInfoEntity;
 import com.innovate.modules.declare.entity.DeclareInfoModel;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -44,4 +45,10 @@ public interface DeclareInfoModelService {
     @Transactional
     void deleteProps(Map<String, Object> params);
 
+    /**
+     * 查询可以结题的项目
+     * @param params
+     * @return
+     */
+    List<DeclareInfoEntity> queryCanFinish(Map<String, Object> params);
 }

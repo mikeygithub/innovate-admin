@@ -1,6 +1,7 @@
 package com.innovate.modules.declare.service;
 
 import com.baomidou.mybatisplus.service.IService;
+import com.innovate.common.utils.PageUtils;
 import com.innovate.modules.declare.entity.DeclareReviewEntity;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -40,4 +41,6 @@ public interface DeclareReviewService extends IService<DeclareReviewEntity> {
      * 计算平均分
      */
     Double queryScoreAvg(Map<String, Object> params);
+
+    PageUtils unReview(Map<String, Object> params);
 }

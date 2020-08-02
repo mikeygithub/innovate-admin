@@ -40,3 +40,11 @@ CREATE SCHEMA innovate_admin DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;
 #### 持续集成平台
 
 >Travis CI
+
+#### TODO
+
+~~1.评委是否评分~~
+2.学号作为账号
+3.数据汇总有去年数据
+4.数据导出
+5.结题减少输入信息

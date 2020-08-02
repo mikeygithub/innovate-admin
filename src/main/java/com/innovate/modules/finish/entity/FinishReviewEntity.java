@@ -1,9 +1,12 @@
 package com.innovate.modules.finish.entity;
 
+import com.baomidou.mybatisplus.annotations.TableField;
 import com.baomidou.mybatisplus.annotations.TableId;
 import com.baomidou.mybatisplus.annotations.TableName;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
+import com.innovate.modules.declare.entity.DeclareInfoEntity;
+import com.innovate.modules.sys.entity.SysUserEntity;
 import lombok.Data;
 
 import java.io.Serializable;
@@ -25,5 +28,13 @@ public class FinishReviewEntity implements Serializable {
     @JsonSerialize(using=ToStringSerializer.class)
     private Double score;
     private String opinion;
+    private Long finishYear;
     private Long isDel;
+
+
+
+    @TableField(exist = false)
+    private FinishInfoEntity finishInfoEntity;
+    @TableField(exist = false)
+    private SysUserEntity sysUserEntity;
 }

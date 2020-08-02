@@ -1,6 +1,7 @@
 package com.innovate.modules.match.service;
 
 import com.baomidou.mybatisplus.service.IService;
+import com.innovate.common.utils.PageUtils;
 import com.innovate.modules.match.entity.MatchReviewEntity;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -40,4 +41,6 @@ public interface MatchReviewService extends IService<MatchReviewEntity> {
      * 计算平均分
      */
     Double queryScoreAvg(Map<String, Object> params);
+
+    PageUtils unReview(Map<String, Object> params);
 }

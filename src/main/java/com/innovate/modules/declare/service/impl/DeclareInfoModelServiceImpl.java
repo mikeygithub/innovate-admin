@@ -1,5 +1,6 @@
 package com.innovate.modules.declare.service.impl;
 
+import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.innovate.common.utils.PageUtils;
 import com.innovate.modules.declare.service.*;
 import com.innovate.modules.innovate.entity.UserPersonInfoEntity;
@@ -11,6 +12,7 @@ import org.jboss.logging.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.swing.text.html.parser.Entity;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -58,8 +60,8 @@ public class DeclareInfoModelServiceImpl implements DeclareInfoModelService {
         Integer pageSize  = 10;
         try {
             if (params.get("currPage")!=null&&params.get("pageSize")!=null) {
-                currPage = Integer.parseInt(params.get("currPage").toString());
                 pageSize = Integer.parseInt(params.get("pageSize").toString());
+                currPage = Integer.parseInt(params.get("currPage").toString());
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -83,6 +85,7 @@ public class DeclareInfoModelServiceImpl implements DeclareInfoModelService {
             tempdeclareInfoModel = this.query(tempParams);
             declareInfoModels.add(tempdeclareInfoModel);
         }
+
         return new PageUtils(declareInfoModels, totalPage, pageSize, currPage);
     }
 
@@ -94,10 +97,10 @@ public class DeclareInfoModelServiceImpl implements DeclareInfoModelService {
     @Override
     public List<DeclareInfoModel> queryAll(Map<String, Object> params) {
 
-//        临时接收项目信息
-        List<DeclareInfoEntity> tempLists = null;
 //        项目所有信息的临时实体
         DeclareInfoModel tempdeclareInfoModel = null;
+//        临时接收项目信息
+        List<DeclareInfoEntity> tempLists = null;
 //        包含项目所有信息的主要实体
         List<DeclareInfoModel> declareInfoModels = new ArrayList<>();
 
@@ -202,4 +205,32 @@ public class DeclareInfoModelServiceImpl implements DeclareInfoModelService {
         declareStaffInfoService.remove(params);
         declareAwardService.remove(params);
     }
+
+    /**
+     * 查询可结题的项目
+     * @param params
+     * @return
+     */
+    @Override
+    public List<DeclareInfoEntity> queryCanFinish(Map<String, Object> params) {
+
+        EntityWrapper entityWrapper = new EntityWrapper();
+
+        //用户id
+        Object userId = params.get("userId");
+        entityWrapper.eq("project_user_id",userId);
+        //评分通过
+        Object status = params.get("status");
+        entityWrapper.ge("project_audit_apply_status",status);
+
+        //未结题
+        entityWrapper.eq("finish_status",0);
+        //未删除
+        entityWrapper.eq("is_del",0);
+
+
+    return   declareInfoService.selectList(entityWrapper);
+
+    }
+
 }

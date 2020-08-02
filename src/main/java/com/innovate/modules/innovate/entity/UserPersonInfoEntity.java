@@ -3,7 +3,6 @@ package com.innovate.modules.innovate.entity;
 import com.baomidou.mybatisplus.annotations.TableField;
 import com.baomidou.mybatisplus.annotations.TableId;
 import com.baomidou.mybatisplus.annotations.TableName;
-import com.innovate.modules.enterprise.entity.EntPersonCooperationInfoEntity;
 import com.innovate.modules.sys.entity.SysUserEntity;
 import lombok.Data;
 
@@ -33,8 +32,6 @@ public class UserPersonInfoEntity implements Serializable {
     private String perSchoolPost;
     private String perSchoolHonor;
     private String perSocialPractice;
-    @TableField(exist = false)
-    private EntPersonCooperationInfoEntity entPersonCooperationInfoEntity;
     @TableField(exist = false)
     private SysUserEntity sysUserEntity;
     @TableField(exist = false)

@@ -5,10 +5,6 @@ import com.google.gson.reflect.TypeToken;
 import com.innovate.common.utils.R;
 import com.innovate.modules.common.entity.CommonAttachments;
 import com.innovate.modules.common.entity.CommonFile;
-import com.innovate.modules.enterprise.entity.EntEnterpriseAttachmentEntity;
-import com.innovate.modules.enterprise.entity.EntEnterpriseInfoEntity;
-import com.innovate.modules.enterprise.service.EntEnterpriseAttachmentService;
-import com.innovate.modules.enterprise.service.EntEnterpriseInfoService;
 import com.innovate.modules.innovate.utils.SmsUtil;
 import com.innovate.modules.sys.entity.SysUserEntity;
 import com.innovate.modules.sys.form.SysLoginForm;
@@ -48,11 +44,6 @@ public class SysLoginController extends AbstractController {
 	private SysUserTokenService sysUserTokenService;
 	@Autowired
 	private SysCaptchaService sysCaptchaService;
-	@Autowired
-	private EntEnterpriseInfoService entEnterpriseInfoService;
-
-	@Autowired
-	private EntEnterpriseAttachmentService entEnterpriseAttachmentService;
 
 	private String VerificationCode;//短信验证码
 
@@ -151,43 +142,11 @@ public class SysLoginController extends AbstractController {
 				user.setRoleIdList(longList);
 			}
 			sysUserService.save(user);
-			if(3 == type){
-				invokeEntMsg(params, user);
-			}
 		}else{
 			return R.error("验证码错误");
 		}
 		return R.ok()
 				.put("params", params);
-	}
-
-	/**
-	 * 企业用户注册
-	 * @param params
-	 * @param user
-	 */
-	private void invokeEntMsg(@RequestBody Map<String, Object> params, SysUserEntity user) {
-		Object ent = params.get("ent");
-		Gson gson = new Gson();
-		String json = gson.toJson(ent);
-		EntEnterpriseInfoEntity entEntity = gson.fromJson(json, EntEnterpriseInfoEntity.class);
-		entEntity.setUserId(user.getUserId());
-		entEntity.setEntInTime(new Date());
-		entEnterpriseInfoService.insert(entEntity);
-		Object attach = params.get("attachments");
-		String jsonAttach = gson.toJson(attach);
-		List<CommonAttachments> attachments = gson.fromJson(jsonAttach, new TypeToken<List<CommonAttachments>>(){}.getType());
-		if(attachments != null){
-			List<EntEnterpriseAttachmentEntity> insertBatch = new ArrayList<>();
-			for(int i=0; i<attachments.size(); i++){
-				CommonFile cfile = attachments.get(i).getResponse();
-				EntEnterpriseAttachmentEntity attachmentEntity = new EntEnterpriseAttachmentEntity();
-				attachmentEntity.setEntInfoId(entEntity.getEntInfoId());
-				attachmentEntity.setEntAttachmentUrl(cfile.getData());
-				insertBatch.add(attachmentEntity);
-			}
-			entEnterpriseAttachmentService.insertBatch(insertBatch);
-		}
 	}
 
 

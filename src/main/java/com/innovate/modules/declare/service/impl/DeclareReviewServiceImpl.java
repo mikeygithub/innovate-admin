@@ -1,7 +1,11 @@
 package com.innovate.modules.declare.service.impl;
 
+import com.baomidou.mybatisplus.mapper.EntityWrapper;
+import com.baomidou.mybatisplus.plugins.Page;
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
 import com.google.gson.Gson;
+import com.innovate.common.utils.PageUtils;
+import com.innovate.common.utils.Query;
 import com.innovate.modules.declare.dao.DeclareReviewDao;
 import com.innovate.modules.declare.entity.DeclareInfoEntity;
 import com.innovate.modules.declare.entity.DeclareReviewEntity;
@@ -10,8 +14,10 @@ import com.innovate.modules.declare.service.DeclareApplyService;
 import com.innovate.modules.declare.service.DeclareInfoService;
 import com.innovate.modules.declare.service.DeclareReviewService;
 import com.innovate.modules.declare.service.DeclareTeacherService;
+import com.innovate.modules.innovate.entity.InnovateGradeEntity;
 import com.innovate.modules.innovate.entity.InnovateReviewGroupUserEntity;
 import com.innovate.modules.innovate.service.InnovateReviewGroupUserService;
+import com.innovate.modules.sys.service.SysUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -38,6 +44,11 @@ public class DeclareReviewServiceImpl extends ServiceImpl<DeclareReviewDao, Decl
     @Autowired
     private InnovateReviewGroupUserService innovateReviewGroupUserService;
 
+    @Autowired
+    private SysUserService sysUserService;
+
+
+
     @Override
     public List<DeclareReviewEntity> queryAll(Map<String, Object> params) {
         return baseMapper.queryAll(params);
@@ -56,6 +67,36 @@ public class DeclareReviewServiceImpl extends ServiceImpl<DeclareReviewDao, Decl
     @Override
     public Double queryScoreAvg(Map<String, Object> params) {
         return baseMapper.queryScoreAvg(params);
+    }
+
+    /**
+     * 查询未评分的项目
+     * @param params
+     * @return
+     */
+    @Override
+    public PageUtils unReview(Map<String, Object> params) {
+
+        EntityWrapper<DeclareReviewEntity> declareReviewEntityEntityWrapper = new EntityWrapper<>();
+
+        declareReviewEntityEntityWrapper.isNull("score").eq("is_del",0);//未评分
+
+        if (params.get("declareTime")!=null)declareReviewEntityEntityWrapper.like("review_year",params.get("declareTime").toString());
+
+        Page<DeclareReviewEntity> page = this.selectPage(
+                    new Query<DeclareReviewEntity>(params).getPage(),declareReviewEntityEntityWrapper
+                    );
+
+        List<DeclareReviewEntity> records = page.getRecords();
+
+        records.forEach(v->{
+            v.setSysUserEntity(sysUserService.selectById(v.getUserId()));
+            v.setDeclareInfoEntity(declareInfoService.selectById(v.getDeclareId()));
+        });
+
+        page.setRecords(records);
+
+        return new PageUtils(page);
     }
 
     @Override
@@ -83,6 +124,7 @@ public class DeclareReviewServiceImpl extends ServiceImpl<DeclareReviewDao, Decl
                 if (innovateReviewGroupUserEntities.get(index).getUserId() != declareTeacherEntities.get(indexJ).getUserId()) {
                     declareReviewEntity = new DeclareReviewEntity();
                     declareReviewEntity.setApply(apply);
+                    declareReviewEntity.setReviewYear(declareInfoEntity.getDeclareYear());//年度
                     declareReviewEntity.setDeclareId(declareId);
                     declareReviewEntity.setUserId(innovateReviewGroupUserEntities.get(index).getUserId());
                     tempSet.add(declareReviewEntity);
