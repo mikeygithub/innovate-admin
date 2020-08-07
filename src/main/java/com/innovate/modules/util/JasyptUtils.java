@@ -28,7 +28,9 @@ public class JasyptUtils {
         config.setAlgorithm("PBEWithMD5AndDES");          // 加密的算法，这个算法是默认的
         config.setPassword("panda");                        // 加密的密钥
         standardPBEStringEncryptor.setConfig(config);
-        String plainText = "your need encrypt string";
+//        String plainText = "your need encrypt string";
+//        String plainText = "Panda15677408298";
+        String plainText = "root";
         String encryptedText = standardPBEStringEncryptor.encrypt(plainText);
         System.out.println(encryptedText);
     }
@@ -45,7 +47,7 @@ public class JasyptUtils {
         config.setAlgorithm("PBEWithMD5AndDES");
         config.setPassword("panda");
         standardPBEStringEncryptor.setConfig(config);
-        String encryptedText = "T3PFeEs/mQPT9NFDWGUXLw==";
+        String encryptedText = "Nve3rwvAuhO04Wmvht932gtGPdfhNhr5";
         String plainText = standardPBEStringEncryptor.decrypt(encryptedText);
         System.out.println(plainText);
     }

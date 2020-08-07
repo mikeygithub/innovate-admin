@@ -29,12 +29,15 @@ CREATE SCHEMA innovate_admin DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;
 6. 拉取镜像： `docker pull mikeyboom/innovate-admin:latest`
 6. 启动服务： `docker-compose -f docker-compose.yml -d`
 
-#### 参与贡献
+#### 部署
 
-1. Fork 本项目
-2. 新建 Feat_xxx 分支
-3. 提交代码
-4. 新建 Pull Request
+`docker run --name=mediawiki_mysql \
+-e MYSQL_DATABASE=wikidb \
+-e MYSQL_USER=wikiuser \
+-e MYSQL_PASSWORD=mysecret \
+-e MYSQL_ROOT_PASSWORD=zhang123 \
+-v /var/mediawiki/mysql:/var/lib/mysql \
+-d mysql:5.7`
 
 
 #### 持续集成平台
@@ -43,8 +46,3 @@ CREATE SCHEMA innovate_admin DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;
 
 #### TODO
 
-~~1.评委是否评分~~
-2.学号作为账号
-3.数据汇总有去年数据
-4.数据导出
-5.结题减少输入信息
