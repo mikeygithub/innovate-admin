@@ -11,8 +11,6 @@ services:
       - MYSQL_ROOT_PASSWORD=123456
     volumes:
       - /opt/mysql/data:/var/lib/mysql
-        restart_policy:
-          condition: on-failure
   innovate-admin:
     image: mikeyboom/innovate-admin:latest
     privileged: true
