@@ -1,6 +1,6 @@
 version: '2'
 services:
-  mysql:
+  innovate-admin-mysql:
     image: mysql:5.7
     ports:
       - 0.0.0.0:3306:3306
@@ -11,6 +11,8 @@ services:
       - MYSQL_ROOT_PASSWORD=123456
     volumes:
       - /opt/mysql/data:/var/lib/mysql
+    privileged: true
+
   innovate-admin:
     image: mikeyboom/innovate-admin:latest
     privileged: true

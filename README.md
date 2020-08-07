@@ -31,12 +31,12 @@ CREATE SCHEMA innovate_admin DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;
 
 #### 部署
 
-`docker run --name=mediawiki_mysql \
--e MYSQL_DATABASE=wikidb \
--e MYSQL_USER=wikiuser \
--e MYSQL_PASSWORD=mysecret \
--e MYSQL_ROOT_PASSWORD=zhang123 \
--v /var/mediawiki/mysql:/var/lib/mysql \
+`docker run --name=innovate_admin_mysql \
+-e MYSQL_DATABASE=innovate_admin \
+-e MYSQL_USER=innovate_admin \
+-e MYSQL_PASSWORD=123456 \
+-e MYSQL_ROOT_PASSWORD=123456 \
+-v /var/innovate_admin/mysql:/var/lib/mysql \
 -d mysql:5.7`
 
 
