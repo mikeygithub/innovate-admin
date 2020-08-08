@@ -5,9 +5,8 @@ import com.innovate.modules.finish.entity.FinishAttachEntity;
 import com.innovate.modules.finish.service.FinishAttachService;
 import com.innovate.modules.innovate.config.ConfigApi;
 import com.innovate.modules.sys.controller.AbstractController;
-import com.innovate.modules.util.FileDownFiles;
+import com.innovate.modules.util.FileUtils;
 import com.innovate.modules.util.RandomUtils;
-import com.innovate.modules.util.UpLoadFileUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -57,7 +56,7 @@ public class FinishAttachController extends AbstractController {
             String fileName = file.getOriginalFilename();
             String result = null;
             try {
-                result = UpLoadFileUtils.upLoad(UPLOAD_FILES_PATH, fileName, file);
+                result = FileUtils.upLoad(UPLOAD_FILES_PATH, fileName, file);
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -81,7 +80,7 @@ public class FinishAttachController extends AbstractController {
     @RequiresPermissions("innovate:project:list")
     public void downloadFile(final HttpServletResponse response, final HttpServletRequest request) {
         String filePath = request.getParameter("filePath");
-        FileDownFiles.download(response, filePath);
+        FileUtils.download(response, filePath);
     }
 
 }

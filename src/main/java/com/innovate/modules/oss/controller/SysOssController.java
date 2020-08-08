@@ -10,16 +10,24 @@ import com.innovate.common.validator.ValidatorUtils;
 import com.innovate.common.validator.group.AliyunGroup;
 import com.innovate.common.validator.group.QcloudGroup;
 import com.innovate.common.validator.group.QiniuGroup;
+import com.innovate.modules.innovate.config.ConfigApi;
 import com.innovate.modules.oss.cloud.CloudStorageConfig;
 import com.innovate.modules.oss.cloud.OSSFactory;
 import com.innovate.modules.oss.entity.SysOssEntity;
 import com.innovate.modules.oss.service.SysOssService;
 import com.innovate.modules.sys.service.SysConfigService;
+import com.innovate.modules.util.FileUtils;
+import com.innovate.modules.util.ZipUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.Map;
@@ -40,7 +48,10 @@ public class SysOssController {
     private SysConfigService sysConfigService;
 
     private final static String KEY = ConfigConstant.CLOUD_STORAGE_CONFIG_KEY;
-	
+
+
+	private Logger logger = LoggerFactory.getLogger(getClass());
+
 	/**
 	 * 列表
 	 */
@@ -122,6 +133,35 @@ public class SysOssController {
 	@RequiresPermissions("sys:oss:all")
 	public R delete(@RequestBody Long[] ids){
 		sysOssService.deleteBatchIds(Arrays.asList(ids));
+
+		return R.ok();
+	}
+
+	/**
+	 * 下载服务器所有附件
+	 * @param response
+	 * @param request
+	 */
+	@PostMapping(value = "/download")
+	@RequiresPermissions("sys:oss:all")
+	public void downloadFile(final HttpServletResponse response, final HttpServletRequest request) {
+		try {
+			ZipUtils.toZip(ConfigApi.UPLOAD_URL,response.getOutputStream(),true);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	/**
+	 * 删除所有附件
+	 */
+	@PostMapping(value = "/del")
+	@RequiresPermissions("sys:oss:all")
+	public R deleteServerFile() {
+
+
+		logger.warn("执行删除服务器附件");
+		//谨慎操作
+		FileUtils.deleteTotal(ConfigApi.UPLOAD_URL);
 
 		return R.ok();
 	}

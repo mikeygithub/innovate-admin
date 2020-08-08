@@ -9,9 +9,8 @@ import java.util.Objects;
 import com.innovate.modules.declare.entity.DeclareInfoEntity;
 import com.innovate.modules.declare.service.DeclareInfoService;
 import com.innovate.modules.innovate.config.ConfigApi;
-import com.innovate.modules.util.FileDownFiles;
+import com.innovate.modules.util.FileUtils;
 import com.innovate.modules.util.RandomUtils;
-import com.innovate.modules.util.UpLoadFileUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -124,7 +123,7 @@ public class InnovateCheckAttachController {
             String fileName = file.getOriginalFilename();
             String result = null;
             try {
-                result = UpLoadFileUtils.upLoad(UPLOAD_FILES_PATH, fileName, file);
+                result = FileUtils.upLoad(UPLOAD_FILES_PATH, fileName, file);
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -149,6 +148,6 @@ public class InnovateCheckAttachController {
     @RequiresPermissions("innovate:check:list")
     public void downloadFile(final HttpServletResponse response, final HttpServletRequest request) {
         String filePath = request.getParameter("filePath");
-        FileDownFiles.download(response, filePath);
+        FileUtils.download(response, filePath);
     }
 }

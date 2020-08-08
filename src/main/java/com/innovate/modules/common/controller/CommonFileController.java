@@ -4,8 +4,8 @@ import com.innovate.common.utils.R;
 import com.innovate.modules.innovate.config.ConfigApi;
 import com.innovate.modules.innovate.entity.ProjectAttachEntity;
 import com.innovate.modules.sys.controller.AbstractController;
+import com.innovate.modules.util.FileUtils;
 import com.innovate.modules.util.RandomUtils;
-import com.innovate.modules.util.UpLoadFileUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -47,7 +47,7 @@ public class CommonFileController extends AbstractController {
             for(MultipartFile file : files){
                 Map<String,Object> item = new HashMap<>();
                 String fileName = file.getOriginalFilename();
-                String result = UpLoadFileUtils.upLoad(UPLOAD_FILES_PATH, fileName, file);
+                String result = FileUtils.upLoad(UPLOAD_FILES_PATH, fileName, file);
                 if (!result.equals("true")) {
                     item.put("code", 500);
                 }else{
@@ -83,7 +83,7 @@ public class CommonFileController extends AbstractController {
                 return R.error("文件为空，请重新上传");
             }
             String fileName = file.getOriginalFilename();
-            String result  = UpLoadFileUtils.upLoad(UPLOAD_FILES_PATH, fileName, file);
+            String result  = FileUtils.upLoad(UPLOAD_FILES_PATH, fileName, file);
             if (!result.equals("true")) {
                 return R.error(result);
             }

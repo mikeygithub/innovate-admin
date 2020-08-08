@@ -20,10 +20,6 @@ public class ConfigApi {
     public static Long[] finishListName = {2L, 3L, 4L, 5L, 6L, 5L, 1L};
 //    文件存储路径
     public static String UPLOAD_URL = "/home/mikey/MIKEY/";
-//    教师附件路径
-    public static String TEACHER_FILE_UPLOAD_URL = "/home/mikey/MIKEY/teacher/";
-//    学生附件路径
-    public static String STUDENT_FILE_UPLOAD_URL = "/home/mikey/MIKEY/student/";
 //    模板文件存储路径
     public static String TEMPLATE_URL = "/TEMPLATE/";
 }
