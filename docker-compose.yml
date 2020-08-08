@@ -10,7 +10,7 @@ services:
       - MYSQL_PASSWORD=123456
       - MYSQL_ROOT_PASSWORD=123456
     volumes:
-      - /opt/mysql/data:/var/lib/mysql
+      - /root/innovate-admin/mysql/data:/var/lib/mysql
     privileged: true
 
   innovate-admin:
