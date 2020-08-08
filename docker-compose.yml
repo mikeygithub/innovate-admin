@@ -12,6 +12,7 @@ services:
     volumes:
       - /root/innovate-admin/mysql/data:/var/lib/mysql
     privileged: true
+    restart: always
 
   innovate-admin:
     image: mikeyboom/innovate-admin:latest
@@ -22,3 +23,4 @@ services:
       - /root/mikey/MIKEY:/home/mikey/MIKEY
     environment:
       - spring.profiles.active=prod
+    restart: always

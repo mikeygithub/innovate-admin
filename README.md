@@ -29,16 +29,14 @@ CREATE SCHEMA innovate_admin DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;
 6. 拉取镜像： `docker pull mikeyboom/innovate-admin:latest`
 6. 启动服务： `docker-compose -f docker-compose.yml -d`
 
-#### 部署
+### 修改数据库密码
 
-`docker run --name=innovate_admin_mysql \
--e MYSQL_DATABASE=innovate_admin \
--e MYSQL_USER=innovate_admin \
--e MYSQL_PASSWORD=123456 \
--e MYSQL_ROOT_PASSWORD=123456 \
--v /var/innovate_admin/mysql:/var/lib/mysql \
--d mysql:5.7`
+修改普通用户只改一个  
+`SET PASSWORD FOR 'username' = PASSWORD('xxxxxxxx');`
 
+修改root用户改两个  
+`SET PASSWORD FOR 'root' = PASSWORD('xxxxxxxxx');`  
+`SET PASSWORD FOR 'root'@'localhost'=PASSWORD('xxxxxxxxx');`
 
 #### 持续集成平台
 
